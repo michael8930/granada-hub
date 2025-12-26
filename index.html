@@ -5,52 +5,236 @@
   <title>Granada Hub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      margin: 0;
-      background: #0a0a0c;
-      color: #e6f7ff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      display: flex;
-      justify-content: center;
-      padding: 20px;
+    body{
+      margin:0;background:#0a0a0c;color:#e6f7ff;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      display:flex;justify-content:center;padding:20px;
     }
-    .app {
-      max-width: 420px;
-      width: 100%;
+    .app{max-width:520px;width:100%;}
+    h1{margin:0 0 12px;font-size:22px;text-align:center;letter-spacing:2px;}
+    .card{
+      background:#111;border:1px solid #1f1f1f;border-radius:12px;
+      padding:14px;margin-bottom:12px;
     }
-    h1 {
-      margin: 0 0 10px;
-      font-size: 22px;
-      text-align: center;
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    label{font-size:12px;opacity:.85;display:block;margin:0 0 6px}
+    input,select{
+      width:100%;padding:10px 12px;border-radius:10px;
+      border:1px solid #2a2a2a;background:#0d0d10;color:#e6f7ff;
+      outline:none;
     }
-    .card {
-      background: #111;
-      border: 1px solid #1f1f1f;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
+    button{
+      width:100%;padding:12px 14px;border-radius:10px;border:1px solid #2a2a2a;
+      background:#00f2ff;color:#001014;font-weight:700;cursor:pointer;
     }
-    .price {
-      color: #00f2ff;
-      font-weight: 600;
-    }
-    .status {
-      float: right;
-      font-size: 12px;
-      opacity: 0.8;
-    }
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .price{color:#00f2ff;font-weight:700}
+    .status{float:right;font-size:12px;opacity:.85}
+    .meta{font-size:12px;opacity:.75;margin-top:6px;line-height:1.4}
+    .small{font-size:12px;opacity:.75;text-align:center;margin:10px 0 14px}
+    .err{color:#ff6b6b}
+    .ok{color:#00ff88}
+    .divider{height:1px;background:#1f1f1f;margin:14px 0}
   </style>
 </head>
 <body>
   <div class="app">
     <h1>GRANADA HUB</h1>
+    <div class="small" id="statusLine">Loading…</div>
 
     <div class="card">
-      Olive oil
-      <span class="status">ASSIGNED</span><br />
-      <span class="price">$0.00</span>
+      <div style="font-weight:700;margin-bottom:10px;">Add / Update Item</div>
+
+      <div class="row">
+        <div style="flex:1;min-width:220px">
+          <label>Category/Tab</label>
+          <input id="tab" value="Watchlist" />
+        </div>
+        <div style="flex:1;min-width:220px">
+          <label>Status</label>
+          <select id="status">
+            <option>Watchlist</option>
+            <option>Purchased</option>
+            <option>Assigned</option>
+            <option>Shipped</option>
+            <option>Received</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <label>Product Name (required)</label>
+      <input id="name" placeholder="e.g., Olive oil" />
+
+      <div class="row" style="margin-top:10px">
+        <div style="flex:1;min-width:160px">
+          <label>Cost Price USD</label>
+          <input id="cost" inputmode="decimal" placeholder="e.g., 9.99" />
+        </div>
+        <div style="flex:1;min-width:160px">
+          <label>Selling Price XCD</label>
+          <input id="sell" inputmode="decimal" placeholder="e.g., 26.97" />
+        </div>
+        <div style="flex:1;min-width:140px">
+          <label>Quantity</label>
+          <input id="qty" inputmode="numeric" placeholder="e.g., 3" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px">
+        <div style="flex:1;min-width:220px">
+          <label>Online Link</label>
+          <input id="link" placeholder="https://…" />
+        </div>
+        <div style="flex:1;min-width:220px">
+          <label>Image URL</label>
+          <input id="img" placeholder="https://…" />
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <label>Note</label>
+        <input id="note" placeholder="optional" />
+      </div>
+
+      <div style="margin-top:12px">
+        <button id="saveBtn" onclick="saveItem()">Save to Sheet</button>
+      </div>
     </div>
 
     <div class="card">
-      Santa hats
-      <span class="status">PURC
+      <div style="font-weight:700;margin-bottom:10px;">Current Items</div>
+      <div id="list">Loading…</div>
+    </div>
+  </div>
+
+<script>
+  // ✅ YOUR NEW WORKING APPS SCRIPT URL
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJdcFBu_AXYOu-m97jsnno4-HZApzlGJvMwGoe1IyMCteR10BJxwKy1LX4nJgrbdnr/exec";
+
+  const $ = (id) => document.getElementById(id);
+
+  function setStatus(msg, cls){
+    const el = $("statusLine");
+    el.className = cls || "";
+    el.textContent = msg;
+  }
+
+  async function loadItems(){
+    try{
+      setStatus("Loading from Google Sheet…");
+      const r = await fetch(SCRIPT_URL, { method: "GET" });
+      const data = await r.json();
+
+      // Expecting array of rows
+      if(!Array.isArray(data)){
+        $("list").innerHTML = `<div class="err">Unexpected response (not an array).</div>`;
+        setStatus("Load failed.", "err");
+        return;
+      }
+
+      if(data.length === 0){
+        $("list").innerHTML = `<div class="meta">No items yet.</div>`;
+        setStatus("Loaded (0 items).", "ok");
+        return;
+      }
+
+      // simple render
+      $("list").innerHTML = data.map(item => {
+        const name = item["Product Name"] || "(no name)";
+        const tab = item["Category/Tab"] || "";
+        const status = (item["Status"] || "").toUpperCase();
+        const cost = item["Cost Price USD"] || "";
+        const sell = item["Selling Price XCD"] || "";
+        const qty  = item["Quantity"] || "";
+        const note = item["Note"] || "";
+        const link = item["Online Link"] || "";
+
+        return `
+          <div class="card" style="margin:0 0 10px;">
+            ${escapeHtml(name)}
+            <span class="status">${escapeHtml(status)}</span><br/>
+            <span class="price">$${escapeHtml(cost)}</span>
+            <span class="meta"> • XCD ${escapeHtml(sell)} • Qty ${escapeHtml(qty)} • ${escapeHtml(tab)}</span>
+            ${note ? `<div class="meta">Note: ${escapeHtml(note)}</div>` : ``}
+            ${link ? `<div class="meta"><a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:#00f2ff">Open link</a></div>` : ``}
+          </div>
+        `;
+      }).join("");
+
+      setStatus(`Loaded (${data.length} items).`, "ok");
+    } catch(err){
+      $("list").innerHTML = `<div class="err">Load error: ${escapeHtml(String(err))}</div>`;
+      setStatus("Load failed (check console).", "err");
+    }
+  }
+
+  async function saveItem(){
+    const btn = $("saveBtn");
+    btn.disabled = true;
+
+    const payload = {
+      _action: "upsert",
+      "Category/Tab": $("tab").value.trim() || "Watchlist",
+      "Product Name": $("name").value.trim(),
+      "Image URL": $("img").value.trim(),
+      "Cost Price USD": $("cost").value.trim(),
+      "Selling Price XCD": $("sell").value.trim(),
+      "Quantity": $("qty").value.trim(),
+      "Online Link": $("link").value.trim(),
+      "Note": $("note").value.trim(),
+      "Status": $("status").value
+    };
+
+    if(!payload["Product Name"]){
+      setStatus("Product Name is required.", "err");
+      btn.disabled = false;
+      return;
+    }
+
+    try{
+      setStatus("Saving to Google Sheet…");
+      const form = new URLSearchParams(payload);
+
+      const r = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: form
+      });
+
+      // script returns JSON
+      const out = await r.json();
+      if(out && out.ok){
+        setStatus("Saved.", "ok");
+        // clear a few fields
+        $("name").value = "";
+        $("cost").value = "";
+        $("sell").value = "";
+        $("qty").value = "";
+        $("link").value = "";
+        $("img").value = "";
+        $("note").value = "";
+        await loadItems();
+      } else {
+        setStatus("Save failed (script returned error).", "err");
+      }
+    } catch(err){
+      setStatus("Save failed (network/script error).", "err");
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
+  }
+  function escapeAttr(s){
+    return escapeHtml(s).replace(/"/g, "&quot;");
+  }
+
+  loadItems();
+</script>
+</body>
+</html>
