@@ -1,240 +1,601 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Granada Hub</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body{
-      margin:0;background:#0a0a0c;color:#e6f7ff;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      display:flex;justify-content:center;padding:20px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Granada Hub Pro | Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@19.0.0",
+        "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+        "@google/genai": "https://esm.sh/@google/genai@1.34.0"
+      }
     }
-    .app{max-width:520px;width:100%;}
-    h1{margin:0 0 12px;font-size:22px;text-align:center;letter-spacing:2px;}
-    .card{
-      background:#111;border:1px solid #1f1f1f;border-radius:12px;
-      padding:14px;margin-bottom:12px;
-    }
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    label{font-size:12px;opacity:.85;display:block;margin:0 0 6px}
-    input,select{
-      width:100%;padding:10px 12px;border-radius:10px;
-      border:1px solid #2a2a2a;background:#0d0d10;color:#e6f7ff;
-      outline:none;
-    }
-    button{
-      width:100%;padding:12px 14px;border-radius:10px;border:1px solid #2a2a2a;
-      background:#00f2ff;color:#001014;font-weight:700;cursor:pointer;
-    }
-    button:disabled{opacity:.55;cursor:not-allowed}
-    .price{color:#00f2ff;font-weight:700}
-    .status{float:right;font-size:12px;opacity:.85}
-    .meta{font-size:12px;opacity:.75;margin-top:6px;line-height:1.4}
-    .small{font-size:12px;opacity:.75;text-align:center;margin:10px 0 14px}
-    .err{color:#ff6b6b}
-    .ok{color:#00ff88}
-    .divider{height:1px;background:#1f1f1f;margin:14px 0}
-  </style>
+    </script>
+    <style>
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { margin: 0; background: #0a0a0c; color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        #boot-screen {
+            position: fixed; inset: 0; background: #0a0a0c;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999; transition: opacity 0.4s ease;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { width: 32px; height: 32px; border: 2px solid rgba(0,242,255,0.1); border-top-color: #00f2ff; border-radius: 50%; animation: spin 0.6s linear infinite; }
+        
+        .status-purchased { background: rgba(0,255,136,0.05) !important; color: #00ff88 !important; border: 1px solid rgba(0,255,136,0.2) !important; }
+        .status-assigned { background: rgba(0,242,255,0.05) !important; color: #00f2ff !important; border: 1px solid rgba(0,242,255,0.2) !important; }
+        .status-shipped { background: rgba(255,170,0,0.05) !important; color: #ffaa00 !important; border: 1px solid rgba(255,170,0,0.2) !important; }
+        .status-received { background: rgba(170,0,255,0.05) !important; color: #aa00ff !important; border: 1px solid rgba(170,0,255,0.2) !important; }
+        
+        ::-webkit-scrollbar { display: none; }
+        input, select, textarea { -webkit-appearance: none; border-radius: 10px; border: 1px solid #1a1a1c; outline: none; transition: border-color 0.2s; background: #111; color: #fff; }
+        input:focus, textarea:focus { border-color: #00f2ff !important; }
+        
+        .tab-active { border-color: #00f2ff !important; color: #00f2ff !important; background: rgba(0,242,255,0.03) !important; }
+        .all-active { border-color: #00ff88 !important; color: #00ff88 !important; background: rgba(0,255,136,0.03) !important; }
+
+        .markup-control {
+            display: flex;
+            align-items: center;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 2px 8px;
+            gap: 5px;
+        }
+        .markup-select {
+            background: transparent;
+            border: none;
+            color: #00f2ff;
+            font-family: 'Orbitron';
+            font-size: 9px;
+            padding: 8px 4px;
+            cursor: pointer;
+            outline: none;
+        }
+        .markup-input {
+            width: 40px;
+            background: #000;
+            border: 1px solid #222;
+            color: #00f2ff;
+            font-size: 10px;
+            padding: 4px;
+            text-align: center;
+            font-family: 'Orbitron';
+        }
+
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .live-indicator { width: 6px; height: 6px; background: #00f2ff; border-radius: 50%; display: inline-block; margin-right: 6px; animation: pulse 1.5s infinite; }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <h1>GRANADA HUB</h1>
-    <div class="small" id="statusLine">Loading…</div>
-
-    <div class="card">
-      <div style="font-weight:700;margin-bottom:10px;">Add / Update Item</div>
-
-      <div class="row">
-        <div style="flex:1;min-width:220px">
-          <label>Category/Tab</label>
-          <input id="tab" value="Watchlist" />
-        </div>
-        <div style="flex:1;min-width:220px">
-          <label>Status</label>
-          <select id="status">
-            <option>Watchlist</option>
-            <option>Purchased</option>
-            <option>Assigned</option>
-            <option>Shipped</option>
-            <option>Received</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <label>Product Name (required)</label>
-      <input id="name" placeholder="e.g., Olive oil" />
-
-      <div class="row" style="margin-top:10px">
-        <div style="flex:1;min-width:160px">
-          <label>Cost Price USD</label>
-          <input id="cost" inputmode="decimal" placeholder="e.g., 9.99" />
-        </div>
-        <div style="flex:1;min-width:160px">
-          <label>Selling Price XCD</label>
-          <input id="sell" inputmode="decimal" placeholder="e.g., 26.97" />
-        </div>
-        <div style="flex:1;min-width:140px">
-          <label>Quantity</label>
-          <input id="qty" inputmode="numeric" placeholder="e.g., 3" />
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:10px">
-        <div style="flex:1;min-width:220px">
-          <label>Online Link</label>
-          <input id="link" placeholder="https://…" />
-        </div>
-        <div style="flex:1;min-width:220px">
-          <label>Image URL</label>
-          <input id="img" placeholder="https://…" />
-        </div>
-      </div>
-
-      <div style="margin-top:10px">
-        <label>Note</label>
-        <input id="note" placeholder="optional" />
-      </div>
-
-      <div style="margin-top:12px">
-        <button id="saveBtn" onclick="saveItem()">Save to Sheet</button>
-      </div>
+    <div id="boot-screen">
+        <div class="spinner"></div>
+        <p style="margin-top:20px; font-family:'Orbitron', sans-serif; font-size:9px; color:#00f2ff; letter-spacing:4px; font-weight:700;">SECURE UPLINK ESTABLISHED</p>
     </div>
+    <div id="root"></div>
 
-    <div class="card">
-      <div style="font-weight:700;margin-bottom:10px;">Current Items</div>
-      <div id="list">Loading…</div>
-    </div>
-  </div>
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useMemo, useRef } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { GoogleGenAI } from "@google/genai";
 
-<script>
-  // ✅ YOUR NEW WORKING APPS SCRIPT URL
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJdcFBu_AXYOu-m97jsnno4-HZApzlGJvMwGoe1IyMCteR10BJxwKy1LX4nJgrbdnr/exec";
+        // Verified endpoint from GitHub working script
+       const API_URL = 'https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec';
+        const HUB_LOGO = 'https://vinylpressusa.com/wp-content/uploads/2025/12/38D06428-7D3B-44EF-B4A9-472C4EDDEB9F.png';
 
-  const $ = (id) => document.getElementById(id);
+        const GENDERS = ["Men's", "Women's", "Children's", "Unisex"];
+        const PRODUCT_TYPES = ["Apparel", "Footwear", "Food", "Cleaning products", "Used items", "Electronics", "Luxury", "Misc"];
+        const APPAREL_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "Kids 2T", "Kids 3T", "Kids 4T", "Kids 5", "Kids 6", "Kids 7", "Kids 8", "Kids 10", "Kids 12", "Kids 14", "Kids 16", "One Size"];
+        const SHOE_SIZES = ["2", "2.5", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "13.5", "14", "14.5"];
+        const DEFAULT_DELIVERY_TABS = ["May Shipment", "April Shipment", "Watchlist", "Amazon Order"];
+        const EC_RATE = 2.7169;
+        const IMG_SEP = '|||';
 
-  function setStatus(msg, cls){
-    const el = $("statusLine");
-    el.className = cls || "";
-    el.textContent = msg;
-  }
+        const CommsHub = ({ onClose }) => (
+            <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={onClose}>
+                <div style={{ background: '#0a0a0c', border: '1px solid #1a1a1c', padding: 30, borderRadius: 24, width: '90%', maxWidth: 350 }} onClick={e => e.stopPropagation()}>
+                    <h2 style={{ fontFamily: 'Orbitron', fontSize: 14, color: '#00f2ff', textAlign: 'center', marginBottom: 25, letterSpacing: 2 }}>COMMS UPLINK</h2>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                        <a href="tel:+14734150000" style={{ textDecoration: 'none', background: '#111', border: '1px solid #222', borderRadius: 15, padding: 20, display: 'flex', alignItems: 'center', gap: 15 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(0,242,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00f2ff' }}>
+                                <i className="fas fa-phone"></i>
+                            </div>
+                            <span style={{ fontFamily: 'Orbitron', fontSize: 11, color: '#fff' }}>CALL MICHAEL</span>
+                        </a>
+                        <a href="tel:+14734150001" style={{ textDecoration: 'none', background: '#111', border: '1px solid #222', borderRadius: 15, padding: 20, display: 'flex', alignItems: 'center', gap: 15 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,170,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffaa00' }}>
+                                <i className="fas fa-phone"></i>
+                            </div>
+                            <span style={{ fontFamily: 'Orbitron', fontSize: 11, color: '#fff' }}>CALL QUINCY</span>
+                        </a>
+                    </div>
+                    <button onClick={onClose} style={{ marginTop: 25, width: '100%', background: 'transparent', border: '1px solid #1a1a1c', padding: 12, borderRadius: 10, color: '#444', fontFamily: 'Orbitron', fontSize: 9 }}>CLOSE TERMINAL</button>
+                </div>
+            </div>
+        );
 
-  async function loadItems(){
-    try{
-      setStatus("Loading from Google Sheet…");
-      const r = await fetch(SCRIPT_URL, { method: "GET" });
-      const data = await r.json();
+        const GalleryLightbox = ({ images, initialIndex, onClose }) => {
+            const [index, setIndex] = useState(initialIndex);
+            return (
+                <div style={{ position: 'fixed', inset: 0, background: '#000', zIndex: 3000, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} onClick={onClose}>
+                    <button onClick={onClose} style={{ position: 'absolute', top: 30, right: 30, background: 'transparent', border: 'none', color: '#fff', fontSize: 30, cursor: 'pointer', zIndex: 3001 }}>&times;</button>
+                    <div style={{ width: '100%', height: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }} onClick={e => e.stopPropagation()}>
+                        {images.length > 1 && <button onClick={() => setIndex((index - 1 + images.length) % images.length)} style={{ position: 'absolute', left: 20, background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff', width: 50, height: 50, borderRadius: '50%' }}><i className="fas fa-chevron-left"></i></button>}
+                        <img src={images[index]} style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', border: '2px solid #1a1a1c', borderRadius: 8 }} />
+                        {images.length > 1 && <button onClick={() => setIndex((index + 1) % images.length)} style={{ position: 'absolute', right: 20, background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff', width: 50, height: 50, borderRadius: '50%' }}><i className="fas fa-chevron-right"></i></button>}
+                    </div>
+                    <div style={{ marginTop: 30, display: 'flex', gap: 10 }}>
+                        {images.map((_, i) => (
+                            <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: i === index ? '#00f2ff' : '#222' }} />
+                        ))}
+                    </div>
+                    <div style={{ marginTop: 20, fontFamily: 'Orbitron', fontSize: 10, color: '#444', letterSpacing: 2 }}>FRAME {index + 1} / {images.length}</div>
+                </div>
+            );
+        };
 
-      // Expecting array of rows
-      if(!Array.isArray(data)){
-        $("list").innerHTML = `<div class="err">Unexpected response (not an array).</div>`;
-        setStatus("Load failed.", "err");
-        return;
-      }
+        const Form = ({ item, tabs, activeMarkup, onClose, onSave, onDelete }) => {
+            const [f, setF] = useState({
+                ...item,
+                cost: parseFloat(item.cost || 0).toFixed(2),
+                sell: parseFloat(item.sell || 0).toFixed(2),
+                qty: parseInt(item.qty || 1),
+                link: item.link || '',
+                note: item.note || ''
+            });
+            const [scanning, setScanning] = useState(false);
+            const [curMode, setCurMode] = useState("XCD");
 
-      if(data.length === 0){
-        $("list").innerHTML = `<div class="meta">No items yet.</div>`;
-        setStatus("Loaded (0 items).", "ok");
-        return;
-      }
+            const updateCost = (val) => {
+                const numeric = parseFloat(val) || 0;
+                const multiplier = 1 + (activeMarkup / 100);
+                const calculatedSell = (numeric * EC_RATE * multiplier).toFixed(2);
+                setF(prev => ({ ...prev, cost: val, sell: calculatedSell }));
+            };
 
-      // simple render
-      $("list").innerHTML = data.map(item => {
-        const name = item["Product Name"] || "(no name)";
-        const tab = item["Category/Tab"] || "";
-        const status = (item["Status"] || "").toUpperCase();
-        const cost = item["Cost Price USD"] || "";
-        const sell = item["Selling Price XCD"] || "";
-        const qty  = item["Quantity"] || "";
-        const note = item["Note"] || "";
-        const link = item["Online Link"] || "";
+            const snap = (e) => {
+                if (!e.target.files?.[0]) return;
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    setScanning(true);
+                    try {
+                        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+                        const res = await ai.models.generateContent({
+                            model: 'gemini-3-flash-preview',
+                            contents: { 
+                                parts: [
+                                    { text: "Output JSON: {name, costUSD, type, size}" }, 
+                                    { inlineData: { data: reader.result.split(',')[1], mimeType: 'image/jpeg' } }
+                                ] 
+                            },
+                            config: { responseMimeType: "application/json" }
+                        });
+                        const d = JSON.parse(res.text || '{}');
+                        const newCost = d.costUSD || f.cost;
+                        const multiplier = 1 + (activeMarkup / 100);
+                        setF(p => ({ 
+                            ...p, 
+                            img: [...p.img, reader.result],
+                            name: d.name || p.name,
+                            cost: parseFloat(newCost).toFixed(2),
+                            sell: (newCost * EC_RATE * multiplier).toFixed(2),
+                            type: d.type || p.type,
+                            size: d.size || p.size
+                        }));
+                    } catch (err) {
+                        setF(p => ({ ...p, img: [...p.img, reader.result] }));
+                    }
+                    setScanning(false);
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            };
 
-        return `
-          <div class="card" style="margin:0 0 10px;">
-            ${escapeHtml(name)}
-            <span class="status">${escapeHtml(status)}</span><br/>
-            <span class="price">$${escapeHtml(cost)}</span>
-            <span class="meta"> • XCD ${escapeHtml(sell)} • Qty ${escapeHtml(qty)} • ${escapeHtml(tab)}</span>
-            ${note ? `<div class="meta">Note: ${escapeHtml(note)}</div>` : ``}
-            ${link ? `<div class="meta"><a href="${escapeAttr(link)}" target="_blank" rel="noopener" style="color:#00f2ff">Open link</a></div>` : ``}
-          </div>
-        `;
-      }).join("");
+            const styles = {
+                overlay: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 15, backdropFilter: 'blur(10px)' },
+                modal: { background: '#0a0a0c', border: '1px solid #1a1a1c', borderRadius: 24, width: '100%', maxWidth: 460, padding: 25, maxHeight: '95vh', overflowY: 'auto', boxShadow: '0 0 50px rgba(0,242,255,0.05)' },
+                gallery: { display: 'flex', gap: 10, overflowX: 'auto', marginBottom: 20, paddingBottom: 5 },
+                thumb: { width: 105, height: 105, borderRadius: 12, objectFit: 'cover', border: '1px solid #1a1a1c' },
+                addImg: { width: 105, height: 105, borderRadius: 12, border: '1px dashed #00f2ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00f2ff', background: 'rgba(0,242,255,0.02)', cursor: 'pointer' },
+                delImg: { position: 'absolute', top: -5, right: -5, background: '#ff4d4d', color: '#fff', border: 'none', borderRadius: '50%', width: 22, height: 22, cursor: 'pointer' },
+                row: { display: 'flex', gap: 12, marginBottom: 15 },
+                label: { display: 'block', fontSize: 8, fontWeight: 900, color: '#444', marginBottom: 6, fontFamily: 'Orbitron', letterSpacing: 2 },
+                input: { width: '100%', padding: '14px', background: '#111', border: '1px solid #1a1a1c', borderRadius: 10, color: '#fff', fontSize: 14, fontFamily: 'Inter' },
+                textarea: { width: '100%', padding: '14px', background: '#111', border: '1px solid #1a1a1c', borderRadius: 10, color: '#fff', fontSize: 13, fontFamily: 'Inter', minHeight: '80px', resize: 'vertical' },
+                hero: { width: '100%', padding: '22px', background: '#000', border: '1px solid #00f2ff', borderRadius: 14, color: '#00f2ff', textAlign: 'center', fontSize: 36, fontWeight: 900, fontFamily: 'Orbitron' },
+                btnDiscard: { flex: 1, padding: 18, background: '#1a1a1c', color: '#555', borderRadius: 12, border: 'none', fontWeight: 800, fontSize: 10, fontFamily: 'Orbitron', cursor: 'pointer' },
+                btnDelete: { padding: 18, background: 'rgba(255,77,77,0.05)', color: '#ff4d4d', border: '1px solid rgba(255,77,77,0.2)', borderRadius: 12, cursor: 'pointer' },
+                btnSync: { flex: 2, padding: 18, background: '#00f2ff', color: '#000', borderRadius: 12, border: 'none', fontWeight: 900, fontSize: 11, fontFamily: 'Orbitron', letterSpacing: 1, cursor: 'pointer' }
+            };
 
-      setStatus(`Loaded (${data.length} items).`, "ok");
-    } catch(err){
-      $("list").innerHTML = `<div class="err">Load error: ${escapeHtml(String(err))}</div>`;
-      setStatus("Load failed (check console).", "err");
-    }
-  }
+            return (
+                <div style={styles.overlay} onClick={onClose}>
+                    <div style={styles.modal} onClick={e => e.stopPropagation()}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                            <label style={styles.label}>PRODUCT ASSETS ({f.img.length}/5)</label>
+                        </div>
+                        <div style={styles.gallery}>
+                            {f.img.map((u, i) => (
+                                <div key={i} style={{ position: 'relative', flexShrink: 0 }}>
+                                    <img src={u} style={styles.thumb} />
+                                    <button onClick={() => setF({...f, img: f.img.filter((_,idx)=>idx!==i)})} style={styles.delImg}>&times;</button>
+                                </div>
+                            ))}
+                            {f.img.length < 5 && (
+                                <label style={styles.addImg}>
+                                    {scanning ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-camera" style={{fontSize:20}}></i>}
+                                    <input type="file" hidden accept="image/*" onChange={snap} />
+                                </label>
+                            )}
+                        </div>
 
-  async function saveItem(){
-    const btn = $("saveBtn");
-    btn.disabled = true;
+                        <div style={styles.row}>
+                            <div style={{ flex: 1 }}>
+                                <label style={styles.label}>HUB STATUS</label>
+                                <select style={{...styles.input, color: '#00f2ff', fontWeight: 700}} value={f.status} onChange={e => setF({...f, status: e.target.value})}>
+                                    <option value="Assigned">APPROVAL REQ</option>
+                                    <option value="Purchased">PURCHASED</option>
+                                    <option value="Shipped">SHIPPED</option>
+                                    <option value="Received">RECEIVED</option>
+                                </select>
+                            </div>
+                        </div>
 
-    const payload = {
-      _action: "upsert",
-      "Category/Tab": $("tab").value.trim() || "Watchlist",
-      "Product Name": $("name").value.trim(),
-      "Image URL": $("img").value.trim(),
-      "Cost Price USD": $("cost").value.trim(),
-      "Selling Price XCD": $("sell").value.trim(),
-      "Quantity": $("qty").value.trim(),
-      "Online Link": $("link").value.trim(),
-      "Note": $("note").value.trim(),
-      "Status": $("status").value
-    };
+                        <div style={styles.row}>
+                            <div style={{ flex: 1 }}>
+                                <label style={styles.label}>CATEGORY</label>
+                                <select style={styles.input} value={f.tab} onChange={e => setF({...f, tab: e.target.value})}>
+                                    {tabs.map(t => <option key={t} value={t}>{t}</option>)}
+                                </select>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={styles.label}>PRODUCT TYPE</label>
+                                <select style={styles.input} value={f.type} onChange={e => setF({...f, type: e.target.value})}>
+                                    {PRODUCT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                                </select>
+                            </div>
+                        </div>
 
-    if(!payload["Product Name"]){
-      setStatus("Product Name is required.", "err");
-      btn.disabled = false;
-      return;
-    }
+                        <div style={{ marginBottom: 15 }}>
+                            <label style={styles.label}>PRODUCT NAME</label>
+                            <input style={styles.input} value={f.name} onChange={e => setF({...f, name: e.target.value})} placeholder="Nike Air Max..." />
+                        </div>
 
-    try{
-      setStatus("Saving to Google Sheet…");
-      const form = new URLSearchParams(payload);
+                        <div style={{ marginBottom: 15 }}>
+                            <label style={styles.label}>ONLINE LINK (URL)</label>
+                            <input style={styles.input} value={f.link} onChange={e => setF({...f, link: e.target.value})} placeholder="https://amazon.com/..." />
+                        </div>
 
-      const r = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: form
-      });
+                        <div style={styles.row}>
+                            <div style={{ flex: 1 }}>
+                                <label style={styles.label}>GENDER</label>
+                                <select style={styles.input} value={f.gender} onChange={e => setF({...f, gender: e.target.value})}>
+                                    {GENDERS.map(g => <option key={g} value={g}>{g}</option>)}
+                                </select>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={styles.label}>{f.type === "Footwear" ? "US SIZE" : "SIZE"}</label>
+                                <select style={styles.input} value={f.type === "Footwear" ? f.shoeSize : f.size} onChange={e => setF({...f, [f.type === "Footwear" ? 'shoeSize' : 'size']: e.target.value})}>
+                                    <option value="">Select...</option>
+                                    {(f.type === "Footwear" ? SHOE_SIZES : APPAREL_SIZES).map(sz => <option key={sz} value={sz}>{sz}</option>)}
+                                </select>
+                            </div>
+                        </div>
 
-      // script returns JSON
-      const out = await r.json();
-      if(out && out.ok){
-        setStatus("Saved.", "ok");
-        // clear a few fields
-        $("name").value = "";
-        $("cost").value = "";
-        $("sell").value = "";
-        $("qty").value = "";
-        $("link").value = "";
-        $("img").value = "";
-        $("note").value = "";
-        await loadItems();
-      } else {
-        setStatus("Save failed (script returned error).", "err");
-      }
-    } catch(err){
-      setStatus("Save failed (network/script error).", "err");
-    } finally {
-      btn.disabled = false;
-    }
-  }
+                        <div style={styles.row}>
+                            <div style={{ flex: 1 }}>
+                                <label style={styles.label}>COST (USD)</label>
+                                <input 
+                                    type="number" 
+                                    step="0.01" 
+                                    style={styles.input} 
+                                    value={f.cost} 
+                                    onFocus={(e) => { e.target.select(); setF(p => ({...p, cost: 0})) }}
+                                    onChange={e => updateCost(e.target.value)}
+                                    onBlur={() => setF(p => ({...p, cost: parseFloat(p.cost || 0).toFixed(2)}))}
+                                />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={styles.label}>QUANTITY</label>
+                                <input 
+                                    type="number" 
+                                    style={styles.input} 
+                                    value={f.qty} 
+                                    onFocus={(e) => { e.target.select(); setF(p => ({...p, qty: 0})) }}
+                                    onChange={e => setF({...f, qty: e.target.value})}
+                                />
+                            </div>
+                        </div>
 
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, c => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    }[c]));
-  }
-  function escapeAttr(s){
-    return escapeHtml(s).replace(/"/g, "&quot;");
-  }
+                        <div style={{ marginBottom: 25 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                                <label style={styles.label}>SALE PRICE ({curMode}) <span style={{color: '#222'}}>Auto: {activeMarkup}% Markup</span></label>
+                                <div style={{ display: 'flex', gap: 10 }}>
+                                    <span onClick={() => setCurMode("USD")} style={{ fontSize: 9, color: curMode === "USD" ? "#00f2ff" : "#444", fontFamily: 'Orbitron', cursor: 'pointer' }}>USD</span>
+                                    <span onClick={() => setCurMode("XCD")} style={{ fontSize: 9, color: curMode === "XCD" ? "#00f2ff" : "#444", fontFamily: 'Orbitron', cursor: 'pointer' }}>XCD</span>
+                                </div>
+                            </div>
+                            <input
+                                type="number"
+                                step="0.01"
+                                style={styles.hero}
+                                value={curMode === "USD" ? (parseFloat(f.sell) / EC_RATE).toFixed(2) : parseFloat(f.sell).toFixed(2)}
+                                onFocus={(e) => { e.target.select(); setF(p => ({...p, sell: 0})) }}
+                                onChange={e => {
+                                    const v = e.target.value;
+                                    setF(p => ({...p, sell: curMode === "USD" ? (parseFloat(v || 0) * EC_RATE).toFixed(2) : parseFloat(v || 0).toFixed(2)}));
+                                }}
+                            />
+                        </div>
 
-  loadItems();
-</script>
+                        <div style={{ marginBottom: 25 }}>
+                            <label style={styles.label}>PRIVATE HUB NOTES</label>
+                            <textarea style={styles.textarea} value={f.note} onChange={e => setF({...f, note: e.target.value})} placeholder="Notes for fulfillment..." />
+                        </div>
+
+                        <div style={{ display: 'flex', gap: 12 }}>
+                            <button onClick={onClose} style={styles.btnDiscard}>DISCARD</button>
+                            {item.name && <button onClick={() => onDelete(item)} style={styles.btnDelete}><i className="fas fa-trash-alt"></i></button>}
+                            <button onClick={() => { onSave(f); onClose(); }} style={styles.btnSync}>UPLINK HUB</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [items, setItems] = useState([]);
+            const [tabs, setTabs] = useState(DEFAULT_DELIVERY_TABS);
+            const [activeTab, setActiveTab] = useState("ALL");
+            const [cur, setCur] = useState("USD");
+            const [modal, setModal] = useState(null);
+            const [commsOpen, setCommsOpen] = useState(false);
+            const [lightbox, setLightbox] = useState(null);
+            const [syncing, setSyncing] = useState(false);
+            const [lastSync, setLastSync] = useState(null);
+            
+            const [markupType, setMarkupType] = useState("50");
+            const [customMarkup, setCustomMarkup] = useState("75");
+
+            const activeMarkupValue = useMemo(() => {
+                return markupType === "Custom" ? parseFloat(customMarkup || 0) : parseFloat(markupType);
+            }, [markupType, customMarkup]);
+
+            const loadData = async () => {
+                setSyncing(true);
+                try {
+                    const r = await fetch(`${API_URL}?cache=${Date.now()}`);
+                    const d = await r.json();
+                    if (Array.isArray(d)) {
+                        const raw = d.map(x => ({
+                            id: `${x['Product Name']}-${x['Category/Tab']}-${Math.random()}`,
+                            name: (x['Product Name'] || '').trim(),
+                            img: (x['Image URL'] || '').split(IMG_SEP).filter(Boolean),
+                            cost: parseFloat(x['Cost Price USD'] || 0),
+                            sell: parseFloat(x['Selling Price XCD'] || 0),
+                            qty: parseInt(x['Quantity'] || 1),
+                            link: x['Online Link'] || '',
+                            note: x['Note'] || '',
+                            type: x['Product Type'] || "Misc",
+                            gender: x['Gender'] || "Unisex",
+                            tab: (x['Category/Tab'] || "Watchlist").trim(),
+                            status: x['Status'] || 'Assigned',
+                            size: x['Size'] || '',
+                            shoeSize: x['Shoe Size'] || ''
+                        }));
+                        setItems(raw);
+                        const sheetTabs = [...new Set(raw.map(i => i.tab))].filter(Boolean);
+                        setTabs(prev => [...new Set([...DEFAULT_DELIVERY_TABS, ...sheetTabs])]);
+                        setLastSync(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+                    }
+                } catch (e) { console.error("Sync Error", e); }
+                finally { 
+                    setSyncing(false); 
+                    const boot = document.getElementById('boot-screen');
+                    if (boot) boot.style.display = 'none';
+                }
+            };
+
+            useEffect(() => { loadData(); }, []);
+
+            const addCategory = () => {
+                const name = prompt("Enter new shipment name:");
+                if (name && name.trim()) {
+                    const clean = name.trim();
+                    setTabs(prev => [...new Set([...prev, clean])]);
+                    setActiveTab(clean);
+                }
+            };
+
+            const performSync = async (payload) => {
+                setSyncing(true);
+                try {
+                    const params = new URLSearchParams();
+                    Object.keys(payload).forEach(key => params.append(key, payload[key]));
+                    
+                    await fetch(API_URL, { 
+                        method: 'POST', 
+                        body: params, 
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    });
+                    
+                    setTimeout(loadData, 2500);
+                } catch (err) { setSyncing(false); }
+            };
+
+            const handleSave = async (f) => {
+                const action = items.some(i => i.name === f.name && i.tab === f.tab) ? 'update' : 'create';
+                await performSync({
+                    'Product Name': f.name,
+                    'Category/Tab': f.tab,
+                    'Cost Price USD': parseFloat(f.cost).toFixed(2),
+                    'Selling Price XCD': parseFloat(f.sell).toFixed(2),
+                    'Quantity': f.qty,
+                    'Status': f.status,
+                    'Product Type': f.type,
+                    'Gender': f.gender,
+                    'Size': f.size,
+                    'Shoe Size': f.shoeSize,
+                    'Online Link': f.link,
+                    'Note': f.note,
+                    'Image URL': f.img.join(IMG_SEP),
+                    '_action': action
+                });
+            };
+
+            const handleDelete = async (item) => {
+                if (!confirm(`Permanently delete ${item.name}?`)) return;
+                await performSync({
+                    'Product Name': item.name,
+                    'Category/Tab': item.tab,
+                    '_action': 'delete'
+                });
+            };
+
+            const committedUSD = items.filter(i => ['Purchased', 'Shipped', 'Received'].includes(i.status)).reduce((a,b) => a + (b.cost * b.qty), 0);
+            const pendingXCD = items.filter(i => i.status === 'Assigned').reduce((a,b) => a + (b.sell * b.qty), 0);
+            const filtered = activeTab === "ALL" ? items : items.filter(i => i.tab === activeTab);
+
+            const styles = {
+                app: { width: '100%', maxWidth: '500px', margin: '0 auto', minHeight: '100vh', background: '#0a0a0c', borderLeft: '1px solid #1a1a1c', borderRight: '1px solid #1a1a1c', position: 'relative' },
+                syncing: { position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)', background: '#00f2ff', color: '#000', padding: '10px 20px', borderRadius: 40, fontWeight: 900, fontSize: 10, zIndex: 9999, fontFamily: 'Orbitron', boxShadow: '0 0 20px rgba(0,242,255,0.4)' },
+                header: { padding: '24px 16px', borderBottom: '1px solid #1a1a1c', position: 'sticky', top: 0, background: 'rgba(10,10,12,0.96)', backdropFilter: 'blur(12px)', zIndex: 100 },
+                title: { fontFamily: 'Orbitron', fontSize: 18, color: '#fff', letterSpacing: 3, margin: 0, fontWeight: 900 },
+                dash: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, margin: '20px 0' },
+                dashBox: { background: '#111', padding: 12, borderRadius: 12, border: '1px solid #1a1a1c' },
+                dashLabel: { fontSize: 8, color: '#444', fontFamily: 'Orbitron', marginBottom: 5, display: 'block' },
+                dashVal: { fontSize: 16, fontFamily: 'Orbitron', fontWeight: 700 },
+                addBtn: { width: '100%', padding: 16, background: '#00f2ff', color: '#000', border: 'none', borderRadius: 12, fontWeight: 900, fontFamily: 'Orbitron', fontSize: 11, cursor: 'pointer' },
+                tabs: { display: 'flex', gap: 8, padding: '15px 16px', overflowX: 'auto', alignItems: 'center' },
+                tab: { padding: '10px 18px', borderRadius: 8, fontSize: 8, fontWeight: 700, fontFamily: 'Orbitron', whiteSpace: 'nowrap', border: '1px solid #1a1a1c', background: 'transparent', color: '#444', cursor: 'pointer' },
+                tabPlus: { width: 34, height: 34, borderRadius: '50%', border: '1px dashed #222', color: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' },
+                card: { display: 'flex', padding: 16, margin: '0 16px 12px', background: 'rgba(255,255,255,0.01)', borderRadius: 16, border: '1px solid #1a1a1c', position: 'relative', cursor: 'pointer' },
+                img: { width: 80, height: 80, borderRadius: 10, overflow: 'hidden', position: 'relative', background: '#111', cursor: 'zoom-in' },
+                qtyBadge: { position: 'absolute', top: 4, left: 4, background: '#00f2ff', color: '#000', fontSize: 9, fontWeight: 900, padding: '2px 6px', borderRadius: 5, zIndex: 5 },
+                photoBadge: { position: 'absolute', top: 4, right: 4, background: 'rgba(0,0,0,0.7)', border: '1px solid #00f2ff', color: '#00f2ff', fontSize: 8, fontWeight: 900, padding: '2px 6px', borderRadius: 5, zIndex: 5 }
+            };
+
+            return (
+                <div style={styles.app}>
+                    {syncing && <div style={styles.syncing}><i className="fas fa-satellite-dish fa-spin" style={{marginRight:8}}></i> SYNCING HUB...</div>}
+                    
+                    <header style={styles.header}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <img 
+                                    src={HUB_LOGO} 
+                                    onClick={() => setCommsOpen(true)}
+                                    style={{ width: 42, height: 42, borderRadius: '50%', border: '1px solid #00f2ff', cursor: 'pointer', transition: 'transform 0.2s' }} 
+                                />
+                                <div>
+                                    <h1 style={styles.title}>G-HUB PRO</h1>
+                                    <div style={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                                        <div className="live-indicator"></div>
+                                        <span style={{ fontSize: 8, color: '#444', fontFamily: 'Orbitron' }}>{lastSync ? `LAST SYNC: ${lastSync}` : 'IDLE'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{ display: 'flex', gap: 10 }}>
+                                <button onClick={() => setCur(cur === 'USD' ? 'XCD' : 'USD')} style={{ background: '#111', border: '1px solid #222', color: '#fff', padding: '10px 12px', borderRadius: 8, fontSize: 9, fontFamily: 'Orbitron' }}>{cur}</button>
+                                <button onClick={loadData} style={{ background: '#111', border: 'none', color: '#444', width: 38, height: 38, borderRadius: 8 }}><i className="fas fa-sync-alt"></i></button>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                            <div className="markup-control">
+                                <span style={{ fontSize: 7, fontFamily: 'Orbitron', color: '#444', paddingLeft: 4 }}>STRATEGY:</span>
+                                <select className="markup-select" value={markupType} onChange={e => setMarkupType(e.target.value)}>
+                                    <option value="50">50% MARKUP</option>
+                                    <option value="100">100% MARKUP</option>
+                                    <option value="150">150% MARKUP</option>
+                                    <option value="200">200% MARKUP</option>
+                                    <option value="Custom">CUSTOM %</option>
+                                </select>
+                                {markupType === "Custom" && (
+                                    <input 
+                                        type="number" 
+                                        className="markup-input" 
+                                        value={customMarkup} 
+                                        onChange={e => setCustomMarkup(e.target.value)} 
+                                    />
+                                )}
+                            </div>
+                            <div style={{ fontSize: 7, fontFamily: 'Orbitron', color: '#00f2ff', letterSpacing: 1 }}>
+                                MULTIPLIER: { (1 + (activeMarkupValue/100)).toFixed(2) }x
+                            </div>
+                        </div>
+
+                        <div style={styles.dash}>
+                            <div style={styles.dashBox}>
+                                <span style={{...styles.dashLabel, color: '#00ff88'}}>COMMITTED (USD)</span>
+                                <div style={styles.dashVal}>${committedUSD.toLocaleString(undefined, {minimumFractionDigits:2})}</div>
+                            </div>
+                            <div style={styles.dashBox}>
+                                <span style={{...styles.dashLabel, color: '#00f2ff'}}>PENDING (XCD)</span>
+                                <div style={styles.dashVal}>EC${pendingXCD.toLocaleString(undefined, {minimumFractionDigits:2})}</div>
+                            </div>
+                        </div>
+
+                        <button onClick={() => setModal({ name: '', cost: '0.00', sell: '0.00', qty: 1, type: 'Misc', gender: "Unisex", tab: activeTab === "ALL" ? 'Watchlist' : activeTab, status: 'Assigned', img: [], size: '', shoeSize: '', link: '', note: '' })} 
+                            style={styles.addBtn}>+ INITIALIZE PRODUCT</button>
+                    </header>
+
+                    <div style={styles.tabs}>
+                        <button onClick={() => setActiveTab("ALL")} className={activeTab === "ALL" ? "all-active" : ""} style={styles.tab}>ALL</button>
+                        {tabs.map(t => <button key={t} onClick={() => setActiveTab(t)} className={activeTab === t ? "tab-active" : ""} style={styles.tab}>{t.toUpperCase()}</button>)}
+                        <button onClick={addCategory} style={styles.tabPlus}><i className="fas fa-plus"></i></button>
+                    </div>
+
+                    <main style={{ paddingBottom: 100 }}>
+                        {filtered.length === 0 && <div style={{textAlign:'center', padding:60, color:'#222', fontSize:9, fontFamily:'Orbitron'}}>NO RECORDS FOUND</div>}
+                        {filtered.map(i => (
+                            <div key={i.id} onClick={() => setModal(i)} style={styles.card}>
+                                <div style={styles.img} onClick={(e) => {
+                                    if(i.img.length > 0) {
+                                        e.stopPropagation();
+                                        setLightbox({ images: i.img, index: 0 });
+                                    }
+                                }}>
+                                    <img src={i.img[0] || 'https://via.placeholder.com/100?text=NONE'} style={{width:'100%', height:'100%', objectFit:'cover'}} />
+                                    <div style={styles.qtyBadge}>{i.qty}</div>
+                                    {i.img.length > 0 && <div style={styles.photoBadge}><i className="fas fa-camera" style={{marginRight:3}}></i>{i.img.length}</div>}
+                                </div>
+                                <div style={{ flex: 1, paddingLeft: 18 }}>
+                                    <div style={{ fontSize: 8, color: '#444', fontFamily: 'Orbitron', fontWeight: 800 }}>{i.type.toUpperCase()} | {i.tab.toUpperCase()}</div>
+                                    <h3 style={{ fontSize: 15, fontWeight: 700, margin: '5px 0', color: '#fff' }}>{i.name}</h3>
+                                    <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+                                        {(i.size || i.shoeSize) && (
+                                            <span style={{fontSize:8, color:'#888', background:'#111', padding:'2px 5px', borderRadius:4}}>
+                                                {i.type === "Footwear" ? `US ${i.shoeSize}` : i.size}
+                                            </span>
+                                        )}
+                                        <span style={{fontSize:8, color: i.status === 'Assigned' ? '#00f2ff' : '#444', fontFamily:'Orbitron'}}>{i.status === 'Assigned' ? 'APPROVAL REQ' : i.status.toUpperCase()}</span>
+                                    </div>
+                                    <div style={{ color: '#00f2ff', fontSize: 20, fontWeight: 900, fontFamily: 'Orbitron' }}>
+                                        {cur === 'USD' ? `$${(i.sell / EC_RATE).toFixed(2)}` : `EC$${i.sell.toFixed(2)}`}
+                                    </div>
+                                </div>
+                                <div style={{ position: 'absolute', right: 15, top: '50%', transform: 'translateY(-50%)', color: '#1a1a1c' }}>
+                                    <i className="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        ))}
+                    </main>
+
+                    {modal && <Form item={modal} tabs={tabs} activeMarkup={activeMarkupValue} onClose={() => setModal(null)} onSave={handleSave} onDelete={handleDelete} />}
+                    {commsOpen && <CommsHub onClose={() => setCommsOpen(false)} />}
+                    {lightbox && <GalleryLightbox images={lightbox.images} initialIndex={lightbox.index} onClose={() => setLightbox(null)} />}
+                </div>
+            );
+        };
+
+        createRoot(document.getElementById('root')).render(<App />);
+    </script>
 </body>
 </html>
