@@ -26,16 +26,16 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner { width: 32px; height: 32px; border: 2px solid rgba(0,242,255,0.1); border-top-color: #00f2ff; border-radius: 50%; animation: spin 0.6s linear infinite; }
-        
+
         .status-purchased { background: rgba(0,255,136,0.05) !important; color: #00ff88 !important; border: 1px solid rgba(0,255,136,0.2) !important; }
         .status-assigned { background: rgba(0,242,255,0.05) !important; color: #00f2ff !important; border: 1px solid rgba(0,242,255,0.2) !important; }
         .status-shipped { background: rgba(255,170,0,0.05) !important; color: #ffaa00 !important; border: 1px solid rgba(255,170,0,0.2) !important; }
         .status-received { background: rgba(170,0,255,0.05) !important; color: #aa00ff !important; border: 1px solid rgba(170,0,255,0.2) !important; }
-        
+
         ::-webkit-scrollbar { display: none; }
         input, select, textarea { -webkit-appearance: none; border-radius: 10px; border: 1px solid #1a1a1c; outline: none; transition: border-color 0.2s; background: #111; color: #fff; }
         input:focus, textarea:focus { border-color: #00f2ff !important; }
-        
+
         .tab-active { border-color: #00f2ff !important; color: #00f2ff !important; background: rgba(0,242,255,0.03) !important; }
         .all-active { border-color: #00ff88 !important; color: #00ff88 !important; background: rgba(0,255,136,0.03) !important; }
 
@@ -81,11 +81,11 @@
     <div id="root"></div>
 
     <script type="text/babel" data-type="module">
-        import React, { useState, useEffect, useMemo, useRef } from 'react';
+        import React, { useState, useEffect, useMemo } from 'react';
         import { createRoot } from 'react-dom/client';
         import { GoogleGenAI } from "@google/genai";
 
-        // Verified endpoint from GitHub working script
+        // Your deployed endpoint (leave as-is)
         const API_URL = 'https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec';
         const HUB_LOGO = 'https://vinylpressusa.com/wp-content/uploads/2025/12/38D06428-7D3B-44EF-B4A9-472C4EDDEB9F.png';
 
@@ -168,19 +168,19 @@
                         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
                         const res = await ai.models.generateContent({
                             model: 'gemini-3-flash-preview',
-                            contents: { 
+                            contents: {
                                 parts: [
-                                    { text: "Output JSON: {name, costUSD, type, size}" }, 
+                                    { text: "Output JSON: {name, costUSD, type, size}" },
                                     { inlineData: { data: reader.result.split(',')[1], mimeType: 'image/jpeg' } }
-                                ] 
+                                ]
                             },
                             config: { responseMimeType: "application/json" }
                         });
                         const d = JSON.parse(res.text || '{}');
                         const newCost = d.costUSD || f.cost;
                         const multiplier = 1 + (activeMarkup / 100);
-                        setF(p => ({ 
-                            ...p, 
+                        setF(p => ({
+                            ...p,
                             img: [...p.img, reader.result],
                             name: d.name || p.name,
                             cost: parseFloat(newCost).toFixed(2),
@@ -290,11 +290,11 @@
                         <div style={styles.row}>
                             <div style={{ flex: 1 }}>
                                 <label style={styles.label}>COST (USD)</label>
-                                <input 
-                                    type="number" 
-                                    step="0.01" 
-                                    style={styles.input} 
-                                    value={f.cost} 
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    style={styles.input}
+                                    value={f.cost}
                                     onFocus={(e) => { e.target.select(); setF(p => ({...p, cost: 0})) }}
                                     onChange={e => updateCost(e.target.value)}
                                     onBlur={() => setF(p => ({...p, cost: parseFloat(p.cost || 0).toFixed(2)}))}
@@ -302,10 +302,10 @@
                             </div>
                             <div style={{ flex: 1 }}>
                                 <label style={styles.label}>QUANTITY</label>
-                                <input 
-                                    type="number" 
-                                    style={styles.input} 
-                                    value={f.qty} 
+                                <input
+                                    type="number"
+                                    style={styles.input}
+                                    value={f.qty}
                                     onFocus={(e) => { e.target.select(); setF(p => ({...p, qty: 0})) }}
                                     onChange={e => setF({...f, qty: e.target.value})}
                                 />
@@ -358,7 +358,7 @@
             const [lightbox, setLightbox] = useState(null);
             const [syncing, setSyncing] = useState(false);
             const [lastSync, setLastSync] = useState(null);
-            
+
             const [markupType, setMarkupType] = useState("50");
             const [customMarkup, setCustomMarkup] = useState("75");
 
@@ -393,9 +393,10 @@
                         setTabs(prev => [...new Set([...DEFAULT_DELIVERY_TABS, ...sheetTabs])]);
                         setLastSync(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
                     }
-                } catch (e) { console.error("Sync Error", e); }
-                finally { 
-                    setSyncing(false); 
+                } catch (e) {
+                    console.error("Sync Error", e);
+                } finally {
+                    setSyncing(false);
                     const boot = document.getElementById('boot-screen');
                     if (boot) boot.style.display = 'none';
                 }
@@ -417,16 +418,18 @@
                 try {
                     const params = new URLSearchParams();
                     Object.keys(payload).forEach(key => params.append(key, payload[key]));
-                    
-                    await fetch(API_URL, { 
-                        method: 'POST', 
-                        body: params, 
+
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        body: params,
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                     });
-                    
+
                     setTimeout(loadData, 2500);
-                } catch (err) { setSyncing(false); }
+                } catch (err) {
+                    setSyncing(false);
+                }
             };
 
             const handleSave = async (f) => {
@@ -458,9 +461,27 @@
                 });
             };
 
-            const committedUSD = items.filter(i => ['Purchased', 'Shipped', 'Received'].includes(i.status)).reduce((a,b) => a + (b.cost * b.qty), 0);
-            const pendingXCD = items.filter(i => i.status === 'Assigned').reduce((a,b) => a + (b.sell * b.qty), 0);
-            const filtered = activeTab === "ALL" ? items : items.filter(i => i.tab === activeTab);
+            /* ==============================
+               FIXED DASHBOARD TOTALS + CURRENCY
+               - Totals now respect selected tab
+               - Currency toggle affects BOTH tiles
+               - Does NOT change any other behavior
+            =============================== */
+            const visible = activeTab === "ALL" ? items : items.filter(i => i.tab === activeTab);
+
+            const committedUSD = visible
+                .filter(i => ['Purchased', 'Shipped', 'Received'].includes(i.status))
+                .reduce((a,b) => a + ((b.cost || 0) * (b.qty || 0)), 0);
+
+            const pendingXCD = visible
+                .filter(i => i.status === 'Assigned')
+                .reduce((a,b) => a + ((b.sell || 0) * (b.qty || 0)), 0);
+
+            const committedDisplay = cur === 'USD' ? committedUSD : (committedUSD * EC_RATE);
+            const pendingDisplay   = cur === 'USD' ? (pendingXCD / EC_RATE) : pendingXCD;
+
+            const filtered = visible;
+            /* ============================== */
 
             const styles = {
                 app: { width: '100%', maxWidth: '500px', margin: '0 auto', minHeight: '100vh', background: '#0a0a0c', borderLeft: '1px solid #1a1a1c', borderRight: '1px solid #1a1a1c', position: 'relative' },
@@ -484,14 +505,14 @@
             return (
                 <div style={styles.app}>
                     {syncing && <div style={styles.syncing}><i className="fas fa-satellite-dish fa-spin" style={{marginRight:8}}></i> SYNCING HUB...</div>}
-                    
+
                     <header style={styles.header}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                <img 
-                                    src={HUB_LOGO} 
+                                <img
+                                    src={HUB_LOGO}
                                     onClick={() => setCommsOpen(true)}
-                                    style={{ width: 42, height: 42, borderRadius: '50%', border: '1px solid #00f2ff', cursor: 'pointer', transition: 'transform 0.2s' }} 
+                                    style={{ width: 42, height: 42, borderRadius: '50%', border: '1px solid #00f2ff', cursor: 'pointer', transition: 'transform 0.2s' }}
                                 />
                                 <div>
                                     <h1 style={styles.title}>G-HUB PRO</h1>
@@ -518,11 +539,11 @@
                                     <option value="Custom">CUSTOM %</option>
                                 </select>
                                 {markupType === "Custom" && (
-                                    <input 
-                                        type="number" 
-                                        className="markup-input" 
-                                        value={customMarkup} 
-                                        onChange={e => setCustomMarkup(e.target.value)} 
+                                    <input
+                                        type="number"
+                                        className="markup-input"
+                                        value={customMarkup}
+                                        onChange={e => setCustomMarkup(e.target.value)}
                                     />
                                 )}
                             </div>
@@ -533,17 +554,27 @@
 
                         <div style={styles.dash}>
                             <div style={styles.dashBox}>
-                                <span style={{...styles.dashLabel, color: '#00ff88'}}>COMMITTED (USD)</span>
-                                <div style={styles.dashVal}>${committedUSD.toLocaleString(undefined, {minimumFractionDigits:2})}</div>
+                                <span style={{...styles.dashLabel, color: '#00ff88'}}>COMMITTED ({cur})</span>
+                                <div style={styles.dashVal}>
+                                    {cur === 'USD'
+                                        ? `$${committedDisplay.toLocaleString(undefined, {minimumFractionDigits:2})}`
+                                        : `EC$${committedDisplay.toLocaleString(undefined, {minimumFractionDigits:2})}`}
+                                </div>
                             </div>
                             <div style={styles.dashBox}>
-                                <span style={{...styles.dashLabel, color: '#00f2ff'}}>PENDING (XCD)</span>
-                                <div style={styles.dashVal}>EC${pendingXCD.toLocaleString(undefined, {minimumFractionDigits:2})}</div>
+                                <span style={{...styles.dashLabel, color: '#00f2ff'}}>PENDING ({cur})</span>
+                                <div style={styles.dashVal}>
+                                    {cur === 'USD'
+                                        ? `$${pendingDisplay.toLocaleString(undefined, {minimumFractionDigits:2})}`
+                                        : `EC$${pendingDisplay.toLocaleString(undefined, {minimumFractionDigits:2})}`}
+                                </div>
                             </div>
                         </div>
 
-                        <button onClick={() => setModal({ name: '', cost: '0.00', sell: '0.00', qty: 1, type: 'Misc', gender: "Unisex", tab: activeTab === "ALL" ? 'Watchlist' : activeTab, status: 'Assigned', img: [], size: '', shoeSize: '', link: '', note: '' })} 
-                            style={styles.addBtn}>+ INITIALIZE PRODUCT</button>
+                        <button
+                            onClick={() => setModal({ name: '', cost: '0.00', sell: '0.00', qty: 1, type: 'Misc', gender: "Unisex", tab: activeTab === "ALL" ? 'Watchlist' : activeTab, status: 'Assigned', img: [], size: '', shoeSize: '', link: '', note: '' })}
+                            style={styles.addBtn}
+                        >+ INITIALIZE PRODUCT</button>
                     </header>
 
                     <div style={styles.tabs}>
