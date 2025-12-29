@@ -2,229 +2,243 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Grenada Hub Pro</title>
+  <meta name="theme-color" content="#071018" />
   <style>
-    :root { color-scheme: dark; }
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#071018; color:#e8f2ff; }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 18px; }
-    .card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; box-shadow: 0 30px 90px rgba(0,0,0,.45); overflow:hidden; }
+    :root{color-scheme:dark; --bg:#071018; --card:rgba(255,255,255,.05); --card2:rgba(0,0,0,.22); --line:rgba(255,255,255,.10);
+      --text:#e8f2ff; --muted:rgba(232,242,255,.70); --brand:#00AEEF; --ok:#b6ffcf; --warn:#ffd59a; --err:#ffb3b3;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:inherit}
+    .wrap{max-width:1240px;margin:0 auto;padding:16px 14px 26px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 26px 90px rgba(0,0,0,.45);overflow:hidden}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:linear-gradient(180deg,rgba(0,174,239,.16),rgba(255,255,255,0));border-bottom:1px solid var(--line)}
+    .title{display:flex;flex-direction:column;gap:3px}
+    h1{margin:0;font-size:16px;letter-spacing:.10em;text-transform:uppercase}
+    .sub{font-size:12px;color:var(--muted)}
+    .topActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .btn{appearance:none;border:0;border-radius:999px;padding:10px 12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;line-height:1;display:inline-flex;align-items:center;gap:8px}
+    .btn.primary{background:var(--brand);color:#001018}
+    .btn.ghost{background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(255,255,255,.12)}
+    .btn.danger{background:rgba(255,70,70,.16);color:#ffd6d6;border:1px solid rgba(255,70,70,.25)}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
 
-    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 14px 16px; background: linear-gradient(180deg, rgba(0,174,239,.14), rgba(255,255,255,0)); border-bottom: 1px solid rgba(255,255,255,.08); }
-    .brandBtn { display:flex; flex-direction:column; gap:4px; cursor:pointer; user-select:none; }
-    .brandBtn:active { transform: translateY(1px); }
-    header h1 { margin:0; font-size: 16px; letter-spacing:.10em; text-transform: uppercase; }
-    header .sub { font-size: 12px; opacity:.75; }
-
-    .topPills { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
-    .pillLink {
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 10px 12px; border-radius: 999px;
-      background: rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
-      color:#e8f2ff; text-decoration:none; font-weight:800; letter-spacing:.06em; text-transform: uppercase; font-size: 11px;
+    .dash{
+      display:grid;
+      grid-template-columns: 1.1fr 1.1fr 1.1fr 1fr;
+      gap:12px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
     }
-    .pillLink:active { transform: translateY(1px); }
+    @media (max-width:1050px){ .dash{grid-template-columns:1fr 1fr} }
+    @media (max-width:640px){ .dash{grid-template-columns:1fr} }
 
-    .btn { appearance:none; border:0; border-radius: 999px; padding: 10px 14px; font-weight: 900; letter-spacing:.06em; text-transform: uppercase; cursor:pointer; }
-    .btn.primary { background:#00AEEF; color:#001018; }
-    .btn.ghost { background: rgba(255,255,255,.08); color:#e8f2ff; border:1px solid rgba(255,255,255,.12); }
-    .btn:disabled { opacity:.55; cursor:not-allowed; }
-
-    .toolbar { display:flex; gap:10px; align-items:center; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); flex-wrap:wrap; }
-    .toolbar input, .toolbar select {
-      background: rgba(0,0,0,.35); color:#e8f2ff; border: 1px solid rgba(255,255,255,.12);
-      border-radius: 12px; padding: 10px 12px; outline:none;
+    .bubble{
+      background:var(--card2);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:12px 12px 10px;
+      display:flex;flex-direction:column;gap:6px;
+      min-height:78px;
     }
-    .toolbar .spacer { flex: 1 1 auto; }
-
-    .tiles { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:10px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
-    @media (max-width: 820px){ .tiles{ grid-template-columns: 1fr; } }
-    .tile {
-      background: rgba(0,0,0,.20);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: 14px;
-      padding: 12px 12px;
-      display:flex; flex-direction:column; gap:6px;
-    }
-    .tileTop { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .tileLabel { font-size: 11px; opacity:.75; letter-spacing:.14em; text-transform: uppercase; }
-    .tileValue { font-size: 18px; font-weight: 900; letter-spacing:.02em; }
-    .tile select {
-      background: rgba(0,0,0,.35); color:#e8f2ff; border: 1px solid rgba(255,255,255,.12);
-      border-radius: 10px; padding: 6px 8px; outline:none; font-size: 12px;
+    .bubbleTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .bubbleLabel{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .bubbleValue{font-size:18px;font-weight:900;letter-spacing:.02em}
+    .bubbleSmall{font-size:12px;color:var(--muted)}
+    .miniSelect{
+      background:rgba(0,0,0,.35);color:var(--text);
+      border:1px solid rgba(255,255,255,.14);border-radius:12px;
+      padding:8px 10px;outline:none;max-width:220px;
     }
 
-    .markupRow { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
-    .markupRow .label { font-size: 11px; opacity:.75; letter-spacing:.14em; text-transform: uppercase; }
-    .markupRow select, .markupRow input {
-      background: rgba(0,0,0,.35); color:#e8f2ff; border: 1px solid rgba(255,255,255,.12);
-      border-radius: 12px; padding: 10px 12px; outline:none;
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--line)}
+    .toolbar input,.toolbar select{
+      background:rgba(0,0,0,.35);color:var(--text);
+      border:1px solid rgba(255,255,255,.14);border-radius:12px;
+      padding:10px 12px;outline:none;
     }
-    .miniBtn { padding: 10px 12px; }
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    .chip{cursor:pointer}
+    .chip.ok{border-color:rgba(182,255,207,.28);background:rgba(182,255,207,.10)}
+    .chip.warn{border-color:rgba(255,213,154,.30);background:rgba(255,213,154,.10)}
+    .chip:active{transform:translateY(1px)}
 
-    .grid { display:grid; grid-template-columns: 1.2fr; gap: 14px; padding: 14px 16px; }
-    .panel { background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow:hidden; }
-    .panel h2 { margin:0; padding: 12px 14px; font-size: 12px; letter-spacing:.18em; text-transform: uppercase; opacity:.85; border-bottom:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .panel .body { padding: 0; }
+    .grid{display:grid;grid-template-columns:1.2fr .85fr;gap:14px;padding:14px}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
 
-    table { width:100%; border-collapse: collapse; font-size: 13px; }
-    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; }
-    th { font-size: 11px; opacity:.7; letter-spacing:.14em; text-transform: uppercase; }
-    tr:hover td { background: rgba(0,174,239,.06); cursor:pointer; }
+    .panel{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.10);border-radius:16px;overflow:hidden}
+    .panel h2{margin:0;padding:12px 14px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.10)}
+    .panel .body{padding:12px 14px}
 
-    .statusBar { padding: 10px 14px; font-size: 12px; border-top:1px solid rgba(255,255,255,.08); opacity:.90; }
-    .statusBar.error { color:#ffb3b3; }
-    .statusBar.ok { color:#b6ffcf; }
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.07);text-align:left;vertical-align:top}
+    th{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;position:sticky;top:0;background:rgba(7,16,24,.92);backdrop-filter:blur(6px)}
+    tr:hover td{background:rgba(0,174,239,.06);cursor:pointer}
+    .statusBar{padding:10px 14px;font-size:12px;border-top:1px solid rgba(255,255,255,.10);color:var(--muted)}
 
-    .quickFilters { display:flex; gap:10px; flex-wrap:wrap; padding: 12px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
-    .tagBtn {
-      display:inline-flex; align-items:center; justify-content:center;
-      background: rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
-      color:#e8f2ff; border-radius:999px; padding: 10px 12px;
-      font-weight:900; letter-spacing:.06em; text-transform: uppercase; font-size: 11px; cursor:pointer;
+    form .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    @media (max-width:560px){ form .row{grid-template-columns:1fr} }
+    label{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;display:block;margin:0 0 6px}
+    input,textarea,select{
+      width:100%;
+      background:rgba(0,0,0,.35);color:var(--text);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:12px;padding:10px 12px;outline:none;
     }
-    .tagBtn.on { background: rgba(0,174,239,.20); border-color: rgba(0,174,239,.45); }
+    textarea{min-height:84px;resize:vertical}
+    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+    .note{font-size:12px;color:var(--muted);line-height:1.45}
 
-    /* Modal */
-    .modalOverlay { position:fixed; inset:0; background: rgba(0,0,0,.65); display:none; align-items:center; justify-content:center; padding: 16px; z-index: 9999; }
-    .modalOverlay.show { display:flex; }
-    .modal {
-      width:min(860px, 100%);
-      background: rgba(10,18,26,.96);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius: 18px;
-      overflow:hidden;
-      box-shadow: 0 40px 120px rgba(0,0,0,.6);
+    .variants{margin-top:12px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.16)}
+    .variantRow{display:grid;grid-template-columns: 1fr 1fr 1fr 44px;gap:10px;margin-bottom:10px}
+    @media (max-width:560px){ .variantRow{grid-template-columns:1fr} .variantRow .xBtn{justify-self:start} }
+    .xBtn{width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer}
+
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+    .overlay.show{display:flex}
+    .modal{width:min(560px,100%);background:rgba(7,16,24,.96);border:1px solid rgba(255,255,255,.14);border-radius:18px;box-shadow:0 30px 120px rgba(0,0,0,.60);overflow:hidden}
+    .modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.14)}
+    .modalHead b{letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:var(--muted)}
+    .modalBody{padding:14px}
+    .modalActions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:12px 14px;border-top:1px solid rgba(255,255,255,.14)}
+
+    .fx{position:fixed;inset:0;pointer-events:none;z-index:80;display:none}
+    .fx.show{display:block}
+    .thumb{
+      position:absolute;left:50%;top:30%;
+      transform:translate(-50%,-50%) scale(.7);
+      font-size:96px;filter:drop-shadow(0 14px 30px rgba(0,0,0,.55));
+      opacity:0;
+      animation:thumbPop 1.05s ease-out forwards;
     }
-    .modalHead { display:flex; align-items:center; justify-content:space-between; gap:10px; padding: 14px 14px; border-bottom:1px solid rgba(255,255,255,.08); }
-    .modalHead .mhTitle { font-weight: 1000; letter-spacing:.08em; text-transform: uppercase; font-size: 12px; opacity:.9; }
-    .modalBody { padding: 14px; max-height: 78vh; overflow:auto; }
-    .modalFoot { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; padding: 14px; border-top:1px solid rgba(255,255,255,.08); }
-
-    form .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; align-items:start; }
-    @media (max-width: 720px){ form .row{ grid-template-columns: 1fr; } }
-    form label { font-size: 11px; opacity:.75; letter-spacing:.14em; text-transform: uppercase; display:block; margin: 0 0 6px; }
-    form input, form textarea, form select {
-      width:100%; box-sizing:border-box;
-      background: rgba(0,0,0,.35); color:#e8f2ff;
-      border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 10px 12px; outline:none;
+    @keyframes thumbPop{
+      0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-6deg)}
+      18%{opacity:1;transform:translate(-50%,-50%) scale(1.05) rotate(4deg)}
+      55%{opacity:1;transform:translate(-50%,-50%) scale(.98) rotate(0deg)}
+      100%{opacity:0;transform:translate(-50%,-60%) scale(.90)}
     }
-    form textarea { min-height: 92px; resize: vertical; }
-    .note { font-size: 12px; opacity:.78; line-height:1.45; }
+    .bill{
+      position:absolute;top:-40px;font-size:22px;opacity:.0;
+      animation:rain 1.2s linear forwards;
+      filter:drop-shadow(0 10px 20px rgba(0,0,0,.55));
+    }
+    @keyframes rain{
+      0%{opacity:0;transform:translateY(-20px) rotate(0deg)}
+      10%{opacity:1}
+      100%{opacity:0;transform:translateY(calc(100vh + 60px)) rotate(260deg)}
+    }
 
-    /* Variants */
-    .variantsWrap { margin-top: 10px; padding: 12px; border: 1px solid rgba(255,255,255,.10); border-radius: 14px; background: rgba(255,255,255,.04); }
-    .variantsTop { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
-    .variantsTop .vTitle { font-weight: 1000; letter-spacing:.10em; text-transform: uppercase; font-size: 11px; opacity:.85; }
-    .variantRow { display:grid; grid-template-columns: 1fr 1fr 1fr 0.6fr 0.8fr 0.8fr auto; gap:8px; margin-bottom:8px; }
-    @media (max-width: 920px){ .variantRow{ grid-template-columns: 1fr 1fr; } }
-    .variantRow input, .variantRow select { padding: 9px 10px; border-radius: 10px; }
-    .iconBtn { background: rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.12); color:#e8f2ff; border-radius: 12px; padding: 10px 10px; cursor:pointer; }
-
-    /* Easter eggs */
-    .egg { position: fixed; inset:0; display:none; align-items:center; justify-content:center; pointer-events:none; z-index: 10000; }
-    .egg.show { display:flex; }
-    .thumb { font-size: 90px; filter: drop-shadow(0 20px 50px rgba(0,174,239,.35)); animation: pop 900ms ease forwards; }
-    @keyframes pop { 0%{ transform: scale(.2); opacity:0; } 40%{ transform: scale(1.1); opacity:1; } 100%{ transform: scale(1.0); opacity:0; } }
-    .moneyRain { position:absolute; inset:0; overflow:hidden; }
-    .bill { position:absolute; top:-20px; font-size: 24px; opacity:.95; animation: fall 900ms linear forwards; }
-    @keyframes fall { to { transform: translateY(110vh) rotate(35deg); opacity:0; } }
+    .muted{color:var(--muted)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-
       <header>
-        <!-- Title is now the Call button -->
-        <div id="brandBtn" class="brandBtn" title="Tap to call">
+        <div class="title">
           <h1>Grenada Hub Pro</h1>
           <div class="sub">Inventory • Pricing • Shipments</div>
         </div>
 
-        <div class="topPills">
-          <a class="pillLink" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
-          <a class="pillLink" href="https://vinylpressusa.com/grenada-dashboard-mobile/" target="_blank" rel="noopener">Dashboard Mobile</a>
+        <div class="topActions">
+          <a class="btn ghost" href="https://vinylpressusa.com/grenada-dashboard-mobile" target="_blank" rel="noopener">Dashboard Mobile</a>
+          <a class="btn ghost" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
+
+          <button id="btnCall" class="btn ghost" type="button">Call</button>
+          <button id="btnReload" class="btn ghost" type="button">Reload</button>
+          <button id="btnAdd" class="btn primary" type="button">+ Add Product</button>
         </div>
       </header>
 
-      <div class="tiles">
-        <div class="tile">
-          <div class="tileTop">
-            <div class="tileLabel">Total Items</div>
+      <div class="dash">
+        <div class="bubble">
+          <div class="bubbleTop">
+            <div class="bubbleLabel">Total Items</div>
+            <span class="pill" id="pillShip">All shipments</span>
           </div>
-          <div id="tileItems" class="tileValue">0</div>
+          <div class="bubbleValue" id="bItems">0</div>
+          <div class="bubbleSmall">Across current filter</div>
         </div>
 
-        <div class="tile">
-          <div class="tileTop">
-            <div class="tileLabel" id="costLabel">Total Cost</div>
-            <select id="costShipment"></select>
+        <div class="bubble">
+          <div class="bubbleTop">
+            <div class="bubbleLabel" id="lblCost">Total Cost</div>
+            <select id="shipForCost" class="miniSelect" title="Choose shipment for this metric"></select>
           </div>
-          <div id="tileCost" class="tileValue">$0.00</div>
+          <div class="bubbleValue" id="bCost">$0.00</div>
+          <div class="bubbleSmall muted">Σ (Cost × Qty)</div>
         </div>
 
-        <div class="tile">
-          <div class="tileTop">
-            <div class="tileLabel" id="revLabel">Expected Revenue</div>
-            <select id="revShipment"></select>
+        <div class="bubble">
+          <div class="bubbleTop">
+            <div class="bubbleLabel" id="lblRev">Expected Revenue</div>
+            <select id="shipForRev" class="miniSelect" title="Choose shipment for this metric"></select>
           </div>
-          <div id="tileRev" class="tileValue">EC$0.00</div>
+          <div class="bubbleValue" id="bRev">EC$0.00</div>
+          <div class="bubbleSmall muted">Σ (Selling × Qty)</div>
         </div>
-      </div>
 
-      <div class="markupRow">
-        <div class="label">Markup</div>
-        <select id="markupPreset">
-          <option value="50">50%</option>
-          <option value="100">100%</option>
-          <option value="150">150%</option>
-          <option value="200">200%</option>
-          <option value="custom">Custom</option>
-        </select>
-        <input id="markupCustom" type="number" inputmode="decimal" step="0.01" placeholder="Custom %" style="display:none; max-width: 170px;" />
-
-        <div class="label" style="margin-left:10px;">USD→XCD</div>
-        <input id="fx" type="number" inputmode="decimal" step="0.01" value="2.70" style="max-width:110px;" />
-
-        <div class="label" style="margin-left:10px;">Display</div>
-        <select id="currencyToggle" style="max-width:160px;">
-          <option value="USD">USD</option>
-          <option value="XCD">XCD</option>
-        </select>
-
-        <button id="btnAdd" class="btn primary miniBtn" type="button">+ Add Product</button>
-        <button id="btnReload" class="btn ghost miniBtn" type="button">Reload</button>
+        <div class="bubble">
+          <div class="bubbleTop">
+            <div class="bubbleLabel" id="lblProfit">Profit Est.</div>
+            <select id="shipForProfit" class="miniSelect" title="Choose shipment for this metric"></select>
+          </div>
+          <div class="bubbleValue" id="bProfit">EC$0.00</div>
+          <div class="bubbleSmall muted">Revenue − Cost</div>
+        </div>
       </div>
 
       <div class="toolbar">
-        <input id="q" type="search" placeholder="Search product name..." />
-        <select id="shipFilter"></select>
-        <select id="catFilter"></select>
-        <select id="statusFilter"></select>
-        <select id="priceFilter">
-          <option value="">All Price Approval</option>
-          <option value="Yes">Price Approved = Yes</option>
-          <option value="No">Price Approved = No</option>
-          <option value="Blank">Price Approved = Blank</option>
-        </select>
-        <div class="spacer"></div>
-        <div id="count" class="note" style="font-weight:900; letter-spacing:.06em; text-transform:uppercase;">0 items</div>
-      </div>
+        <input id="q" type="search" placeholder="Search Product Name..." />
 
-      <div class="quickFilters">
-        <button id="btnNeedsApproval" class="tagBtn" type="button">Needs Price Approval</button>
-        <button id="btnMissingSell" class="tagBtn" type="button">Missing Selling Price</button>
+        <select id="shipmentFilter" title="Filter by Shipment"></select>
+        <select id="categoryFilter" title="Filter by Category/Tab"></select>
+        <select id="statusFilter" title="Filter by Status"></select>
+        <select id="approvedFilter" title="Filter by Price Approved">
+          <option value="">All Price Approved</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+          <option value="Pending">Pending</option>
+          <option value="Needs Price">Needs Price</option>
+        </select>
+
+        <span class="pill chip warn" id="chipNeedsApproval" title="Show items needing price approval">Needs price approval: <b id="nNeedsApproval">0</b></span>
+        <span class="pill chip ok" id="chipNeedsSelling" title="Show items missing Selling Price">Needs selling price: <b id="nNeedsSelling">0</b></span>
+
+        <span class="pill" style="margin-left:auto">
+          Display
+          <select id="displaySel" class="miniSelect" style="padding:6px 10px">
+            <option value="USD">USD</option>
+            <option value="XCD">XCD</option>
+          </select>
+        </span>
+
+        <span class="pill">
+          USD→XCD
+          <input id="fxInput" inputmode="decimal" value="2.70" style="max-width:110px;padding:6px 10px;border-radius:12px" />
+        </span>
+
+        <span class="pill">
+          Markup
+          <select id="markupSel" class="miniSelect" style="padding:6px 10px">
+            <option value="0.50">50%</option>
+            <option value="1.00">100%</option>
+            <option value="1.50">150%</option>
+            <option value="2.00">200%</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input id="markupCustom" inputmode="decimal" placeholder="e.g. 0.85" style="display:none;max-width:120px;padding:6px 10px;border-radius:12px" />
+        </span>
       </div>
 
       <div class="grid">
         <div class="panel">
-          <h2>
-            <span>Inventory</span>
-            <span class="note" style="opacity:.7;">Tap a row to edit</span>
-          </h2>
-          <div class="body">
-            <div style="overflow:auto; max-height: 62vh;">
+          <h2>Inventory</h2>
+          <div class="body" style="padding:0">
+            <div style="overflow:auto;max-height:62vh">
               <table id="tbl">
                 <thead>
                   <tr>
@@ -232,8 +246,8 @@
                     <th>Shipment</th>
                     <th>Category</th>
                     <th>Qty</th>
-                    <th>Cost (USD)</th>
-                    <th>Selling (XCD)</th>
+                    <th id="thCost">Cost</th>
+                    <th id="thSell">Selling</th>
                     <th>Status</th>
                     <th>Approved</th>
                     <th>Shipping</th>
@@ -245,711 +259,1011 @@
             <div id="loadMsg" class="statusBar">Loading…</div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Contact Modal -->
-  <div id="contactModal" class="modalOverlay" role="dialog" aria-modal="true">
-    <div class="modal">
-      <div class="modalHead">
-        <div class="mhTitle">Call</div>
-        <button class="btn ghost" type="button" data-close>Close</button>
-      </div>
-      <div class="modalBody">
-        <div class="note" style="margin-bottom:12px;">Choose who to call:</div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <a class="btn primary" href="tel:+14845135528" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">Call Quencie</a>
-          <a class="btn ghost" href="tel:+16107035185" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">Call Michael</a>
+        <div class="panel">
+          <h2>Edit / Add</h2>
+          <div class="body">
+            <form id="frm" autocomplete="off">
+              <div class="row">
+                <div>
+                  <label>Product Name *</label>
+                  <input name="Product Name" required />
+                </div>
+                <div>
+                  <label>Shipment *</label>
+                  <select name="Shipment" id="fShipment" required></select>
+                  <div class="note" style="margin-top:6px">
+                    <a href="#" id="addShipmentLink">+ Add a new shipment</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Category/Tab *</label>
+                  <select name="Category/Tab" id="fCategory" required></select>
+                </div>
+                <div>
+                  <label>Status</label>
+                  <select name="Status" id="fStatus"></select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label id="lblFormCost">Cost Price</label>
+                  <input name="Cost Price USD" id="fCost" inputmode="decimal" placeholder="e.g. 12.50" />
+                  <div class="note" style="margin-top:6px">Auto-fills Selling using Markup + FX (unless you override).</div>
+                </div>
+                <div>
+                  <label id="lblFormSell">Selling Price</label>
+                  <input name="Selling Price XCD" id="fSelling" inputmode="decimal" placeholder="auto" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Quantity</label>
+                  <select name="Quantity" id="fQty"></select>
+                </div>
+                <div>
+                  <label>Price Approved</label>
+                  <select name="Price Approved" id="fApproved"></select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Shipping Status</label>
+                  <select name="Shipping Status" id="fShipStatus"></select>
+                </div>
+                <div>
+                  <label>Shipped Date (optional)</label>
+                  <input name="Shipped Date (optional but recommended)" id="fShippedDate" type="date" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Ship Date</label>
+                  <input name="Ship Date" type="date" />
+                </div>
+                <div>
+                  <label>Gender</label>
+                  <select name="Gender" id="fGender"></select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Size</label>
+                  <select name="Size" id="fSize"></select>
+                </div>
+                <div>
+                  <label>Shoe Size</label>
+                  <select name="Shoe Size" id="fShoe"></select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Image URL</label>
+                  <input name="Image URL" placeholder="https://..." />
+                </div>
+                <div>
+                  <label>Online Link</label>
+                  <input name="Online Link" placeholder="https://..." />
+                  <div class="note" style="margin-top:6px">Saved as a clickable link in the table.</div>
+                </div>
+              </div>
+
+              <div>
+                <label>Note</label>
+                <textarea name="Note" placeholder="Notes, condition, resale ideas, etc."></textarea>
+              </div>
+
+              <div class="variants">
+                <div class="row" style="margin-bottom:8px">
+                  <div>
+                    <label>Variations JSON</label>
+                    <textarea name="Variations JSON" id="fVarJson" class="mono" placeholder='Auto-built from variants below (or paste JSON)'></textarea>
+                    <div class="note" style="margin-top:6px">Stores variants for one item without creating separate rows.</div>
+                  </div>
+                  <div>
+                    <label>&nbsp;</label>
+                    <button id="btnAddVariant" class="btn ghost" type="button" style="width:100%;justify-content:center">+ Variant</button>
+                    <div class="note" style="margin-top:10px">Variant fields write into the JSON box.</div>
+                  </div>
+                </div>
+                <div id="variantList"></div>
+              </div>
+
+              <div class="actions">
+                <button id="btnSave" class="btn primary" type="submit">Save</button>
+                <button id="btnDelete" class="btn danger" type="button">Delete</button>
+                <span id="formMsg" class="note"></span>
+              </div>
+            </form>
+          </div>
+
+          <div class="statusBar muted">
+            Tip: Click a row on the left to load it into the form.
+          </div>
         </div>
       </div>
-      <div class="modalFoot">
-        <button class="btn ghost" type="button" data-close>Done</button>
-      </div>
+
     </div>
   </div>
 
-  <!-- Add/Edit Modal -->
-  <div id="editModal" class="modalOverlay" role="dialog" aria-modal="true">
+  <div class="overlay" id="callOverlay" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modalHead">
-        <div id="modalTitle" class="mhTitle">Add Product</div>
-        <button class="btn ghost" type="button" data-close>Close</button>
+        <b>Call</b>
+        <button class="btn ghost" id="callClose" type="button">Close</button>
       </div>
-
       <div class="modalBody">
-        <form id="frm">
-          <div class="row">
-            <div>
-              <label>Product Name *</label>
-              <input name="Product Name" required />
-            </div>
-            <div>
-              <label>Shipment</label>
-              <select name="Shipment" id="ShipmentSelect"></select>
-              <div class="note" style="margin-top:6px; opacity:.75;">To add a new shipment name, type it below and Save.</div>
-              <input id="newShipment" placeholder="New shipment name (optional)" />
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Category *</label>
-              <select name="Category/Tab" id="CategorySelect" required></select>
-              <div class="note" style="margin-top:6px; opacity:.75;">Need a new category? Type it below and Save.</div>
-              <input id="newCategory" placeholder="New category (optional)" />
-            </div>
-            <div>
-              <label>Status</label>
-              <select name="Status" id="StatusSelect"></select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Cost Price USD</label>
-              <input name="Cost Price USD" id="CostUSD" inputmode="decimal" placeholder="" />
-            </div>
-            <div>
-              <label>Selling Price XCD</label>
-              <input name="Selling Price XCD" id="SellXCD" inputmode="decimal" placeholder="" />
-              <div class="note" style="margin-top:6px; opacity:.75;">Auto-calculated from Cost + Markup + FX. You can override.</div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Quantity (1–100)</label>
-              <input name="Quantity" type="number" min="1" max="100" step="1" inputmode="numeric" placeholder="" />
-            </div>
-            <div>
-              <label>Price Approved</label>
-              <select name="Price Approved" id="PriceApprovedSelect">
-                <option value=""></option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Shipping Status</label>
-              <select name="Shipping Status" id="ShipStatusSelect"></select>
-            </div>
-            <div></div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Gender</label>
-              <select name="Gender" id="GenderSelect"></select>
-            </div>
-            <div>
-              <label>Size</label>
-              <select name="Size" id="SizeSelect"></select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Shoe Size</label>
-              <select name="Shoe Size" id="ShoeSizeSelect"></select>
-            </div>
-            <div></div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label>Image URL</label>
-              <input name="Image URL" placeholder="https://..." />
-            </div>
-            <div>
-              <label>Online Link</label>
-              <input name="Online Link" placeholder="https://..." />
-            </div>
-          </div>
-
-          <div>
-            <label>Note</label>
-            <textarea name="Note"></textarea>
-          </div>
-
-          <div class="variantsWrap">
-            <div class="variantsTop">
-              <div class="vTitle">Variants</div>
-              <button id="btnAddVariant" class="btn ghost" type="button">+ Variant</button>
-            </div>
-            <div id="variantsList"></div>
-          </div>
-
-          <div id="formMsg" class="note" style="margin-top:12px;"></div>
-        </form>
+        <div class="note" style="margin-bottom:10px">Tap to call:</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn primary" href="tel:+16107035185">Michael • (610) 703-5185</a>
+          <a class="btn ghost" href="tel:+14845135528">Quencie • (484) 513-5528</a>
+        </div>
       </div>
-
-      <div class="modalFoot">
-        <button id="btnDelete" class="btn ghost" type="button">Delete</button>
-        <button id="btnSave" class="btn primary" type="button">Save</button>
+      <div class="modalActions">
+        <button class="btn ghost" id="callClose2" type="button">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Easter eggs -->
-  <div id="eggThumb" class="egg"><div class="thumb">👍</div></div>
-  <div id="eggMoney" class="egg"><div class="moneyRain" id="moneyRain"></div></div>
+  <div class="overlay" id="shipOverlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHead">
+        <b>Add shipment</b>
+        <button class="btn ghost" id="shipClose" type="button">Close</button>
+      </div>
+      <div class="modalBody">
+        <label>Shipment name</label>
+        <input id="shipNew" placeholder="e.g. March Shipment 4-7-3" />
+        <div class="note" style="margin-top:8px">Adds to dropdown immediately; becomes “real” once you save an item using it.</div>
+      </div>
+      <div class="modalActions">
+        <button class="btn ghost" id="shipClose2" type="button">Cancel</button>
+        <button class="btn primary" id="shipAdd" type="button">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fx" id="fx"></div>
 
 <script>
-  // === CONFIG ===
-  const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+/* =======================
+   CONFIG
+======================= */
+const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
 
-  const $ = (sel) => document.querySelector(sel);
+/* =======================
+   DOM
+======================= */
+const $ = (s)=>document.querySelector(s);
+const tblBody = $("#tbl tbody");
+const loadMsg = $("#loadMsg");
 
-  const tblBody = $("#tbl tbody");
-  const loadMsg = $("#loadMsg");
+const q = $("#q");
+const shipmentFilter = $("#shipmentFilter");
+const categoryFilter = $("#categoryFilter");
+const statusFilter = $("#statusFilter");
+const approvedFilter = $("#approvedFilter");
 
-  const btnReload = $("#btnReload");
-  const btnAdd = $("#btnAdd");
-  const brandBtn = $("#brandBtn");
+const shipForCost = $("#shipForCost");
+const shipForRev = $("#shipForRev");
+const shipForProfit = $("#shipForProfit");
 
-  const q = $("#q");
-  const shipFilter = $("#shipFilter");
-  const catFilter = $("#catFilter");
-  const statusFilter = $("#statusFilter");
-  const priceFilter = $("#priceFilter");
-  const countEl = $("#count");
+const bItems = $("#bItems");
+const bCost = $("#bCost");
+const bRev = $("#bRev");
+const bProfit = $("#bProfit");
+const pillShip = $("#pillShip");
 
-  const markupPreset = $("#markupPreset");
-  const markupCustom = $("#markupCustom");
-  const fx = $("#fx");
+const lblCost = $("#lblCost");
+const lblRev = $("#lblRev");
+const lblProfit = $("#lblProfit");
+const thCost = $("#thCost");
+const thSell = $("#thSell");
 
-  const currencyToggle = $("#currencyToggle");
-  const costLabel = $("#costLabel");
-  const revLabel = $("#revLabel");
+const nNeedsApproval = $("#nNeedsApproval");
+const nNeedsSelling = $("#nNeedsSelling");
+const chipNeedsApproval = $("#chipNeedsApproval");
+const chipNeedsSelling = $("#chipNeedsSelling");
 
-  const tileItems = $("#tileItems");
-  const tileCost = $("#tileCost");
-  const tileRev  = $("#tileRev");
-  const costShipment = $("#costShipment");
-  const revShipment  = $("#revShipment");
+const displaySel = $("#displaySel");
+const fxInput = $("#fxInput");
 
-  const btnNeedsApproval = $("#btnNeedsApproval");
-  const btnMissingSell = $("#btnMissingSell");
+const markupSel = $("#markupSel");
+const markupCustom = $("#markupCustom");
 
-  const contactModal = $("#contactModal");
-  const editModal = $("#editModal");
-  const modalTitle = $("#modalTitle");
+const frm = $("#frm");
+const formMsg = $("#formMsg");
+const btnReload = $("#btnReload");
+const btnAdd = $("#btnAdd");
+const btnDelete = $("#btnDelete");
 
-  const frm = $("#frm");
-  const btnSave = $("#btnSave");
-  const btnDelete = $("#btnDelete");
-  const formMsg = $("#formMsg");
+const fShipment = $("#fShipment");
+const fCategory = $("#fCategory");
+const fStatus = $("#fStatus");
+const fCost = $("#fCost");
+const fSelling = $("#fSelling");
+const fQty = $("#fQty");
+const fApproved = $("#fApproved");
+const fShipStatus = $("#fShipStatus");
+const fGender = $("#fGender");
+const fSize = $("#fSize");
+const fShoe = $("#fShoe");
+const fVarJson = $("#fVarJson");
+const btnAddVariant = $("#btnAddVariant");
+const variantList = $("#variantList");
 
-  const ShipmentSelect = $("#ShipmentSelect");
-  const CategorySelect = $("#CategorySelect");
-  const StatusSelect = $("#StatusSelect");
-  const PriceApprovedSelect = $("#PriceApprovedSelect");
-  const GenderSelect = $("#GenderSelect");
-  const SizeSelect = $("#SizeSelect");
-  const ShoeSizeSelect = $("#ShoeSizeSelect");
-  const ShipStatusSelect = $("#ShipStatusSelect");
-  const newShipment = $("#newShipment");
-  const newCategory = $("#newCategory");
+const lblFormCost = $("#lblFormCost");
+const lblFormSell = $("#lblFormSell");
 
-  const CostUSD = $("#CostUSD");
-  const SellXCD = $("#SellXCD");
+const callOverlay = $("#callOverlay");
+const btnCall = $("#btnCall");
+const callClose = $("#callClose");
+const callClose2 = $("#callClose2");
 
-  const btnAddVariant = $("#btnAddVariant");
-  const variantsList = $("#variantsList");
+const shipOverlay = $("#shipOverlay");
+const addShipmentLink = $("#addShipmentLink");
+const shipClose = $("#shipClose");
+const shipClose2 = $("#shipClose2");
+const shipAdd = $("#shipAdd");
+const shipNew = $("#shipNew");
 
-  const eggThumb = $("#eggThumb");
-  const eggMoney = $("#eggMoney");
-  const moneyRain = $("#moneyRain");
+const fx = $("#fx");
 
-  let rows = [];
-  let selectedKey = null;
+/* =======================
+   STATE
+======================= */
+let rows = [];
+let currentRow = null;
+let localShipments = new Set();
+let forceFilter = null;
 
-  // Controlled lists (your categories should NOT be auto-mined from existing sheet values)
-  const LISTS = {
-    categories: ["Apparel","Shoes","Electronics","Household Goods","Food","Used Items","Miscellaneous"],
-    statuses: ["In Stock","Sold","Watchlist","Needs Price","Needs Approval"],
-    genders: ["","Men","Women","Unisex","Kids"],
-    sizes: ["","XS","S","M","L","XL","XXL","XXXL","One Size"],
-    shipStatuses: ["","Not shipped","Packed","Shipped","Delivered"]
+const state = {
+  display: "USD", // "USD" | "XCD"
+  fx: 2.70
+};
+
+let userOverrodeSelling = false;
+
+/* =======================
+   DEFAULTS
+======================= */
+const DEFAULTS = {
+  status: ["In Stock","Sold","Watchlist","Seasonal","Price Watchlist"],
+  approved: ["Needs Price","Pending","No","Yes"],
+  shipStatus: ["In Inventory","Ready to Ship","Shipped"],
+  gender: ["","Men","Women","Unisex","Kids"],
+  size: ["","XS","S","M","L","XL","XXL","XXXL"],
+  categories: ["Shirts","Detergent","Gatorade","Spam","Corn Beef","Lunchmeat","Boxers","Thompson","Tools","Protein Powder","Bath & Body Works Soap","Bath & Body Works Lotion","Shoes","Electronics","Used"]
+};
+
+/* =======================
+   HELPERS
+======================= */
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function norm(s){ return String(s ?? "").trim(); }
+function low(s){ return norm(s).toLowerCase(); }
+function num(v){ const x = parseFloat(String(v ?? "").replace(/[^0-9.\-]/g,"")); return isFinite(x) ? x : 0; }
+function qty(v){ const q = parseInt(String(v ?? "").replace(/[^0-9\-]/g,""),10); return isFinite(q) && q>0 ? q : 0; }
+
+function money(n, ccy){
+  const x = isFinite(n) ? n : 0;
+  if (ccy === "USD") return x.toLocaleString(undefined,{style:"currency",currency:"USD"});
+  return "EC$" + x.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function setLoad(text){
+  loadMsg.textContent = text || "";
+}
+
+function keyOf(r){
+  // identity = Product Name + Shipment + Category/Tab (must match Apps Script)
+  return (low(r["Product Name"])+"||"+low(r["Shipment"])+"||"+low(r["Category/Tab"]));
+}
+
+function getMarkup(){
+  if (markupSel.value === "custom"){
+    const v = parseFloat(markupCustom.value);
+    return isFinite(v) ? v : 0;
+  }
+  return parseFloat(markupSel.value);
+}
+
+/* =======================
+   CURRENCY CANONICAL RULES (NO DRIFT)
+   - Sheet stores: Cost Price USD (USD) and Selling Price XCD (XCD)
+   - UI can display either currency for BOTH fields
+======================= */
+function costUsdFromDisplay(v){ return state.display === "USD" ? v : (v / state.fx); }
+function sellXcdFromDisplay(v){ return state.display === "XCD" ? v : (v * state.fx); }
+
+function displayCostFromUsd(costUsd){
+  return state.display === "USD" ? costUsd : (costUsd * state.fx);
+}
+function displaySellFromXcd(sellXcd){
+  return state.display === "XCD" ? sellXcd : (sellXcd / state.fx);
+}
+
+function syncFormDatasetsFromInputs(){
+  // Use current display mode to convert what’s typed into canonical datasets
+  const c = num(fCost.value);
+  if (c || fCost.value === "") fCost.dataset.usd = String(costUsdFromDisplay(c));
+
+  const s = num(fSelling.value);
+  if (s || fSelling.value === "") fSelling.dataset.xcd = String(sellXcdFromDisplay(s));
+}
+
+function applyFormDisplayFromDatasets(){
+  const usd = num(fCost.dataset.usd);
+  const xcd = num(fSelling.dataset.xcd);
+
+  if (fCost === document.activeElement) {
+    // don't fight user while typing
+  } else {
+    fCost.value = usd ? String((Math.round(displayCostFromUsd(usd)*100)/100).toFixed(2)) : "";
+  }
+
+  if (fSelling === document.activeElement) {
+    // don't fight user while typing
+  } else {
+    fSelling.value = xcd ? String((Math.round(displaySellFromXcd(xcd)*100)/100).toFixed(2)) : "";
+  }
+}
+
+function updateCurrencyLabels(){
+  lblCost.textContent = `Total Cost (${state.display})`;
+  lblRev.textContent = `Expected Revenue (${state.display})`;
+  lblProfit.textContent = `Profit Est. (${state.display})`;
+
+  thCost.textContent = `Cost (${state.display})`;
+  thSell.textContent = `Selling (${state.display})`;
+
+  lblFormCost.textContent = `Cost Price (${state.display})`;
+  lblFormSell.textContent = `Selling Price (${state.display})`;
+}
+
+/* =======================
+   SELLING SUGGESTION (CANONICAL)
+======================= */
+function calcSuggestedSellXcdFromCostUsd(costUsd){
+  const m = getMarkup();
+  const c = num(costUsd);
+  if (!c) return 0;
+  // Selling XCD = Cost USD * FX * (1 + markup)
+  return c * state.fx * (1 + m);
+}
+
+function tryAutofillSelling(){
+  if (userOverrodeSelling) return;
+  const costUsd = num(fCost.dataset.usd || costUsdFromDisplay(num(fCost.value)));
+  if (!costUsd) return;
+
+  const sellXcd = calcSuggestedSellXcdFromCostUsd(costUsd);
+  fSelling.dataset.xcd = String(sellXcd);
+  applyFormDisplayFromDatasets();
+}
+
+/* =======================
+   DROPDOWNS
+======================= */
+function fillSelect(sel, arr, {includeBlank=false, blankLabel="(blank)"} = {}){
+  const cur = sel.value;
+  const items = [...arr].filter(x=>x!==undefined && x!==null);
+  const opts = [];
+  if (includeBlank) opts.push(`<option value="">${esc(blankLabel)}</option>`);
+  for (const v of items){
+    const s = String(v);
+    opts.push(`<option value="${esc(s)}">${esc(s)}</option>`);
+  }
+  sel.innerHTML = opts.join("");
+  const has = [...sel.options].some(o=>o.value === cur);
+  if (has) sel.value = cur;
+}
+
+function buildOptionSets(){
+  const shipments = new Set();
+  const cats = new Set(DEFAULTS.categories);
+  const stat = new Set(DEFAULTS.status);
+  const appr = new Set(DEFAULTS.approved);
+  const shipS = new Set(DEFAULTS.shipStatus);
+
+  rows.forEach(r=>{
+    const sh = norm(r["Shipment"]); if (sh) shipments.add(sh);
+    const c = norm(r["Category/Tab"]); if (c) cats.add(c);
+    const s = norm(r["Status"]); if (s) stat.add(s);
+    const a = norm(r["Price Approved"]); if (a) appr.add(a);
+    const ss = norm(r["Shipping Status"]); if (ss) shipS.add(ss);
+  });
+
+  localShipments.forEach(s=>shipments.add(s));
+
+  return {
+    shipments: [...shipments].sort((a,b)=>a.localeCompare(b)),
+    categories: [...cats].sort((a,b)=>a.localeCompare(b)),
+    status: [...stat].sort((a,b)=>a.localeCompare(b)),
+    approved: [...appr].sort((a,b)=>a.localeCompare(b)),
+    shipStatus: [...shipS].sort((a,b)=>a.localeCompare(b))
   };
+}
 
-  function shoeSizes(){
-    const out = [""];
-    for(let i=4; i<=15; i++){
-      out.push(String(i));
-      if(i<15) out.push(i + ".5");
+function initStaticDropdowns(){
+  const qOpts = ["","1","2","3","4","5","6","7","8","9","10","12","15","20","25","50","100","Custom…"];
+  fillSelect(fQty, qOpts, {includeBlank:false});
+  fQty.addEventListener("change", ()=>{
+    if (fQty.value === "Custom…"){
+      const v = prompt("Quantity (number):","1");
+      if (v !== null){
+        const qn = parseInt(v,10);
+        fQty.value = (isFinite(qn) && qn>0) ? String(qn) : "";
+        if (fQty.value && ![...fQty.options].some(o=>o.value===fQty.value)){
+          const opt = document.createElement("option");
+          opt.value=fQty.value; opt.textContent=fQty.value;
+          fQty.insertBefore(opt, fQty.options[fQty.options.length-1]);
+          fQty.value = opt.value;
+        }
+      } else fQty.value = "";
     }
-    return out;
-  }
-
-  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
-  function setLoad(text, type="") {
-    loadMsg.textContent = text;
-    loadMsg.className = "statusBar" + (type ? " " + type : "");
-  }
-
-  function keyOf(r){
-    return (String(r["Product Name"]||"").trim()+"||"+String(r["Category/Tab"]||"").trim()).toLowerCase();
-  }
-
-  function num(n){
-    const x = Number(String(n ?? "").replace(/[^0-9.\-]/g,""));
-    return Number.isFinite(x) ? x : 0;
-  }
-
-  function moneyUSD(n){ return "$" + n.toFixed(2); }
-  function moneyXCD(n){ return "EC$" + n.toFixed(2); }
-
-  function getMarkupPct(){
-    if(markupPreset.value === "custom"){
-      return Math.max(0, num(markupCustom.value));
-    }
-    return Math.max(0, num(markupPreset.value));
-  }
-
-  function applySuggestedSell(){
-    const cost = num(CostUSD.value);
-    if(!cost) return;
-    const fxRate = Math.max(0.01, num(fx.value) || 2.70);
-    const pct = getMarkupPct();
-    const suggested = cost * fxRate * (1 + pct/100);
-
-    // Only fill if empty
-    if(String(SellXCD.value||"").trim()===""){
-      SellXCD.value = suggested.toFixed(2);
-    }
-  }
-
-  function fillSelect(select, values, placeholder){
-    const cur = select.value;
-    select.innerHTML = "";
-    if(placeholder != null) {
-      const opt = document.createElement("option");
-      opt.value = "";
-      opt.textContent = placeholder;
-      select.appendChild(opt);
-    }
-    values.forEach(v => {
-      const o = document.createElement("option");
-      o.value = v;
-      o.textContent = v === "" ? "" : v;
-      select.appendChild(o);
-    });
-    select.value = cur;
-  }
-
-  function uniqueFromRows(field){
-    const s = new Set();
-    rows.forEach(r => {
-      const v = String(r[field] ?? "").trim();
-      if(v) s.add(v);
-    });
-    return [...s].sort((a,b)=>a.localeCompare(b));
-  }
-
-  function rebuildOptionSources(){
-    // Shipments come from data
-    const shipments = uniqueFromRows("Shipment");
-    fillSelect(shipFilter, shipments, "All Shipments");
-    fillSelect(costShipment, ["All"].concat(shipments), null);
-    fillSelect(revShipment, ["All"].concat(shipments), null);
-    fillSelect(ShipmentSelect, ["", ...shipments], null);
-
-    // Controlled categories; allow newCategory to append temporarily for selection
-    const cats = [...new Set(LISTS.categories.concat(uniqueFromRows("Category/Tab")))].filter(Boolean);
-    fillSelect(catFilter, cats, "All Categories");
-    fillSelect(CategorySelect, cats, null);
-
-    // Status from controlled list + any existing (safe)
-    const statuses = [...new Set(LISTS.statuses.concat(uniqueFromRows("Status")))].filter(Boolean);
-    fillSelect(statusFilter, statuses, "All Status");
-    fillSelect(StatusSelect, statuses, null);
-
-    fillSelect(GenderSelect, LISTS.genders, null);
-    fillSelect(SizeSelect, LISTS.sizes, null);
-    fillSelect(ShoeSizeSelect, shoeSizes(), null);
-    fillSelect(ShipStatusSelect, LISTS.shipStatuses, null);
-
-    if(!costShipment.value) costShipment.value = "All";
-    if(!revShipment.value) revShipment.value = "All";
-  }
-
-  function applyFilters(list){
-    const needle = q.value.trim().toLowerCase();
-    const ship = shipFilter.value.trim();
-    const cat = catFilter.value.trim();
-    const st = statusFilter.value.trim();
-    const pf = priceFilter.value.trim();
-
-    const wantsApprovalOnly = btnNeedsApproval.classList.contains("on");
-    const wantsMissingSell = btnMissingSell.classList.contains("on");
-
-    return list.filter(r => {
-      const name = String(r["Product Name"]||"").toLowerCase();
-      const okName = !needle || name.includes(needle);
-
-      const okShip = !ship || String(r["Shipment"]||"").trim() === ship;
-      const okCat  = !cat  || String(r["Category/Tab"]||"").trim() === cat;
-      const okSt   = !st   || String(r["Status"]||"").trim() === st;
-
-      const pa = String(r["Price Approved"]||"").trim();
-      const okPA = !pf ||
-        (pf==="Yes" && pa==="Yes") ||
-        (pf==="No" && pa==="No") ||
-        (pf==="Blank" && pa==="");
-
-      const needsApproval = pa !== "Yes";
-      const missingSell = String(r["Selling Price XCD"]||"").trim() === "";
-
-      const okNeedsApproval = !wantsApprovalOnly || needsApproval;
-      const okMissingSell = !wantsMissingSell || missingSell;
-
-      return okName && okShip && okCat && okSt && okPA && okNeedsApproval && okMissingSell;
-    });
-  }
-
-  function render(){
-    const filtered = applyFilters(rows);
-    countEl.textContent = `${filtered.length} items`;
-
-    tblBody.innerHTML = filtered.map(r => {
-      const link = String(r["Online Link"]||"").trim();
-      const productHtml = link ? `<a href="${esc(link)}" target="_blank" rel="noopener">${esc(r["Product Name"])}</a>` : esc(r["Product Name"]);
-      return `<tr data-k="${esc(keyOf(r))}">
-        <td>${productHtml}</td>
-        <td>${esc(r["Shipment"]||"")}</td>
-        <td>${esc(r["Category/Tab"]||"")}</td>
-        <td>${esc(r["Quantity"]||"")}</td>
-        <td>${esc(r["Cost Price USD"]||"")}</td>
-        <td>${esc(r["Selling Price XCD"]||"")}</td>
-        <td>${esc(r["Status"]||"")}</td>
-        <td>${esc(r["Price Approved"]||"")}</td>
-        <td>${esc(r["Shipping Status"]||"")}</td>
-      </tr>`;
-    }).join("");
-
-    // Dashboard tiles + currency toggle
-    tileItems.textContent = String(rows.length);
-
-    const cs = costShipment.value || "All";
-    const rs = revShipment.value || "All";
-
-    const costSumUSD = rows
-      .filter(r => cs==="All" || String(r["Shipment"]||"").trim()===cs)
-      .reduce((acc,r)=> acc + num(r["Cost Price USD"]) * Math.max(1, num(r["Quantity"]) || 1), 0);
-
-    const revSumXCD = rows
-      .filter(r => rs==="All" || String(r["Shipment"]||"").trim()===rs)
-      .reduce((acc,r)=> acc + num(r["Selling Price XCD"]) * Math.max(1, num(r["Quantity"]) || 1), 0);
-
-    const fxRate = Math.max(0.01, num(fx.value) || 2.70);
-    const currency = currencyToggle.value;
-
-    if(currency === "USD"){
-      costLabel.textContent = "Total Cost (USD)";
-      revLabel.textContent  = "Expected Revenue (USD)";
-      tileCost.textContent  = moneyUSD(costSumUSD);
-      tileRev.textContent   = moneyUSD(revSumXCD / fxRate);
-    } else {
-      costLabel.textContent = "Total Cost (XCD)";
-      revLabel.textContent  = "Expected Revenue (XCD)";
-      tileCost.textContent  = moneyXCD(costSumUSD * fxRate);
-      tileRev.textContent   = moneyXCD(revSumXCD);
-    }
-  }
-
-  function showModal(el){ el.classList.add("show"); }
-  function hideModal(el){ el.classList.remove("show"); }
-  document.addEventListener("click", (e) => {
-    if(e.target.matches("[data-close]")){
-      hideModal(contactModal);
-      hideModal(editModal);
-    }
-    if(e.target === contactModal) hideModal(contactModal);
-    if(e.target === editModal) hideModal(editModal);
   });
 
-  // Title opens call modal
-  brandBtn.addEventListener("click", () => showModal(contactModal));
+  const shoe = [""];
+  for (let s=4; s<=15; s++){ shoe.push(String(s)); shoe.push(String(s)+".5"); }
+  fillSelect(fShoe, shoe, {includeBlank:false});
 
-  // Eggs
-  function popThumb(){ eggThumb.classList.add("show"); setTimeout(()=>eggThumb.classList.remove("show"), 900); }
-  function rainMoney(){
-    moneyRain.innerHTML = "";
-    eggMoney.classList.add("show");
-    for(let i=0;i<26;i++){
-      const s = document.createElement("div");
-      s.className="bill";
-      s.textContent="💵";
-      s.style.left = Math.random()*100 + "vw";
-      s.style.animationDelay = (Math.random()*0.20) + "s";
-      s.style.fontSize = (18 + Math.random()*14) + "px";
-      moneyRain.appendChild(s);
-    }
-    setTimeout(()=>eggMoney.classList.remove("show"), 900);
-  }
+  fillSelect(fGender, DEFAULTS.gender, {includeBlank:false});
+  fillSelect(fSize, DEFAULTS.size, {includeBlank:false});
+}
 
-  // Variants
-  function readVariants(){
-    const items = [];
-    variantsList.querySelectorAll(".variantRow").forEach(row => {
-      const obj = {
-        color: row.querySelector("[data-k='color']")?.value || "",
-        gender: row.querySelector("[data-k='gender']")?.value || "",
-        size: row.querySelector("[data-k='size']")?.value || "",
-        shoe: row.querySelector("[data-k='shoe']")?.value || "",
-        qty: row.querySelector("[data-k='qty']")?.value || "",
-        cost_usd: row.querySelector("[data-k='cost']")?.value || "",
-        sell_xcd: row.querySelector("[data-k='sell']")?.value || ""
-      };
-      const has = Object.values(obj).some(v => String(v).trim()!=="");
-      if(has) items.push(obj);
+function refreshAllDropdowns(){
+  const sets = buildOptionSets();
+
+  fillSelect(shipmentFilter, ["", ...sets.shipments], {includeBlank:false});
+  shipmentFilter.options[0].textContent = "All Shipments";
+  fillSelect(categoryFilter, ["", ...sets.categories], {includeBlank:false});
+  categoryFilter.options[0].textContent = "All Categories";
+  fillSelect(statusFilter, ["", ...sets.status], {includeBlank:false});
+  statusFilter.options[0].textContent = "All Status";
+
+  const metricList = ["All", ...sets.shipments];
+  fillSelect(shipForCost, metricList, {includeBlank:false});
+  fillSelect(shipForRev, metricList, {includeBlank:false});
+  fillSelect(shipForProfit, metricList, {includeBlank:false});
+
+  fillSelect(fShipment, sets.shipments.length ? sets.shipments : ["(Add shipment first)"], {includeBlank:false});
+  if (!sets.shipments.length) fShipment.value = "(Add shipment first)";
+  fillSelect(fCategory, sets.categories, {includeBlank:false});
+  fillSelect(fStatus, ["", ...sets.status], {includeBlank:false}); fStatus.options[0].textContent="(blank)";
+  fillSelect(fApproved, ["", ...sets.approved], {includeBlank:false}); fApproved.options[0].textContent="(blank)";
+  fillSelect(fShipStatus, ["", ...sets.shipStatus], {includeBlank:false}); fShipStatus.options[0].textContent="(blank)";
+}
+
+/* =======================
+   VARIANTS
+======================= */
+function parseVarJson(){
+  try{
+    const t = norm(fVarJson.value);
+    if (!t) return [];
+    const x = JSON.parse(t);
+    return Array.isArray(x) ? x : [];
+  }catch(_){ return []; }
+}
+function writeVarJson(list){
+  fVarJson.value = list.length ? JSON.stringify(list, null, 2) : "";
+}
+function addVariantRow(data = {color:"", gender:"", size:""}){
+  const row = document.createElement("div");
+  row.className = "variantRow";
+  row.innerHTML = `
+    <div>
+      <label>Color</label>
+      <input data-k="color" placeholder="e.g. Black" value="${esc(data.color)}">
+    </div>
+    <div>
+      <label>Gender</label>
+      <input data-k="gender" placeholder="Men/Women/Unisex" value="${esc(data.gender)}">
+    </div>
+    <div>
+      <label>Size</label>
+      <input data-k="size" placeholder="M / 10 / XL" value="${esc(data.size)}">
+    </div>
+    <button class="xBtn" type="button" title="Remove">✕</button>
+  `;
+  row.querySelector(".xBtn").addEventListener("click", ()=>{
+    row.remove();
+    syncVariantsToJson();
+  });
+  row.querySelectorAll("input").forEach(inp=>inp.addEventListener("input", syncVariantsToJson));
+  variantList.appendChild(row);
+  syncVariantsToJson();
+}
+function syncJsonToVariants(){
+  variantList.innerHTML = "";
+  parseVarJson().forEach(v=>addVariantRow(v));
+}
+function syncVariantsToJson(){
+  const out = [];
+  variantList.querySelectorAll(".variantRow").forEach(r=>{
+    const o = {};
+    r.querySelectorAll("input[data-k]").forEach(inp=>{
+      o[inp.getAttribute("data-k")] = inp.value;
     });
-    return items;
+    const has = Object.values(o).some(v=>norm(v));
+    if (has) out.push(o);
+  });
+  writeVarJson(out);
+}
+
+/* =======================
+   JSONP GET + iframe POST
+======================= */
+let jsonpId = 0;
+function jsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb = "__cb" + (++jsonpId) + "_" + Date.now();
+    const s = document.createElement("script");
+    const cleanup = ()=>{
+      try{ delete window[cb]; }catch(_){ window[cb] = undefined; }
+      s.remove();
+    };
+    window[cb] = (data)=>{ cleanup(); resolve(data); };
+    s.onerror = ()=>{ cleanup(); reject(new Error("JSONP load failed")); };
+    const join = url.includes("?") ? "&" : "?";
+    s.src = url + join + "callback=" + cb + "&_t=" + Date.now();
+    document.head.appendChild(s);
+  });
+}
+
+async function apiGet(){
+  setLoad("Loading…");
+  const out = await jsonp(API);
+  if (!out || out.ok !== true || !Array.isArray(out.data)) {
+    throw new Error(out?.error || "Unexpected API response");
+  }
+  rows = out.data;
+  refreshAllDropdowns();
+  render();
+  setLoad("Ready.");
+  setTimeout(()=>setLoad(""), 1800);
+}
+
+function apiPostViaIframe(params){
+  return new Promise((resolve,reject)=>{
+    const frameName = "pm_iframe_" + Date.now();
+    const iframe = document.createElement("iframe");
+    iframe.name = frameName;
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+
+    const form = document.createElement("form");
+    form.action = API;
+    form.method = "POST";
+    form.target = frameName;
+    form.style.display = "none";
+
+    params._pm = "1";
+
+    Object.entries(params).forEach(([k,v])=>{
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = k;
+      input.value = v ?? "";
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+
+    const timer = setTimeout(()=>{
+      cleanup();
+      reject(new Error("Save timed out"));
+    }, 12000);
+
+    function onMsg(ev){
+      const data = ev.data;
+      if (!data || typeof data !== "object" || data.ok === undefined) return;
+      clearTimeout(timer);
+      cleanup();
+      if (data.ok !== true) reject(new Error(data.error || "Save failed"));
+      else resolve(data);
+    }
+    function cleanup(){
+      window.removeEventListener("message", onMsg);
+      form.remove();
+      iframe.remove();
+    }
+
+    window.addEventListener("message", onMsg);
+    form.submit();
+  });
+}
+
+/* =======================
+   FILTERS + RENDER
+======================= */
+function applyFilters(list){
+  const needle = low(q.value);
+  const ship = norm(shipmentFilter.value);
+  const cat = norm(categoryFilter.value);
+  const st = norm(statusFilter.value);
+  const ap = norm(approvedFilter.value);
+
+  return list.filter(r=>{
+    const okName = !needle || low(r["Product Name"]).includes(needle);
+    const okShip = !ship || norm(r["Shipment"]) === ship;
+    const okCat = !cat || norm(r["Category/Tab"]) === cat;
+    const okSt = !st || norm(r["Status"]) === st;
+
+    let okAp = true;
+    if (ap){
+      const val = norm(r["Price Approved"]);
+      if (ap === "Needs Price") okAp = !norm(r["Selling Price XCD"]);
+      else okAp = val === ap;
+    }
+
+    if (forceFilter === "needsApproval"){
+      okAp = norm(r["Price Approved"]) !== "Yes";
+    }
+    if (forceFilter === "needsSelling"){
+      okAp = !norm(r["Selling Price XCD"]);
+    }
+
+    return okName && okShip && okCat && okSt && okAp;
+  });
+}
+
+function linkify(url, label){
+  const u = norm(url);
+  if (!u) return "";
+  return `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(label || "Link")}</a>`;
+}
+
+function metricFor(shipSel){
+  const ship = shipSel.value;
+  const base = (ship && ship !== "All") ? rows.filter(r=>norm(r["Shipment"])===ship) : rows.slice();
+  const items = base.reduce((a,r)=>a+qty(r["Quantity"]),0);
+  const totalCostUSD = base.reduce((a,r)=>a + (num(r["Cost Price USD"]) * qty(r["Quantity"])),0);
+  const totalRevXCD  = base.reduce((a,r)=>a + (num(r["Selling Price XCD"]) * qty(r["Quantity"])),0);
+  const profitXCD = totalRevXCD - (totalCostUSD * state.fx);
+  return {items,totalCostUSD,totalRevXCD,profitXCD};
+}
+
+function render(){
+  updateCurrencyLabels();
+
+  const filtered = applyFilters(rows);
+
+  const needsApproval = rows.filter(r=>norm(r["Price Approved"]) !== "Yes").length;
+  const needsSelling = rows.filter(r=>!norm(r["Selling Price XCD"])).length;
+  nNeedsApproval.textContent = String(needsApproval);
+  nNeedsSelling.textContent = String(needsSelling);
+
+  pillShip.textContent = shipmentFilter.value ? shipmentFilter.value : "All shipments";
+
+  tblBody.innerHTML = filtered.map(r=>{
+    const k = keyOf(r);
+    const qn = qty(r["Quantity"]);
+    const costUsd = num(r["Cost Price USD"]);
+    const sellXcd = num(r["Selling Price XCD"]);
+
+    const costDisp = costUsd ? displayCostFromUsd(costUsd) : 0;
+    const sellDisp = sellXcd ? displaySellFromXcd(sellXcd) : 0;
+
+    const online = norm(r["Online Link"]);
+    const prod = esc(r["Product Name"]);
+
+    return `<tr data-k="${esc(k)}" title="Tap to edit">
+      <td>${prod}${online ? `<div class="note" style="margin-top:4px">${linkify(online,"Open")}</div>` : ""}</td>
+      <td>${esc(r["Shipment"]||"")}</td>
+      <td>${esc(r["Category/Tab"]||"")}</td>
+      <td>${qn ? esc(qn) : ""}</td>
+      <td>${costUsd ? esc(money(costDisp, state.display)) : ""}</td>
+      <td>${sellXcd ? esc(money(sellDisp, state.display)) : ""}</td>
+      <td>${esc(r["Status"]||"")}</td>
+      <td>${esc(r["Price Approved"]||"")}</td>
+      <td>${esc(r["Shipping Status"]||"")}</td>
+    </tr>`;
+  }).join("");
+
+  tblBody.querySelectorAll("tr").forEach(tr=>{
+    tr.addEventListener("click", ()=>{
+      const k = tr.getAttribute("data-k");
+      const r = rows.find(x=>keyOf(x)===k);
+      if (r) loadIntoForm(r);
+    });
+  });
+
+  const filteredItems = filtered.reduce((a,r)=>a+qty(r["Quantity"]),0);
+  bItems.textContent = String(filteredItems);
+
+  const m1 = metricFor(shipForCost);
+  const m2 = metricFor(shipForRev);
+  const m3 = metricFor(shipForProfit);
+
+  // Display mode controls the currency for ALL bubble values
+  const costDisp = state.display === "USD" ? m1.totalCostUSD : (m1.totalCostUSD * state.fx);
+  const revDisp  = state.display === "XCD" ? m2.totalRevXCD  : (m2.totalRevXCD / state.fx);
+  const profDisp = state.display === "XCD" ? m3.profitXCD    : (m3.profitXCD / state.fx);
+
+  bCost.textContent = money(costDisp, state.display);
+  bRev.textContent = money(revDisp, state.display);
+  bProfit.textContent = money(profDisp, state.display);
+}
+
+/* =======================
+   FORM LOAD / SAVE / DELETE
+======================= */
+function clearForm(){
+  frm.reset();
+  currentRow = null;
+  formMsg.textContent = "";
+  variantList.innerHTML = "";
+  fVarJson.value = "";
+  fCost.dataset.usd = "";
+  fSelling.dataset.xcd = "";
+  userOverrodeSelling = false;
+  refreshAllDropdowns();
+  updateCurrencyLabels();
+}
+
+function loadIntoForm(r){
+  currentRow = r;
+  refreshAllDropdowns();
+
+  for (const el of frm.elements){
+    if (!el.name) continue;
+    el.value = r[el.name] ?? "";
   }
 
-  function addVariantRow(v){
-    const row = document.createElement("div");
-    row.className = "variantRow";
-    row.innerHTML = `
-      <input data-k="color" placeholder="Color" value="${esc(v.color||"")}"/>
-      <select data-k="gender"></select>
-      <select data-k="size"></select>
-      <select data-k="shoe"></select>
-      <input data-k="qty" placeholder="Qty" inputmode="numeric" value="${esc(v.qty||"")}"/>
-      <input data-k="cost" placeholder="Cost USD" inputmode="decimal" value="${esc(v.cost_usd||"")}"/>
-      <input data-k="sell" placeholder="Sell XCD" inputmode="decimal" value="${esc(v.sell_xcd||"")}"/>
-      <button class="iconBtn" type="button" title="Remove">✕</button>
-    `;
-    const gSel = row.querySelector("[data-k='gender']");
-    fillSelect(gSel, LISTS.genders, null);
-    gSel.value = v.gender || "";
+  // Canonical datasets from sheet:
+  fCost.dataset.usd = String(num(r["Cost Price USD"]));
+  fSelling.dataset.xcd = String(num(r["Selling Price XCD"]));
 
-    const sSel = row.querySelector("[data-k='size']");
-    fillSelect(sSel, LISTS.sizes, null);
-    sSel.value = v.size || "";
+  userOverrodeSelling = true; // because we loaded an explicit selling value from sheet
+  if (!num(r["Selling Price XCD"])) userOverrodeSelling = false;
 
-    const shoeSel = row.querySelector("[data-k='shoe']");
-    fillSelect(shoeSel, shoeSizes(), null);
-    shoeSel.value = v.shoe || "";
+  // Apply display conversion
+  applyFormDisplayFromDatasets();
 
-    row.querySelector("button").addEventListener("click", ()=> row.remove());
-    variantsList.appendChild(row);
+  syncJsonToVariants();
+  formMsg.textContent = "Loaded into form.";
+}
+
+function validateRequired(){
+  const pn = norm(frm.elements["Product Name"]?.value);
+  const sh = norm(frm.elements["Shipment"]?.value);
+  const cat = norm(frm.elements["Category/Tab"]?.value);
+  if (!pn || !sh || !cat) return "Product Name, Shipment, and Category/Tab are required.";
+  if (sh === "(Add shipment first)") return "Add a shipment first.";
+  return "";
+}
+
+function buildParamsForSave(){
+  // Ensure datasets reflect current typing
+  syncFormDatasetsFromInputs();
+
+  const params = {_action: "update"};
+  for (const el of frm.elements){
+    if (!el.name) continue;
+
+    // We will overwrite the two money fields with canonical values below
+    if (el.name === "Cost Price USD") continue;
+    if (el.name === "Selling Price XCD") continue;
+
+    params[el.name] = el.value ?? "";
   }
 
-  btnAddVariant.addEventListener("click", ()=> addVariantRow({}));
+  const costUsd = num(fCost.dataset.usd);
+  let sellXcd = num(fSelling.dataset.xcd);
 
-  function setVariantsUI(arr){
-    variantsList.innerHTML = "";
-    (arr || []).forEach(v => addVariantRow(v));
-    if(!arr || !arr.length) addVariantRow({});
+  // If selling blank and not overridden, calculate once
+  if (!sellXcd && costUsd > 0) {
+    if (!userOverrodeSelling) {
+      sellXcd = calcSuggestedSellXcdFromCostUsd(costUsd);
+      fSelling.dataset.xcd = String(sellXcd);
+      applyFormDisplayFromDatasets();
+    }
   }
 
-  function clearForm(){
-    frm.reset();
-    selectedKey = null;
-    newShipment.value = "";
-    newCategory.value = "";
-    setVariantsUI([]);
-    formMsg.textContent = "";
-    // Selling stays blank until cost entered
-    SellXCD.value = "";
-  }
+  params["Cost Price USD"] = costUsd ? (Math.round(costUsd*100)/100).toFixed(2) : "";
+  params["Selling Price XCD"] = sellXcd ? (Math.round(sellXcd*100)/100).toFixed(2) : "";
 
-  function openAdd(){
+  return params;
+}
+
+/* =======================
+   AUTOFILL WIRES
+======================= */
+fSelling.addEventListener("input", ()=>{
+  const v = norm(fSelling.value);
+  userOverrodeSelling = !!v;
+  syncFormDatasetsFromInputs();
+});
+
+fCost.addEventListener("input", ()=>{
+  userOverrodeSelling = false;
+  syncFormDatasetsFromInputs();
+  tryAutofillSelling();
+});
+
+markupSel.addEventListener("change", ()=>{
+  if (markupSel.value === "custom"){
+    markupCustom.style.display = "inline-block";
+    markupCustom.focus();
+  } else {
+    markupCustom.style.display = "none";
+  }
+  userOverrodeSelling = false;
+  tryAutofillSelling();
+});
+
+markupCustom.addEventListener("input", ()=>{
+  userOverrodeSelling = false;
+  tryAutofillSelling();
+});
+
+/* =======================
+   EASTER EGGS
+======================= */
+function thumbsUp(){
+  fx.innerHTML = `<div class="thumb">👍</div>`;
+  fx.classList.add("show");
+  setTimeout(()=>fx.classList.remove("show"), 1100);
+}
+function dollarRain(){
+  fx.innerHTML = "";
+  fx.classList.add("show");
+  const count = 22;
+  for (let i=0;i<count;i++){
+    const d = document.createElement("div");
+    d.className = "bill";
+    d.textContent = "💵";
+    d.style.left = Math.round(Math.random()*100) + "vw";
+    d.style.animationDelay = (Math.random()*0.35) + "s";
+    d.style.fontSize = (18 + Math.random()*18) + "px";
+    d.style.opacity = 0;
+    fx.appendChild(d);
+  }
+  setTimeout(()=>fx.classList.remove("show"), 1300);
+}
+
+/* =======================
+   EVENTS
+======================= */
+btnReload.addEventListener("click", ()=>apiGet().catch(err=>setLoad("Load failed: "+err.message)));
+
+btnAdd.addEventListener("click", ()=>{
+  clearForm();
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+btnDelete.addEventListener("click", async ()=>{
+  const pn = norm(frm.elements["Product Name"]?.value);
+  const sh = norm(frm.elements["Shipment"]?.value);
+  const cat = norm(frm.elements["Category/Tab"]?.value);
+  if (!pn || !sh || !cat) { formMsg.textContent = "Product Name, Shipment, and Category/Tab are required to delete."; return; }
+  if (!confirm(`Delete "${pn}" (${sh} / ${cat}) from the sheet?`)) return;
+
+  formMsg.textContent = "Deleting…";
+  try{
+    const out = await apiPostViaIframe({_action:"delete","Product Name":pn,"Shipment":sh,"Category/Tab":cat});
+    formMsg.textContent = out.action === "deleted" ? "Deleted." : "Not found.";
     clearForm();
-    modalTitle.textContent = "Add Product";
-    showModal(editModal);
+    await apiGet();
+  }catch(err){
+    formMsg.textContent = "Delete failed: " + err.message;
   }
+});
 
-  function openEdit(r){
-    clearForm();
-    modalTitle.textContent = "Edit Product";
-    selectedKey = keyOf(r);
+frm.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const msg = validateRequired();
+  if (msg){ formMsg.textContent = msg; return; }
 
-    for (const el of frm.elements) {
-      if (!el.name) continue;
-      el.value = r[el.name] ?? "";
-    }
+  syncVariantsToJson();
 
-    try {
-      const raw = String(r["Variations JSON"]||"").trim();
-      const arr = raw ? JSON.parse(raw) : [];
-      setVariantsUI(Array.isArray(arr) ? arr : []);
-    } catch(e){
-      setVariantsUI([]);
-    }
+  const prevApproved = currentRow ? norm(currentRow["Price Approved"]) : "";
+  const prevShipStat = currentRow ? norm(currentRow["Shipping Status"]) : "";
 
-    showModal(editModal);
+  const params = buildParamsForSave();
+
+  formMsg.textContent = "Saving…";
+  try{
+    const out = await apiPostViaIframe(params);
+    formMsg.textContent = out.action === "created" ? "Created." : "Updated.";
+
+    await apiGet();
+
+    const k = low(params["Product Name"])+"||"+low(params["Shipment"])+"||"+low(params["Category/Tab"]);
+    const r = rows.find(x=>keyOf(x)===k);
+    if (r) loadIntoForm(r);
+
+    const nowApproved = norm(params["Price Approved"]);
+    const nowShipStat = norm(params["Shipping Status"]);
+
+    if (nowApproved === "Yes" && prevApproved !== "Yes") thumbsUp();
+    if (nowShipStat === "Shipped" && prevShipStat !== "Shipped") dollarRain();
+
+  }catch(err){
+    formMsg.textContent = "Save failed: " + err.message;
   }
+});
 
-  // Make Add button impossible to “do nothing”
-  document.addEventListener("click", (e) => {
-    if(e.target && (e.target.id === "btnAdd")) openAdd();
-  });
+q.addEventListener("input", render);
+shipmentFilter.addEventListener("change", render);
+categoryFilter.addEventListener("change", render);
+statusFilter.addEventListener("change", render);
+approvedFilter.addEventListener("change", render);
 
-  // Markup controls
-  markupPreset.addEventListener("change", () => {
-    markupCustom.style.display = (markupPreset.value==="custom") ? "inline-block" : "none";
-  });
-  markupCustom.addEventListener("input", applySuggestedSell);
-  fx.addEventListener("input", applySuggestedSell);
+shipForCost.addEventListener("change", render);
+shipForRev.addEventListener("change", render);
+shipForProfit.addEventListener("change", render);
 
-  // Cost formatting + auto-sell
-  CostUSD.addEventListener("input", () => {
-    // Only calculate if Selling is blank
-    applySuggestedSell();
-  });
-  CostUSD.addEventListener("blur", () => {
-    const v = num(CostUSD.value);
-    if(String(CostUSD.value).trim() !== "" && Number.isFinite(v)) CostUSD.value = v.toFixed(2);
-  });
+chipNeedsApproval.addEventListener("click", ()=>{
+  forceFilter = (forceFilter === "needsApproval") ? null : "needsApproval";
+  render();
+});
+chipNeedsSelling.addEventListener("click", ()=>{
+  forceFilter = (forceFilter === "needsSelling") ? null : "needsSelling";
+  render();
+});
 
-  // Quick filters
-  btnNeedsApproval.addEventListener("click", () => { btnNeedsApproval.classList.toggle("on"); render(); });
-  btnMissingSell.addEventListener("click", () => { btnMissingSell.classList.toggle("on"); render(); });
+btnAddVariant.addEventListener("click", ()=>addVariantRow());
+fVarJson.addEventListener("input", ()=>syncJsonToVariants());
 
-  // Table row click (delegated)
-  tblBody.addEventListener("click", (e) => {
-    const tr = e.target.closest("tr[data-k]");
-    if(!tr) return;
-    const k = tr.getAttribute("data-k");
-    const r = rows.find(x => keyOf(x) === k);
-    if(r) openEdit(r);
-  });
+// Call modal
+function showCall(v){ callOverlay.classList.toggle("show", !!v); }
+btnCall.addEventListener("click", ()=>showCall(true));
+callClose.addEventListener("click", ()=>showCall(false));
+callClose2.addEventListener("click", ()=>showCall(false));
+callOverlay.addEventListener("click", (e)=>{ if (e.target === callOverlay) showCall(false); });
 
-  // API
-  async function apiGet(){
-    setLoad("Loading…");
-    const res = await fetch(API, { method:"GET", cache:"no-store" });
-    const j = await res.json();
-    if(!j || j.ok !== true || !Array.isArray(j.data)) throw new Error(j?.error || "Unexpected response");
-    return j.data;
-  }
+// Shipment modal
+function showShip(v){ shipOverlay.classList.toggle("show", !!v); }
+addShipmentLink.addEventListener("click", (e)=>{ e.preventDefault(); shipNew.value=""; showShip(true); shipNew.focus(); });
+shipClose.addEventListener("click", ()=>showShip(false));
+shipClose2.addEventListener("click", ()=>showShip(false));
+shipOverlay.addEventListener("click", (e)=>{ if (e.target === shipOverlay) showShip(false); });
+shipAdd.addEventListener("click", ()=>{
+  const s = norm(shipNew.value);
+  if (!s){ alert("Enter a shipment name."); return; }
+  localShipments.add(s);
+  refreshAllDropdowns();
+  fShipment.value = s;
+  shipmentFilter.value = "";
+  showShip(false);
+});
 
-  async function apiPost(params){
-    const body = new URLSearchParams(params);
-    const res = await fetch(API, { method:"POST", body });
-    const out = await res.json();
-    if(!out || out.ok !== true) throw new Error(out?.error || "Save failed");
-    return out;
-  }
+// Currency + FX controls
+displaySel.addEventListener("change", ()=>{
+  // Capture current typing as canonical before switching
+  syncFormDatasetsFromInputs();
+  state.display = displaySel.value;
+  updateCurrencyLabels();
+  applyFormDisplayFromDatasets();
+  render();
+});
 
-  function normalizeForSave(params){
-    const ns = String(newShipment.value||"").trim();
-    if(ns) params["Shipment"] = ns;
+fxInput.addEventListener("input", ()=>{
+  const v = num(fxInput.value);
+  if (v > 0) state.fx = v;
+  // Recalc suggestion if not overridden
+  syncFormDatasetsFromInputs();
+  if (!userOverrodeSelling) tryAutofillSelling();
+  render();
+});
 
-    const nc = String(newCategory.value||"").trim();
-    if(nc) params["Category/Tab"] = nc;
-
-    const variants = readVariants();
-    params["Variations JSON"] = variants.length ? JSON.stringify(variants) : "";
-
-    const cost = num(params["Cost Price USD"]);
-    const sell = String(params["Selling Price XCD"]||"").trim();
-    if(cost && !sell){
-      const fxRate = Math.max(0.01, num(fx.value) || 2.70);
-      const pct = Math.max(0, (markupPreset.value==="custom") ? num(markupCustom.value) : num(markupPreset.value));
-      params["Selling Price XCD"] = (cost * fxRate * (1 + pct/100)).toFixed(2);
-    }
-
-    return params;
-  }
-
-  btnSave.addEventListener("click", async () => {
-    formMsg.textContent = "Saving…";
-    const params = { _action: selectedKey ? "update" : "create" };
-
-    for (const el of frm.elements) {
-      if (!el.name) continue;
-      params[el.name] = el.value;
-    }
-
-    if(!String(params["Product Name"]||"").trim() || !String(params["Category/Tab"]||"").trim()){
-      formMsg.textContent = "Product Name and Category are required.";
-      return;
-    }
-
-    normalizeForSave(params);
-
-    const prevApproved = (() => {
-      const r = rows.find(x => keyOf(x)===selectedKey);
-      return r ? String(r["Price Approved"]||"").trim() : "";
-    })();
-    const nextApproved = String(params["Price Approved"]||"").trim();
-
-    const prevShip = (() => {
-      const r = rows.find(x => keyOf(x)===selectedKey);
-      return r ? String(r["Shipping Status"]||"").trim() : "";
-    })();
-    const nextShip = String(params["Shipping Status"]||"").trim();
-
-    try {
-      const out = await apiPost(params);
-
-      if(prevApproved !== "Yes" && nextApproved === "Yes") popThumb();
-      if(prevShip !== "Shipped" && nextShip === "Shipped") rainMoney();
-
-      formMsg.textContent = (out.action || "saved").toUpperCase();
-      await boot();
-      hideModal(editModal);
-    } catch (err) {
-      formMsg.textContent = "Save failed: " + err.message;
-    }
-  });
-
-  btnDelete.addEventListener("click", async () => {
-    const name = String(frm.elements["Product Name"]?.value||"").trim();
-    const tab  = String(frm.elements["Category/Tab"]?.value||"").trim();
-    if(!name || !tab){
-      formMsg.textContent = "Product Name and Category are required to delete.";
-      return;
-    }
-    if(!confirm(`Delete "${name}" (${tab}) from the sheet?`)) return;
-
-    formMsg.textContent = "Deleting…";
-    try {
-      const out = await apiPost({ _action:"delete", "Product Name": name, "Category/Tab": tab });
-      formMsg.textContent = (out.action || "deleted").toUpperCase();
-      await boot();
-      hideModal(editModal);
-    } catch (err) {
-      formMsg.textContent = "Delete failed: " + err.message;
-    }
-  });
-
-  btnReload.addEventListener("click", () => boot());
-
-  q.addEventListener("input", render);
-  shipFilter.addEventListener("change", render);
-  catFilter.addEventListener("change", render);
-  statusFilter.addEventListener("change", render);
-  priceFilter.addEventListener("change", render);
-  costShipment.addEventListener("change", render);
-  revShipment.addEventListener("change", render);
-  currencyToggle.addEventListener("change", render);
-
-  async function boot(){
-    try {
-      rows = await apiGet();
-      rebuildOptionSources();
-      render();
-      setLoad("Loaded.", "ok");
-    } catch (err) {
-      setLoad("Load failed: " + err.message, "error");
-    }
-  }
-
-  // initial variants row
-  setVariantsUI([]);
-
-  // initial load
-  boot();
+// Boot
+initStaticDropdowns();
+state.display = displaySel.value;
+state.fx = num(fxInput.value) || 2.70;
+updateCurrencyLabels();
+apiGet().catch(err=>setLoad("Load failed: "+err.message));
 </script>
 </body>
 </html>
