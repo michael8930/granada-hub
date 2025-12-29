@@ -1,7 +1,185 @@
+<!--
+PASTE THIS WHOLE BLOCK INTO GitHub: /granada-hub/index.html
+Then in Elementor, embed ONLY an iframe to https://michael8930.github.io/granada-hub/
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>G HUB PRO</title>
+
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#071018; color:#e8f2ff; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 22px; }
+    .card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; box-shadow: 0 30px 90px rgba(0,0,0,.45); overflow:hidden; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 16px 18px; background: linear-gradient(180deg, rgba(0,174,239,.14), rgba(255,255,255,0)); border-bottom: 1px solid rgba(255,255,255,.08); }
+    header .title { display:flex; flex-direction:column; gap:4px; }
+    header h1 { margin:0; font-size: 18px; letter-spacing:.08em; text-transform: uppercase; }
+    header .sub { font-size: 12px; opacity:.75; }
+    .btn { appearance:none; border:0; border-radius: 999px; padding: 10px 14px; font-weight: 800; letter-spacing:.06em; text-transform: uppercase; cursor:pointer; }
+    .btn.primary { background:#00AEEF; color:#001018; }
+    .btn.ghost { background: rgba(255,255,255,.08); color:#e8f2ff; border:1px solid rgba(255,255,255,.12); }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
+
+    .toolbar { display:flex; gap:10px; align-items:center; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,.08); flex-wrap:wrap; }
+    .toolbar input, .toolbar select {
+      background: rgba(0,0,0,.35); color:#e8f2ff; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 10px 12px; outline:none;
+    }
+    .grid { display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px; padding: 14px; }
+    @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+
+    .panel { background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow:hidden; }
+    .panel h2 { margin:0; padding: 12px 14px; font-size: 12px; letter-spacing:.18em; text-transform: uppercase; opacity:.8; border-bottom:1px solid rgba(255,255,255,.08); }
+    table { width:100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; }
+    th { font-size: 11px; opacity:.7; letter-spacing:.14em; text-transform: uppercase; }
+    tr:hover td { background: rgba(0,174,239,.06); cursor:pointer; }
+    .status { padding: 10px 14px; font-size: 12px; border-top:1px solid rgba(255,255,255,.08); opacity:.9; }
+    .status.error { color:#ffb3b3; }
+    .status.ok { color:#b6ffcf; }
+    .status.warn { color:#ffe8a3; }
+
+    form { padding: 12px 14px; }
+    form .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    form label { font-size: 11px; opacity:.75; letter-spacing:.14em; text-transform: uppercase; display:block; margin: 0 0 6px; }
+    form input, form textarea, form select {
+      width:100%;
+      background: rgba(0,0,0,.35); color:#e8f2ff;
+      border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 10px 12px; outline:none;
+    }
+    form textarea { min-height: 92px; resize: vertical; }
+    .actions { display:flex; gap:10px; align-items:center; margin-top: 10px; flex-wrap:wrap; }
+    .note { font-size: 12px; opacity:.75; line-height:1.45; }
+    .pill { display:inline-block; padding: 6px 10px; border-radius: 999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); font-size: 11px; letter-spacing:.08em; text-transform: uppercase; }
+    .hint { padding: 0 14px 12px; }
+    .small { font-size: 12px; opacity: .8; }
+    a { color:#7fd8ff; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="title">
+          <h1>G HUB PRO</h1>
+          <div class="sub">Inventory — loaded from Google Sheets</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button id="btnReload" class="btn ghost" type="button">Reload</button>
+          <button id="btnAdd" class="btn primary" type="button">+ Add Product</button>
+        </div>
+      </header>
+
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Search product name..." />
+        <select id="statusFilter">
+          <option value="">All Status</option>
+        </select>
+        <span id="count" class="pill">0 items</span>
+      </div>
+
+      <div class="grid">
+        <div class="panel">
+          <h2>Inventory</h2>
+          <div style="padding:0;">
+            <div style="overflow:auto; max-height: 62vh;">
+              <table id="tbl">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category/Tab</th>
+                    <th>Qty</th>
+                    <th>Selling</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div id="loadMsg" class="status">Loading…</div>
+            <div class="hint small">
+              If you see “Load failed”, open DevTools Console to view the exact error.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Edit / Add</h2>
+
+          <form id="frm" autocomplete="off">
+            <div class="row">
+              <div>
+                <label>Product Name *</label>
+                <input name="Product Name" required />
+              </div>
+              <div>
+                <label>Category/Tab *</label>
+                <input name="Category/Tab" required />
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label>Selling Price XCD</label>
+                <input name="Selling Price XCD" inputmode="decimal" />
+              </div>
+              <div>
+                <label>Quantity</label>
+                <input name="Quantity" inputmode="numeric" />
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label>Status</label>
+                <input name="Status" placeholder="In Stock / Sold / Watchlist" />
+              </div>
+              <div>
+                <label>Image URL</label>
+                <input name="Image URL" />
+              </div>
+            </div>
+
+            <div>
+              <label>Online Link</label>
+              <input name="Online Link" />
+            </div>
+
+            <div style="margin-top:10px;">
+              <label>Note</label>
+              <textarea name="Note"></textarea>
+            </div>
+
+            <div class="actions">
+              <button id="btnSave" type="submit" class="btn primary">Save (Upsert)</button>
+              <button id="btnDelete" type="button" class="btn ghost">Delete</button>
+              <span id="formMsg" class="note"></span>
+            </div>
+          </form>
+
+          <div class="status note">
+            Tip: Click a row on the left to load it into the form.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
-  // === CONFIG: your Apps Script Web App URL ===
+  /************* CONFIG *************/
+  // Your Apps Script Web App (doGet/doPost)
   const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
 
+  /************* DOM *************/
   const $ = (sel) => document.querySelector(sel);
   const tblBody = $("#tbl tbody");
   const loadMsg = $("#loadMsg");
@@ -13,34 +191,64 @@
   const btnReload = $("#btnReload");
   const btnAdd = $("#btnAdd");
   const btnDelete = $("#btnDelete");
+  const btnSave = $("#btnSave");
 
+  /************* STATE *************/
   let rows = [];
-  let selectedKey = null;
 
-  function setLoad(text, type="") {
+  /************* HELPERS *************/
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function setLoad(text, type=""){
     loadMsg.textContent = text;
     loadMsg.className = "status" + (type ? " " + type : "");
   }
 
-  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-
   function keyOf(r){
-    return (String(r["Product Name"]||"").trim()+"||"+String(r["Category/Tab"]||"").trim()).toLowerCase();
+    return (String(r["Product Name"]||"").trim() + "||" + String(r["Category/Tab"]||"").trim()).toLowerCase();
   }
 
-  function buildStatusOptions() {
+  function formToParams(){
+    const params = {};
+    for (const el of frm.elements){
+      if (!el.name) continue;
+      params[el.name] = el.value;
+    }
+    return params;
+  }
+
+  function clearForm(){
+    frm.reset();
+    formMsg.textContent = "";
+  }
+
+  function loadIntoForm(r){
+    for (const el of frm.elements){
+      if (!el.name) continue;
+      el.value = r[el.name] ?? "";
+    }
+    formMsg.textContent = "Loaded.";
+  }
+
+  function buildStatusOptions(){
     const set = new Set();
     rows.forEach(r => {
       const s = String(r["Status"]||"").trim();
       if (s) set.add(s);
     });
+
     const cur = statusFilter.value;
-    statusFilter.innerHTML = '<option value="">All Status</option>' +
+    statusFilter.innerHTML =
+      '<option value="">All Status</option>' +
       [...set].sort().map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
     statusFilter.value = cur;
   }
 
-  function applyFilters(list) {
+  function applyFilters(list){
     const needle = q.value.trim().toLowerCase();
     const st = statusFilter.value.trim();
     return list.filter(r => {
@@ -51,9 +259,10 @@
     });
   }
 
-  function render() {
+  function render(){
     const filtered = applyFilters(rows);
     countEl.textContent = `${filtered.length} items`;
+
     tblBody.innerHTML = filtered.map(r => {
       const k = keyOf(r);
       return `<tr data-k="${esc(k)}">
@@ -74,160 +283,120 @@
     });
   }
 
-  function clearForm() {
-    frm.reset();
-    selectedKey = null;
-    formMsg.textContent = "";
-  }
-
-  function loadIntoForm(r) {
-    selectedKey = keyOf(r);
-    for (const el of frm.elements) {
-      if (!el.name) continue;
-      el.value = r[el.name] ?? "";
-    }
-    formMsg.textContent = "Loaded.";
-  }
-
-  // ========= CROSS-DOMAIN GET (JSONP) =========
-  function jsonp(url, timeoutMs = 15000) {
-    return new Promise((resolve, reject) => {
-      const cb = "__ghub_cb_" + Math.random().toString(36).slice(2);
-      const script = document.createElement("script");
-      const timer = setTimeout(() => cleanup(new Error("JSONP timeout")), timeoutMs);
-
-      function cleanup(err) {
-        clearTimeout(timer);
-        try { delete window[cb]; } catch(_) { window[cb] = undefined; }
-        if (script.parentNode) script.parentNode.removeChild(script);
-        if (err) reject(err);
-      }
-
-      window[cb] = (data) => {
-        cleanup();
-        resolve(data);
-      };
-
-      const sep = url.includes("?") ? "&" : "?";
-      script.src = url + sep + "callback=" + encodeURIComponent(cb) + "&_ts=" + Date.now();
-      script.onerror = () => cleanup(new Error("JSONP load error"));
-      document.head.appendChild(script);
-    });
-  }
-
-  async function apiGet() {
+  /************* API *************/
+  async function apiGet(){
     setLoad("Loading…");
-    const data = await jsonp(API);
 
-    // Support both response shapes:
-    // A) array
-    // B) { ok:true, data:[...] }
-    if (data && data.ok === false) throw new Error(data.error || "API error");
+    // Cache-bust so WP/Cloudflare/CDN doesn’t hand you stale responses
+    const url = API + (API.includes("?") ? "&" : "?") + "t=" + Date.now();
 
-    const list = Array.isArray(data)
-      ? data
-      : (data && Array.isArray(data.data) ? data.data : null);
+    const res = await fetch(url, {
+      method: "GET",
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
 
-    if (!list) throw new Error("Unexpected response (expected array or {ok:true,data:[]}).");
+    // If Apps Script returns HTML due to auth/redirect, this catches it cleanly.
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      // Common cause: you're getting HTML (login/permission page) instead of JSON.
+      throw new Error("API did not return JSON (likely permission/redirect).");
+    }
 
-    rows = list;
+    // ACCEPT BOTH SHAPES:
+    // A) array: [ ...rows ]
+    // B) wrapped: { ok:true, data:[ ...rows ] }  OR { ok:true, ... }
+    let arr = null;
+
+    if (Array.isArray(data)) {
+      arr = data;
+    } else if (data && Array.isArray(data.data)) {
+      arr = data.data;
+    } else if (data && data.ok === false) {
+      throw new Error(data.error || "API error");
+    } else if (data && data.ok === true && Array.isArray(data.rows)) {
+      // optional alternate wrapper if you ever change it
+      arr = data.rows;
+    } else {
+      // If your API currently returns {"ok":true,"data":[]} that's handled above.
+      // If it returns {"ok":true,"data":{}} or something else, fail loudly.
+      throw new Error("Unexpected API response shape.");
+    }
+
+    rows = arr;
     buildStatusOptions();
     render();
     setLoad("Loaded.", "ok");
   }
 
-  // ========= CROSS-DOMAIN POST (hidden form submit) =========
-  function apiPost(params) {
-    return new Promise((resolve, reject) => {
-      // Cross-origin POST is allowed via form submission,
-      // but you cannot read the response back. We treat "submitted" as success
-      // and then refresh the table with apiGet().
-      const iframe = document.createElement("iframe");
-      iframe.name = "hidden_post_target";
-      iframe.style.display = "none";
+  async function apiPost(params){
+    const body = new URLSearchParams(params);
 
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = API;
-      form.target = iframe.name;
+    // Cache-bust for POST too, avoids odd proxy behavior
+    const url = API + (API.includes("?") ? "&" : "?") + "t=" + Date.now();
 
-      Object.keys(params).forEach((k) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = k;
-        input.value = params[k] ?? "";
-        form.appendChild(input);
-      });
-
-      // Clean up safely
-      let done = false;
-      const t = setTimeout(() => {
-        if (done) return;
-        done = true;
-        cleanup();
-        // Even if Google doesn't fire onload, the request likely went out.
-        resolve({ ok: true, note: "submitted_timeout" });
-      }, 8000);
-
-      function cleanup() {
-        clearTimeout(t);
-        try { form.remove(); } catch(_) {}
-        try { iframe.remove(); } catch(_) {}
-      }
-
-      iframe.onload = () => {
-        if (done) return;
-        done = true;
-        cleanup();
-        resolve({ ok: true, note: "submitted" });
-      };
-
-      iframe.onerror = () => {
-        if (done) return;
-        done = true;
-        cleanup();
-        reject(new Error("POST failed to submit"));
-      };
-
-      document.body.appendChild(iframe);
-      document.body.appendChild(form);
-      form.submit();
+    const res = await fetch(url, {
+      method: "POST",
+      body,
+      headers: { "Accept": "application/json" }
     });
+
+    const text = await res.text();
+    let out;
+    try {
+      out = JSON.parse(text);
+    } catch {
+      throw new Error("API did not return JSON (permission/redirect).");
+    }
+
+    if (!out || out.ok !== true) throw new Error(out?.error || "Save failed");
+    return out;
   }
 
+  /************* EVENTS *************/
   frm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    formMsg.textContent = "Saving…";
 
-    const params = { _action: "update" };
-    for (const el of frm.elements) {
-      if (!el.name) continue;
-      params[el.name] = el.value;
-    }
+    formMsg.textContent = "Saving…";
+    btnSave.disabled = true;
+    btnDelete.disabled = true;
+
+    const params = formToParams();
+    params._action = "update"; // your Apps Script treats blank as upsert; we keep explicit
 
     if (!params["Product Name"] || !params["Category/Tab"]) {
       formMsg.textContent = "Product Name and Category/Tab are required.";
+      btnSave.disabled = false;
+      btnDelete.disabled = false;
       return;
     }
 
     try {
-      await apiPost(params);
-      formMsg.textContent = "Saved. Reloading…";
+      const out = await apiPost(params);
+      formMsg.textContent = out.action === "created" ? "Created." : "Updated.";
       await apiGet();
 
+      // reselect the updated row
       const k = (String(params["Product Name"]).trim()+"||"+String(params["Category/Tab"]).trim()).toLowerCase();
       const r = rows.find(x => keyOf(x) === k);
       if (r) loadIntoForm(r);
-
-      formMsg.textContent = "Saved.";
     } catch (err) {
+      console.error(err);
       formMsg.textContent = "Save failed: " + err.message;
+      setLoad("Load/Save issue: " + err.message, "warn");
+    } finally {
+      btnSave.disabled = false;
+      btnDelete.disabled = false;
     }
   });
 
   btnDelete.addEventListener("click", async () => {
     const name = frm.elements["Product Name"]?.value?.trim();
-    const tab = frm.elements["Category/Tab"]?.value?.trim();
+    const tab  = frm.elements["Category/Tab"]?.value?.trim();
+
     if (!name || !tab) {
       formMsg.textContent = "Product Name and Category/Tab are required to delete.";
       return;
@@ -235,14 +404,21 @@
     if (!confirm(`Delete "${name}" (${tab}) from the sheet?`)) return;
 
     formMsg.textContent = "Deleting…";
+    btnSave.disabled = true;
+    btnDelete.disabled = true;
+
     try {
-      await apiPost({ _action:"delete", "Product Name": name, "Category/Tab": tab });
-      formMsg.textContent = "Deleted. Reloading…";
+      const out = await apiPost({ _action:"delete", "Product Name": name, "Category/Tab": tab });
+      formMsg.textContent = out.action === "deleted" ? "Deleted." : "Not found.";
       clearForm();
       await apiGet();
-      formMsg.textContent = "Deleted.";
     } catch (err) {
+      console.error(err);
       formMsg.textContent = "Delete failed: " + err.message;
+      setLoad("Delete issue: " + err.message, "warn");
+    } finally {
+      btnSave.disabled = false;
+      btnDelete.disabled = false;
     }
   });
 
@@ -251,6 +427,11 @@
   q.addEventListener("input", render);
   statusFilter.addEventListener("change", render);
 
-  // Boot
-  apiGet().catch(err => setLoad("Load failed: " + err.message, "error"));
+  /************* BOOT *************/
+  apiGet().catch(err => {
+    console.error(err);
+    setLoad("Load failed: " + err.message, "error");
+  });
 </script>
+</body>
+</html>
