@@ -1,54 +1,62 @@
-<!--
-PASTE THIS WHOLE BLOCK INTO GitHub: /granada-hub/index.html
-Then in Elementor, embed ONLY an iframe to https://michael8930.github.io/granada-hub/
--->
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>G HUB PRO</title>
-
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
-  <meta http-equiv="Pragma" content="no-cache" />
-
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
     body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#071018; color:#e8f2ff; }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 22px; }
+    a { color: inherit; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 18px; }
     .card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; box-shadow: 0 30px 90px rgba(0,0,0,.45); overflow:hidden; }
-    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 16px 18px; background: linear-gradient(180deg, rgba(0,174,239,.14), rgba(255,255,255,0)); border-bottom: 1px solid rgba(255,255,255,.08); }
-    header .title { display:flex; flex-direction:column; gap:4px; }
-    header h1 { margin:0; font-size: 18px; letter-spacing:.08em; text-transform: uppercase; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 14px 16px; background: linear-gradient(180deg, rgba(0,174,239,.16), rgba(255,255,255,0)); border-bottom: 1px solid rgba(255,255,255,.08); }
+    header .title { display:flex; flex-direction:column; gap:4px; cursor:pointer; user-select:none; }
+    header h1 { margin:0; font-size: 16px; letter-spacing:.12em; text-transform: uppercase; }
     header .sub { font-size: 12px; opacity:.75; }
-    .btn { appearance:none; border:0; border-radius: 999px; padding: 10px 14px; font-weight: 800; letter-spacing:.06em; text-transform: uppercase; cursor:pointer; }
+
+    .rightBtns { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn { appearance:none; border:0; border-radius: 999px; padding: 10px 14px; font-weight: 800; letter-spacing:.06em; text-transform: uppercase; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
     .btn.primary { background:#00AEEF; color:#001018; }
     .btn.ghost { background: rgba(255,255,255,.08); color:#e8f2ff; border:1px solid rgba(255,255,255,.12); }
+    .btn.link { text-decoration:none; }
     .btn:disabled { opacity:.55; cursor:not-allowed; }
 
-    .toolbar { display:flex; gap:10px; align-items:center; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,.08); flex-wrap:wrap; }
+    .tiles { display:grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    @media (max-width: 1020px){ .tiles { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px){ .tiles { grid-template-columns: 1fr; } }
+    .tile { padding: 12px 12px; border-radius: 14px; background: rgba(0,0,0,.20); border:1px solid rgba(255,255,255,.08); cursor:pointer; }
+    .tile .k { font-size: 11px; letter-spacing:.14em; text-transform: uppercase; opacity:.75; }
+    .tile .v { margin-top: 6px; font-size: 18px; font-weight: 900; }
+    .tile .s { margin-top: 2px; font-size: 12px; opacity:.70; }
+
+    .toolbar { display:flex; gap:10px; align-items:center; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.08); flex-wrap:wrap; }
     .toolbar input, .toolbar select {
       background: rgba(0,0,0,.35); color:#e8f2ff; border: 1px solid rgba(255,255,255,.12);
       border-radius: 12px; padding: 10px 12px; outline:none;
     }
-    .grid { display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px; padding: 14px; }
+    .pill { display:inline-block; padding: 6px 10px; border-radius: 999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); font-size: 11px; letter-spacing:.08em; text-transform: uppercase; }
+
+    .grid { display:grid; grid-template-columns: 1.2fr .9fr; gap: 12px; padding: 12px; }
     @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
 
     .panel { background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow:hidden; }
-    .panel h2 { margin:0; padding: 12px 14px; font-size: 12px; letter-spacing:.18em; text-transform: uppercase; opacity:.8; border-bottom:1px solid rgba(255,255,255,.08); }
-    table { width:100%; border-collapse: collapse; font-size: 13px; }
-    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; }
-    th { font-size: 11px; opacity:.7; letter-spacing:.14em; text-transform: uppercase; }
-    tr:hover td { background: rgba(0,174,239,.06); cursor:pointer; }
-    .status { padding: 10px 14px; font-size: 12px; border-top:1px solid rgba(255,255,255,.08); opacity:.9; }
-    .status.error { color:#ffb3b3; }
-    .status.ok { color:#b6ffcf; }
-    .status.warn { color:#ffe8a3; }
+    .panel h2 { margin:0; padding: 12px 14px; font-size: 12px; letter-spacing:.18em; text-transform: uppercase; opacity:.85; border-bottom:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .panel .body { padding: 12px 14px; }
+    .muted { opacity:.75; font-size:12px; }
 
-    form { padding: 12px 14px; }
-    form .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    table { width:100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; white-space:nowrap; }
+    th { font-size: 11px; opacity:.7; letter-spacing:.14em; text-transform: uppercase; position: sticky; top: 0; background: rgba(7,16,24,.92); backdrop-filter: blur(6px); }
+    tr:hover td { background: rgba(0,174,239,.06); cursor:pointer; }
+    td.wrap { white-space: normal; }
+
+    .statusLine { padding: 10px 14px; font-size: 12px; border-top:1px solid rgba(255,255,255,.08); opacity:.9; }
+    .statusLine.error { color:#ffb3b3; }
+    .statusLine.ok { color:#b6ffcf; }
+
+    /* Form */
     form label { font-size: 11px; opacity:.75; letter-spacing:.14em; text-transform: uppercase; display:block; margin: 0 0 6px; }
     form input, form textarea, form select {
       width:100%;
@@ -56,41 +64,131 @@ Then in Elementor, embed ONLY an iframe to https://michael8930.github.io/granada
       border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 10px 12px; outline:none;
     }
     form textarea { min-height: 92px; resize: vertical; }
+    .row2 { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .row3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    @media (max-width: 640px){ .row2, .row3 { grid-template-columns: 1fr; } }
+
     .actions { display:flex; gap:10px; align-items:center; margin-top: 10px; flex-wrap:wrap; }
     .note { font-size: 12px; opacity:.75; line-height:1.45; }
-    .pill { display:inline-block; padding: 6px 10px; border-radius: 999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); font-size: 11px; letter-spacing:.08em; text-transform: uppercase; }
-    .hint { padding: 0 14px 12px; }
-    .small { font-size: 12px; opacity: .8; }
-    a { color:#7fd8ff; }
+
+    /* Variants table */
+    .vwrap { border:1px solid rgba(255,255,255,.08); border-radius: 14px; overflow:hidden; }
+    .vhead { display:flex; justify-content:space-between; align-items:center; padding: 10px 10px; border-bottom:1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); }
+    .vhead .left { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .vhead .left .pill { font-size: 10px; }
+    .vtable { width:100%; border-collapse: collapse; font-size: 12px; }
+    .vtable th, .vtable td { padding: 8px 8px; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .vtable th { font-size: 10px; }
+    .vtable input { padding: 8px 8px; border-radius: 10px; }
+
+    .miniBtn { padding: 8px 10px; font-size: 11px; }
+    .danger { border-color: rgba(255,140,140,.45) !important; color:#ffd1d1 !important; }
+
+    /* Modal */
+    .backdrop { position: fixed; inset:0; background: rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding: 18px; z-index: 9999; }
+    .modal { width: min(520px, 100%); background: rgba(10,18,26,.98); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; box-shadow: 0 30px 90px rgba(0,0,0,.6); overflow:hidden; }
+    .modal .mhead { padding: 14px 14px; border-bottom:1px solid rgba(255,255,255,.10); display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .modal .mhead .t { letter-spacing:.14em; text-transform: uppercase; font-weight: 900; font-size: 12px; opacity:.9; }
+    .modal .mbody { padding: 14px; display:grid; gap:10px; }
+    .xbtn { border:0; background: rgba(255,255,255,.10); color:#e8f2ff; border-radius: 10px; padding: 8px 10px; cursor:pointer; }
+
+    /* Easter eggs */
+    .toast {
+      position: fixed; inset: 0; display:none; align-items:center; justify-content:center; z-index: 10000;
+      pointer-events:none;
+    }
+    .toast .big {
+      font-size: 76px; filter: drop-shadow(0 20px 40px rgba(0,0,0,.6));
+      animation: pop 0.9s ease forwards;
+    }
+    @keyframes pop {
+      0% { transform: scale(.2); opacity:0; }
+      30% { transform: scale(1.05); opacity:1; }
+      70% { transform: scale(1); opacity:1; }
+      100% { transform: scale(.9); opacity:0; }
+    }
+    .rain {
+      position: fixed; inset:0; pointer-events:none; display:none; z-index:10000;
+      overflow:hidden;
+    }
+    .bill {
+      position:absolute; top:-40px; font-size: 26px;
+      animation: fall 1.2s linear forwards;
+      opacity:.9;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,.45));
+    }
+    @keyframes fall {
+      to { transform: translateY(calc(100vh + 80px)) rotate(120deg); opacity: 0.25; }
+    }
   </style>
 </head>
-
 <body>
   <div class="wrap">
     <div class="card">
       <header>
-        <div class="title">
+        <div id="brand" class="title" title="Tap for contacts">
           <h1>G HUB PRO</h1>
-          <div class="sub">Inventory — loaded from Google Sheets</div>
+          <div class="sub">Grenada inventory hub</div>
         </div>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <button id="btnReload" class="btn ghost" type="button">Reload</button>
-          <button id="btnAdd" class="btn primary" type="button">+ Add Product</button>
+
+        <div class="rightBtns">
+          <a class="btn ghost link" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
+          <a class="btn ghost link" href="https://vinylpressusa.com/grenada-dashboard-mobile" target="_blank" rel="noopener">Dashboard Mobile</a>
+          <button id="btnReload" class="btn ghost">Reload</button>
+          <button id="btnAdd" class="btn primary">+ Add Product</button>
         </div>
       </header>
 
+      <div class="tiles">
+        <div id="tileItems" class="tile" data-filter="all">
+          <div class="k">Total items</div>
+          <div class="v" id="kItems">0</div>
+          <div class="s">Across all shipments/tabs</div>
+        </div>
+        <div id="tileCost" class="tile" data-filter="all">
+          <div class="k">Total cost USD</div>
+          <div class="v" id="kCost">$0</div>
+          <div class="s">Computed from Variations</div>
+        </div>
+        <div id="tileNeedResale" class="tile" data-filter="needResale">
+          <div class="k">Needs resale price</div>
+          <div class="v" id="kNeedResale">0</div>
+          <div class="s">Selling price missing/0</div>
+        </div>
+        <div id="tileNeedApprove" class="tile" data-filter="needApprove">
+          <div class="k">Needs price approval</div>
+          <div class="v" id="kNeedApprove">0</div>
+          <div class="s">Price Approved not Yes</div>
+        </div>
+      </div>
+
       <div class="toolbar">
         <input id="q" type="search" placeholder="Search product name..." />
+        <select id="categoryFilter">
+          <option value="">All Categories/Tabs</option>
+        </select>
         <select id="statusFilter">
           <option value="">All Status</option>
+        </select>
+        <select id="shipFilter">
+          <option value="">All Shipping Status</option>
+        </select>
+        <select id="approvedFilter">
+          <option value="">Price Approved (All)</option>
+          <option value="Yes">Approved = Yes</option>
+          <option value="No">Approved = No</option>
         </select>
         <span id="count" class="pill">0 items</span>
       </div>
 
       <div class="grid">
         <div class="panel">
-          <h2>Inventory</h2>
-          <div style="padding:0;">
+          <h2>
+            <span>Inventory</span>
+            <span class="muted" id="hint"></span>
+          </h2>
+
+          <div class="body" style="padding:0;">
             <div style="overflow:auto; max-height: 62vh;">
               <table id="tbl">
                 <thead>
@@ -98,179 +196,360 @@ Then in Elementor, embed ONLY an iframe to https://michael8930.github.io/granada
                     <th>Product</th>
                     <th>Category/Tab</th>
                     <th>Qty</th>
-                    <th>Selling</th>
+                    <th>Cost (USD)</th>
+                    <th>Selling (XCD)</th>
                     <th>Status</th>
+                    <th>Approved</th>
+                    <th>Shipping</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
               </table>
             </div>
-            <div id="loadMsg" class="status">Loading…</div>
-            <div class="hint small">
-              If you see “Load failed”, open DevTools Console to view the exact error.
-            </div>
+            <div id="loadMsg" class="statusLine">Loading…</div>
           </div>
         </div>
 
         <div class="panel">
-          <h2>Edit / Add</h2>
+          <h2>
+            <span>Edit / Add</span>
+            <span class="muted" id="editTitle">No selection</span>
+          </h2>
 
-          <form id="frm" autocomplete="off">
-            <div class="row">
-              <div>
-                <label>Product Name *</label>
-                <input name="Product Name" required />
+          <div class="body">
+            <form id="frm" autocomplete="off">
+              <div class="row2">
+                <div>
+                  <label>Product Name *</label>
+                  <input name="Product Name" required />
+                </div>
+                <div>
+                  <label>Category/Tab *</label>
+                  <input name="Category/Tab" list="catList" required />
+                  <datalist id="catList"></datalist>
+                </div>
               </div>
-              <div>
-                <label>Category/Tab *</label>
-                <input name="Category/Tab" required />
+
+              <div class="row3">
+                <div>
+                  <label>Status</label>
+                  <select name="Status">
+                    <option value="In Stock">In Stock</option>
+                    <option value="Sold">Sold</option>
+                    <option value="Watchlist">Watchlist</option>
+                    <option value="Needs Resale Price">Needs Resale Price</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Price Approved</label>
+                  <select name="Price Approved">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                </div>
+                <div>
+                  <label>Shipping Status</label>
+                  <select name="Shipping Status">
+                    <option value="">(blank)</option>
+                    <option value="In Inventory">In Inventory</option>
+                    <option value="Ready to Ship">Ready to Ship</option>
+                    <option value="Shipped">Shipped</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div class="row">
-              <div>
-                <label>Selling Price XCD</label>
-                <input name="Selling Price XCD" inputmode="decimal" />
+              <div class="row2">
+                <div>
+                  <label>Ship Date (optional)</label>
+                  <input name="Ship Date (optional but recommended)" placeholder="YYYY-MM-DD" />
+                </div>
+                <div>
+                  <label>Product Type</label>
+                  <input name="Product Type" placeholder="e.g., Apparel / Grocery / Tools" />
+                </div>
               </div>
-              <div>
-                <label>Quantity</label>
-                <input name="Quantity" inputmode="numeric" />
+
+              <div class="row2">
+                <div>
+                  <label>Image URL</label>
+                  <input name="Image URL" placeholder="https://..." />
+                  <div id="imgPreview" style="margin-top:8px; display:none;">
+                    <img id="imgTag" alt="preview" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12);" />
+                  </div>
+                </div>
+                <div>
+                  <label>Online Link</label>
+                  <input name="Online Link" placeholder="https://..." />
+                  <div class="note" style="margin-top:8px;">
+                    <a id="linkOut" href="#" target="_blank" rel="noopener" style="display:none; text-decoration:underline;">Open link</a>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div class="row">
               <div>
-                <label>Status</label>
-                <input name="Status" placeholder="In Stock / Sold / Watchlist" />
+                <label>Note</label>
+                <textarea name="Note"></textarea>
               </div>
-              <div>
-                <label>Image URL</label>
-                <input name="Image URL" />
+
+              <div style="margin-top:12px;">
+                <div class="vwrap">
+                  <div class="vhead">
+                    <div class="left">
+                      <span class="pill">Variants</span>
+                      <span class="note">Add size/gender/color/qty/cost/sell here. Saved into <b>Variations JSON</b>.</span>
+                    </div>
+                    <button type="button" id="btnAddVar" class="btn ghost miniBtn">+ Variant</button>
+                  </div>
+
+                  <div style="overflow:auto; max-height: 220px;">
+                    <table class="vtable">
+                      <thead>
+                        <tr>
+                          <th>Gender</th>
+                          <th>Size</th>
+                          <th>Color</th>
+                          <th>Shoe Size</th>
+                          <th>Qty</th>
+                          <th>Unit Cost USD</th>
+                          <th>Resale XCD</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="vbody"></tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label>Online Link</label>
-              <input name="Online Link" />
-            </div>
+              <div class="actions">
+                <button id="btnSave" type="submit" class="btn primary">Save</button>
+                <button id="btnDelete" type="button" class="btn ghost danger">Delete</button>
+                <span id="formMsg" class="note"></span>
+              </div>
+            </form>
+          </div>
 
-            <div style="margin-top:10px;">
-              <label>Note</label>
-              <textarea name="Note"></textarea>
-            </div>
-
-            <div class="actions">
-              <button id="btnSave" type="submit" class="btn primary">Save (Upsert)</button>
-              <button id="btnDelete" type="button" class="btn ghost">Delete</button>
-              <span id="formMsg" class="note"></span>
-            </div>
-          </form>
-
-          <div class="status note">
-            Tip: Click a row on the left to load it into the form.
+          <div class="statusLine note" style="border-top:1px solid rgba(255,255,255,.08);">
+            Tip: Click a row on the left to load it. Use “+ Variant” to add multiple variations without making separate sheet rows.
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Contacts modal -->
+  <div id="backdrop" class="backdrop">
+    <div class="modal">
+      <div class="mhead">
+        <div class="t">Contacts</div>
+        <button class="xbtn" id="closeModal">Close</button>
+      </div>
+      <div class="mbody">
+        <a class="btn primary link" href="tel:+16107035185">Call Michael • (610) 703-5185</a>
+        <a class="btn ghost link" href="tel:+14845135528">Call Quencie • (484) 513-5528</a>
+        <div class="note">These are tap-to-call links (works best on mobile).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Easter eggs -->
+  <div id="toast" class="toast"><div id="toastIcon" class="big">👍</div></div>
+  <div id="rain" class="rain"></div>
+
+  <!-- Hidden iframe + form for POST (no CORS issues) -->
+  <iframe id="postFrame" name="postFrame" style="display:none;"></iframe>
+  <form id="postForm" target="postFrame" method="POST" style="display:none;"></form>
+
 <script>
   /************* CONFIG *************/
-  // Your Apps Script Web App (doGet/doPost)
   const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+  const VARCOL = "Variations JSON";
 
   /************* DOM *************/
   const $ = (sel) => document.querySelector(sel);
   const tblBody = $("#tbl tbody");
   const loadMsg = $("#loadMsg");
   const q = $("#q");
+  const categoryFilter = $("#categoryFilter");
   const statusFilter = $("#statusFilter");
+  const shipFilter = $("#shipFilter");
+  const approvedFilter = $("#approvedFilter");
   const countEl = $("#count");
+  const hint = $("#hint");
+
   const frm = $("#frm");
   const formMsg = $("#formMsg");
+  const editTitle = $("#editTitle");
+
   const btnReload = $("#btnReload");
   const btnAdd = $("#btnAdd");
   const btnDelete = $("#btnDelete");
-  const btnSave = $("#btnSave");
+  const btnAddVar = $("#btnAddVar");
+  const vbody = $("#vbody");
+
+  const imgPreview = $("#imgPreview");
+  const imgTag = $("#imgTag");
+  const linkOut = $("#linkOut");
+
+  const backdrop = $("#backdrop");
+  const closeModal = $("#closeModal");
+  const brand = $("#brand");
+
+  const toast = $("#toast");
+  const toastIcon = $("#toastIcon");
+  const rain = $("#rain");
+
+  const postForm = $("#postForm");
 
   /************* STATE *************/
   let rows = [];
+  let selectedKey = null;
+  let hardFilter = "all"; // all | needResale | needApprove
 
-  /************* HELPERS *************/
+  function setLoad(text, type="") {
+    loadMsg.textContent = text;
+    loadMsg.className = "statusLine" + (type ? " " + type : "");
+  }
+
   function esc(s){
     return String(s ?? "").replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
     }[m]));
   }
 
-  function setLoad(text, type=""){
-    loadMsg.textContent = text;
-    loadMsg.className = "status" + (type ? " " + type : "");
+  function money(n){
+    const x = Number(n);
+    if (!isFinite(x)) return "";
+    return x.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+
+  function moneyUSD(n){
+    const x = Number(n);
+    if (!isFinite(x)) return "$0";
+    return x.toLocaleString(undefined, { style:"currency", currency:"USD" });
   }
 
   function keyOf(r){
-    return (String(r["Product Name"]||"").trim() + "||" + String(r["Category/Tab"]||"").trim()).toLowerCase();
+    return (String(r["Product Name"]||"").trim()+"||"+String(r["Category/Tab"]||"").trim()).toLowerCase();
   }
 
-  function formToParams(){
-    const params = {};
-    for (const el of frm.elements){
-      if (!el.name) continue;
-      params[el.name] = el.value;
+  function parseVars(r){
+    const raw = r[VARCOL];
+    if (!raw) return [];
+    try {
+      const v = JSON.parse(raw);
+      return Array.isArray(v) ? v : [];
+    } catch {
+      return [];
     }
-    return params;
   }
 
-  function clearForm(){
-    frm.reset();
-    formMsg.textContent = "";
-  }
-
-  function loadIntoForm(r){
-    for (const el of frm.elements){
-      if (!el.name) continue;
-      el.value = r[el.name] ?? "";
+  function computeAgg(r){
+    const vars = parseVars(r);
+    // If no variants, fall back to single-row fields (legacy)
+    if (!vars.length) {
+      const qty = Number(r["Quantity"]||0) || 0;
+      const unitCost = Number(r["Cost Price USD"]||0) || 0;
+      const unitSell = Number(r["Selling Price XCD"]||0) || 0;
+      return {
+        qty,
+        costUSD: qty * unitCost,
+        sellXCD: qty * unitSell,
+        needResale: !(unitSell > 0),
+      };
     }
-    formMsg.textContent = "Loaded.";
+    let qty=0, costUSD=0, sellXCD=0;
+    let needResale=false;
+    for (const v of vars) {
+      const q = Number(v.qty||0) || 0;
+      const c = Number(v.unitCostUSD||0) || 0;
+      const s = Number(v.resaleXCD||0) || 0;
+      qty += q;
+      costUSD += q * c;
+      sellXCD += q * s;
+      if (!(s > 0)) needResale = true;
+    }
+    return { qty, costUSD, sellXCD, needResale };
   }
 
-  function buildStatusOptions(){
-    const set = new Set();
+  function buildDropdownOptions() {
+    const cats = new Set();
+    const stats = new Set();
+    const ships = new Set();
+
     rows.forEach(r => {
+      const c = String(r["Category/Tab"]||"").trim();
+      if (c) cats.add(c);
+
       const s = String(r["Status"]||"").trim();
-      if (s) set.add(s);
+      if (s) stats.add(s);
+
+      const sh = String(r["Shipping Status"]||"").trim();
+      if (sh) ships.add(sh);
     });
 
-    const cur = statusFilter.value;
-    statusFilter.innerHTML =
-      '<option value="">All Status</option>' +
-      [...set].sort().map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
-    statusFilter.value = cur;
+    categoryFilter.innerHTML = '<option value="">All Categories/Tabs</option>' +
+      [...cats].sort().map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join("");
+
+    statusFilter.innerHTML = '<option value="">All Status</option>' +
+      [...stats].sort().map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join("");
+
+    shipFilter.innerHTML = '<option value="">All Shipping Status</option>' +
+      [...ships].sort().map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join("");
+
+    // datalist for Category/Tab in form
+    const dl = $("#catList");
+    dl.innerHTML = [...cats].sort().map(x => `<option value="${esc(x)}"></option>`).join("");
   }
 
-  function applyFilters(list){
+  function applyFilters(list) {
     const needle = q.value.trim().toLowerCase();
+    const cat = categoryFilter.value.trim();
     const st = statusFilter.value.trim();
+    const ship = shipFilter.value.trim();
+    const appr = approvedFilter.value.trim();
+
     return list.filter(r => {
       const name = String(r["Product Name"]||"").toLowerCase();
-      const okName = !needle || name.includes(needle);
-      const okStatus = !st || String(r["Status"]||"").trim() === st;
-      return okName && okStatus;
+      if (needle && !name.includes(needle)) return false;
+      if (cat && String(r["Category/Tab"]||"").trim() !== cat) return false;
+      if (st && String(r["Status"]||"").trim() !== st) return false;
+      if (ship && String(r["Shipping Status"]||"").trim() !== ship) return false;
+      if (appr && String(r["Price Approved"]||"").trim() !== appr) return false;
+
+      const agg = computeAgg(r);
+      if (hardFilter === "needResale" && !agg.needResale) return false;
+      if (hardFilter === "needApprove" && String(r["Price Approved"]||"").trim() === "Yes") return false;
+
+      return true;
     });
   }
 
-  function render(){
+  function render() {
     const filtered = applyFilters(rows);
+
     countEl.textContent = `${filtered.length} items`;
+    hint.textContent = hardFilter === "needResale"
+      ? "Filtered: Needs resale price"
+      : hardFilter === "needApprove"
+      ? "Filtered: Needs price approval"
+      : "";
 
     tblBody.innerHTML = filtered.map(r => {
       const k = keyOf(r);
+      const agg = computeAgg(r);
+      const approved = String(r["Price Approved"]||"").trim() || "No";
+      const ship = String(r["Shipping Status"]||"").trim() || "";
+
       return `<tr data-k="${esc(k)}">
-        <td>${esc(r["Product Name"])}</td>
+        <td class="wrap">${esc(r["Product Name"])}</td>
         <td>${esc(r["Category/Tab"])}</td>
-        <td>${esc(r["Quantity"] ?? "")}</td>
-        <td>${esc(r["Selling Price XCD"] ?? "")}</td>
+        <td>${esc(agg.qty)}</td>
+        <td>${esc(money(agg.costUSD))}</td>
+        <td>${esc(money(agg.sellXCD))}</td>
         <td>${esc(r["Status"] ?? "")}</td>
+        <td>${esc(approved)}</td>
+        <td>${esc(ship)}</td>
       </tr>`;
     }).join("");
 
@@ -281,157 +560,352 @@ Then in Elementor, embed ONLY an iframe to https://michael8930.github.io/granada
         if (r) loadIntoForm(r);
       });
     });
+
+    // dashboard tiles
+    let totalCost = 0;
+    let needResale = 0;
+    let needApprove = 0;
+    for (const r of rows) {
+      const agg = computeAgg(r);
+      totalCost += agg.costUSD;
+      if (agg.needResale) needResale++;
+      if (String(r["Price Approved"]||"").trim() !== "Yes") needApprove++;
+    }
+    $("#kItems").textContent = rows.length.toLocaleString();
+    $("#kCost").textContent = moneyUSD(totalCost);
+    $("#kNeedResale").textContent = needResale.toLocaleString();
+    $("#kNeedApprove").textContent = needApprove.toLocaleString();
   }
 
-  /************* API *************/
-  async function apiGet(){
-    setLoad("Loading…");
+  function clearForm() {
+    frm.reset();
+    selectedKey = null;
+    editTitle.textContent = "New item";
+    formMsg.textContent = "";
+    vbody.innerHTML = "";
+    updatePreviews_();
+    addVariantRow_(); // start with one
+  }
 
-    // Cache-bust so WP/Cloudflare/CDN doesn’t hand you stale responses
-    const url = API + (API.includes("?") ? "&" : "?") + "t=" + Date.now();
+  function loadIntoForm(r) {
+    selectedKey = keyOf(r);
+    editTitle.textContent = `${r["Product Name"] || ""} • ${r["Category/Tab"] || ""}`;
 
-    const res = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      headers: { "Accept": "application/json" }
-    });
-
-    // If Apps Script returns HTML due to auth/redirect, this catches it cleanly.
-    const text = await res.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      // Common cause: you're getting HTML (login/permission page) instead of JSON.
-      throw new Error("API did not return JSON (likely permission/redirect).");
+    for (const el of frm.elements) {
+      if (!el.name) continue;
+      el.value = r[el.name] ?? "";
     }
 
-    // ACCEPT BOTH SHAPES:
-    // A) array: [ ...rows ]
-    // B) wrapped: { ok:true, data:[ ...rows ] }  OR { ok:true, ... }
-    let arr = null;
-
-    if (Array.isArray(data)) {
-      arr = data;
-    } else if (data && Array.isArray(data.data)) {
-      arr = data.data;
-    } else if (data && data.ok === false) {
-      throw new Error(data.error || "API error");
-    } else if (data && data.ok === true && Array.isArray(data.rows)) {
-      // optional alternate wrapper if you ever change it
-      arr = data.rows;
+    // Variants
+    const vars = parseVars(r);
+    vbody.innerHTML = "";
+    if (vars.length) {
+      vars.forEach(v => addVariantRow_(v));
     } else {
-      // If your API currently returns {"ok":true,"data":[]} that's handled above.
-      // If it returns {"ok":true,"data":{}} or something else, fail loudly.
-      throw new Error("Unexpected API response shape.");
+      // fallback: create one variant from legacy columns if present
+      addVariantRow_({
+        gender: r["Gender"] || "",
+        size: r["Size"] || "",
+        color: "",
+        shoeSize: r["Shoe Size"] || "",
+        qty: r["Quantity"] || "",
+        unitCostUSD: r["Cost Price USD"] || "",
+        resaleXCD: r["Selling Price XCD"] || ""
+      });
     }
 
-    rows = arr;
-    buildStatusOptions();
-    render();
-    setLoad("Loaded.", "ok");
+    updatePreviews_();
+    formMsg.textContent = "Loaded.";
   }
 
-  async function apiPost(params){
-    const body = new URLSearchParams(params);
-
-    // Cache-bust for POST too, avoids odd proxy behavior
-    const url = API + (API.includes("?") ? "&" : "?") + "t=" + Date.now();
-
-    const res = await fetch(url, {
-      method: "POST",
-      body,
-      headers: { "Accept": "application/json" }
-    });
-
-    const text = await res.text();
-    let out;
-    try {
-      out = JSON.parse(text);
-    } catch {
-      throw new Error("API did not return JSON (permission/redirect).");
+  function updatePreviews_(){
+    const img = frm.elements["Image URL"]?.value?.trim();
+    if (img) {
+      imgTag.src = img;
+      imgPreview.style.display = "block";
+    } else {
+      imgPreview.style.display = "none";
+      imgTag.src = "";
     }
 
-    if (!out || out.ok !== true) throw new Error(out?.error || "Save failed");
-    return out;
+    const link = frm.elements["Online Link"]?.value?.trim();
+    if (link) {
+      linkOut.href = link;
+      linkOut.style.display = "inline";
+    } else {
+      linkOut.href = "#";
+      linkOut.style.display = "none";
+    }
+  }
+
+  function addVariantRow_(v = {}) {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td><input data-k="gender" placeholder="" value="${esc(v.gender||"")}" /></td>
+      <td><input data-k="size" placeholder="" value="${esc(v.size||"")}" /></td>
+      <td><input data-k="color" placeholder="" value="${esc(v.color||"")}" /></td>
+      <td><input data-k="shoeSize" placeholder="" value="${esc(v.shoeSize||"")}" /></td>
+      <td><input data-k="qty" inputmode="numeric" placeholder="" value="${esc(v.qty||"")}" /></td>
+      <td><input data-k="unitCostUSD" inputmode="decimal" placeholder="" value="${esc(v.unitCostUSD||"")}" /></td>
+      <td><input data-k="resaleXCD" inputmode="decimal" placeholder="" value="${esc(v.resaleXCD||"")}" /></td>
+      <td><button type="button" class="btn ghost miniBtn danger">X</button></td>
+    `;
+
+    tr.querySelector("button").addEventListener("click", () => {
+      tr.remove();
+      if (!vbody.querySelector("tr")) addVariantRow_();
+    });
+
+    vbody.appendChild(tr);
+  }
+
+  function collectVariants_() {
+    const vars = [];
+    vbody.querySelectorAll("tr").forEach(tr => {
+      const get = (k) => tr.querySelector(`[data-k="${k}"]`)?.value?.trim() || "";
+      const qty = Number(get("qty") || 0) || 0;
+      const unitCostUSD = Number(get("unitCostUSD") || 0) || 0;
+      const resaleXCD = Number(get("resaleXCD") || 0) || 0;
+
+      // keep rows even if qty 0 (some users stage it), but you can tighten if needed
+      vars.push({
+        gender: get("gender"),
+        size: get("size"),
+        color: get("color"),
+        shoeSize: get("shoeSize"),
+        qty,
+        unitCostUSD,
+        resaleXCD
+      });
+    });
+    return vars;
+  }
+
+  function sumFromVariants_(vars){
+    let qty=0, cost=0, sell=0;
+    let needResale=false;
+    for (const v of vars) {
+      const q = Number(v.qty||0) || 0;
+      const c = Number(v.unitCostUSD||0) || 0;
+      const s = Number(v.resaleXCD||0) || 0;
+      qty += q;
+      cost += q * c;
+      sell += q * s;
+      if (!(s > 0)) needResale = true;
+    }
+    return { qty, cost, sell, needResale };
+  }
+
+  /************* JSONP GET (no CORS issues) *************/
+  function apiGet() {
+    setLoad("Loading…");
+    return new Promise((resolve, reject) => {
+      const cb = "cb_" + Math.random().toString(16).slice(2);
+      window[cb] = (payload) => {
+        try {
+          delete window[cb];
+          script.remove();
+
+          if (!payload || payload.ok !== true) throw new Error(payload?.error || "API error");
+          if (!Array.isArray(payload.data)) throw new Error("Unexpected response");
+
+          rows = payload.data;
+          buildDropdownOptions();
+          render();
+          setLoad("Loaded.", "ok");
+          resolve();
+        } catch (e) {
+          setLoad("Load failed: " + e.message, "error");
+          reject(e);
+        }
+      };
+
+      const script = document.createElement("script");
+      script.src = API + "?callback=" + encodeURIComponent(cb) + "&_ts=" + Date.now();
+      script.onerror = () => {
+        delete window[cb];
+        setLoad("Load failed: network/script error", "error");
+        reject(new Error("Network/script error"));
+      };
+      document.body.appendChild(script);
+    });
+  }
+
+  /************* POST via hidden form to iframe (no CORS issues) *************/
+  function apiPost(params) {
+    return new Promise((resolve, reject) => {
+      const token = "pm_" + Math.random().toString(16).slice(2);
+      const handler = (ev) => {
+        // We accept any origin; you can tighten later if desired.
+        const data = ev.data;
+        if (!data || data._token !== token) return;
+        window.removeEventListener("message", handler);
+        if (data.ok !== true) reject(new Error(data.error || "Save failed"));
+        else resolve(data);
+      };
+      window.addEventListener("message", handler);
+
+      // Build hidden inputs
+      postForm.innerHTML = "";
+      postForm.action = API;
+
+      const add = (k, v) => {
+        const i = document.createElement("input");
+        i.type = "hidden";
+        i.name = k;
+        i.value = v == null ? "" : String(v);
+        postForm.appendChild(i);
+      };
+
+      add("_pm", "1");
+      add("_token", token);
+      Object.entries(params).forEach(([k,v]) => add(k, v));
+
+      // Apps Script response posts message WITHOUT our token; we add it here by wrapping.
+      // We'll intercept the first message and attach token if missing.
+      const passthrough = (ev) => {
+        const d = ev.data;
+        if (!d || d._token) return; // already tagged
+        // tag and re-dispatch locally
+        window.removeEventListener("message", passthrough);
+        window.postMessage({ ...d, _token: token }, "*");
+      };
+      window.addEventListener("message", passthrough, { once: true });
+
+      postForm.submit();
+
+      // fail-safe timeout
+      setTimeout(() => {
+        window.removeEventListener("message", handler);
+        reject(new Error("POST timed out"));
+      }, 15000);
+    });
+  }
+
+  /************* Easter eggs *************/
+  function showThumbs(){
+    toastIcon.textContent = "👍";
+    toast.style.display = "flex";
+    setTimeout(() => toast.style.display = "none", 900);
+  }
+
+  function showMoney(){
+    rain.innerHTML = "";
+    rain.style.display = "block";
+    const count = 28;
+    for (let i=0;i<count;i++){
+      const d = document.createElement("div");
+      d.className = "bill";
+      d.textContent = "💵";
+      d.style.left = (Math.random()*100) + "vw";
+      d.style.animationDelay = (Math.random()*0.35) + "s";
+      d.style.transform = `translateY(0) rotate(${Math.random()*80}deg)`;
+      rain.appendChild(d);
+    }
+    setTimeout(() => { rain.style.display = "none"; rain.innerHTML=""; }, 1400);
   }
 
   /************* EVENTS *************/
+  btnReload.addEventListener("click", () => apiGet());
+  btnAdd.addEventListener("click", () => clearForm());
+
+  q.addEventListener("input", render);
+  categoryFilter.addEventListener("change", render);
+  statusFilter.addEventListener("change", render);
+  shipFilter.addEventListener("change", render);
+  approvedFilter.addEventListener("change", render);
+
+  btnAddVar.addEventListener("click", () => addVariantRow_());
+
+  frm.elements["Image URL"]?.addEventListener("input", updatePreviews_);
+  frm.elements["Online Link"]?.addEventListener("input", updatePreviews_);
+
+  // Dashboard tile filters
+  document.querySelectorAll(".tile").forEach(t => {
+    t.addEventListener("click", () => {
+      hardFilter = t.getAttribute("data-filter") || "all";
+      render();
+    });
+  });
+
+  // Contact modal
+  brand.addEventListener("click", () => backdrop.style.display = "flex");
+  closeModal.addEventListener("click", () => backdrop.style.display = "none");
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) backdrop.style.display = "none"; });
+
+  // Save
   frm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     formMsg.textContent = "Saving…";
-    btnSave.disabled = true;
-    btnDelete.disabled = true;
 
-    const params = formToParams();
-    params._action = "update"; // your Apps Script treats blank as upsert; we keep explicit
+    const params = { _action: "update" };
+    for (const el of frm.elements) {
+      if (!el.name) continue;
+      params[el.name] = el.value;
+    }
 
     if (!params["Product Name"] || !params["Category/Tab"]) {
       formMsg.textContent = "Product Name and Category/Tab are required.";
-      btnSave.disabled = false;
-      btnDelete.disabled = false;
       return;
     }
+
+    const vars = collectVariants_();
+    const agg = sumFromVariants_(vars);
+
+    // Auto-set “Needs Resale Price” if any variant missing resale
+    if (agg.needResale) params["Status"] = "Needs Resale Price";
+
+    // Write useful rollups back to the sheet columns (so the sheet stays readable)
+    params["Quantity"] = String(agg.qty);
+    params["Cost Price USD"] = String(agg.cost.toFixed(2));     // total cost
+    params["Selling Price XCD"] = String(agg.sell.toFixed(2));  // total resale value
+
+    // Store the real detail
+    params[VARCOL] = JSON.stringify(vars);
 
     try {
       const out = await apiPost(params);
+
+      // Easter eggs
+      showThumbs();
+      if ((params["Shipping Status"] || "").trim() === "Shipped") showMoney();
+      if ((params["Price Approved"] || "").trim() === "Yes") showThumbs();
+
       formMsg.textContent = out.action === "created" ? "Created." : "Updated.";
       await apiGet();
 
-      // reselect the updated row
+      // Reselect
       const k = (String(params["Product Name"]).trim()+"||"+String(params["Category/Tab"]).trim()).toLowerCase();
       const r = rows.find(x => keyOf(x) === k);
       if (r) loadIntoForm(r);
+
     } catch (err) {
-      console.error(err);
       formMsg.textContent = "Save failed: " + err.message;
-      setLoad("Load/Save issue: " + err.message, "warn");
-    } finally {
-      btnSave.disabled = false;
-      btnDelete.disabled = false;
     }
   });
 
+  // Delete
   btnDelete.addEventListener("click", async () => {
     const name = frm.elements["Product Name"]?.value?.trim();
-    const tab  = frm.elements["Category/Tab"]?.value?.trim();
-
-    if (!name || !tab) {
-      formMsg.textContent = "Product Name and Category/Tab are required to delete.";
-      return;
-    }
+    const tab = frm.elements["Category/Tab"]?.value?.trim();
+    if (!name || !tab) { formMsg.textContent = "Product Name and Category/Tab are required to delete."; return; }
     if (!confirm(`Delete "${name}" (${tab}) from the sheet?`)) return;
 
     formMsg.textContent = "Deleting…";
-    btnSave.disabled = true;
-    btnDelete.disabled = true;
-
     try {
       const out = await apiPost({ _action:"delete", "Product Name": name, "Category/Tab": tab });
       formMsg.textContent = out.action === "deleted" ? "Deleted." : "Not found.";
       clearForm();
       await apiGet();
     } catch (err) {
-      console.error(err);
       formMsg.textContent = "Delete failed: " + err.message;
-      setLoad("Delete issue: " + err.message, "warn");
-    } finally {
-      btnSave.disabled = false;
-      btnDelete.disabled = false;
     }
   });
 
-  btnReload.addEventListener("click", () => apiGet().catch(err => setLoad("Load failed: " + err.message, "error")));
-  btnAdd.addEventListener("click", clearForm);
-  q.addEventListener("input", render);
-  statusFilter.addEventListener("change", render);
-
-  /************* BOOT *************/
-  apiGet().catch(err => {
-    console.error(err);
-    setLoad("Load failed: " + err.message, "error");
-  });
+  // Boot
+  clearForm();
+  apiGet().catch(() => {});
 </script>
 </body>
 </html>
