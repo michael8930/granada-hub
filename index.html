@@ -1,1213 +1,416 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>G HUB PRO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grenada Hub Pro</title>
+
+  <!-- ===== CORE STYLES ===== -->
   <style>
-    :root { color-scheme: dark; }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:#061019; color:#e9f2ff;
-    }
-    .wrap{ max-width:1200px; margin:0 auto; padding:18px; }
-    .card{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.09);
-      border-radius:18px;
-      box-shadow:0 30px 90px rgba(0,0,0,.45);
-      overflow:hidden;
-    }
-    header{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:14px 14px;
-      background:linear-gradient(180deg, rgba(0,174,239,.16), rgba(255,255,255,0));
-      border-bottom:1px solid rgba(255,255,255,.09);
-      flex-wrap:wrap;
-    }
-    .brand{
-      display:flex; align-items:flex-start; gap:12px;
-    }
-    .brandBtn{
-      appearance:none; border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      color:#e9f2ff; border-radius:14px;
-      padding:10px 12px; font-weight:900; letter-spacing:.12em;
-      text-transform:uppercase; cursor:pointer;
-      display:flex; align-items:center; gap:10px;
-    }
-    .brandBtn .sub{ font-size:11px; letter-spacing:.08em; font-weight:700; opacity:.75; text-transform:none; }
-    .brandBtn .caret{ opacity:.8; }
-    .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
-    .btn{
-      appearance:none; border:0; border-radius:999px;
-      padding:10px 14px; font-weight:900; letter-spacing:.08em;
-      text-transform:uppercase; cursor:pointer;
-    }
-    .btn.primary{ background:#00AEEF; color:#001018; }
-    .btn.ghost{
-      background:rgba(255,255,255,.08); color:#e9f2ff;
-      border:1px solid rgba(255,255,255,.14);
-    }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    /* Top bubbles */
-    .topbar{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:10px;
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,.09);
-    }
-    @media (max-width: 980px){
-      .topbar{ grid-template-columns:1fr; }
-      .btnRow{ justify-content:flex-start; }
-    }
-    .bubble{
-      background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.09);
-      border-radius:16px;
-      padding:10px 12px;
-      min-height:74px;
-      display:flex; flex-direction:column; gap:6px;
-    }
-    .bubble .label{
-      font-size:11px; letter-spacing:.16em; text-transform:uppercase; opacity:.75;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-    .bubble .value{
-      font-size:22px; font-weight:900;
-    }
-    .bubble .hint{ font-size:12px; opacity:.72; line-height:1.35; }
-    .bubble .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-
-    select,input,textarea{
-      background:rgba(0,0,0,.35); color:#e9f2ff;
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:12px; padding:10px 12px;
-      outline:none;
-    }
-    .mini{ padding:8px 10px; border-radius:10px; font-weight:800; }
-    .pill{
-      display:inline-block; padding:6px 10px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    :root {
+      --bg: #0b0f14;
+      --panel: #121826;
+      --accent: #00e5ff;
+      --accent-2: #00ff88;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --danger: #ff5c5c;
     }
 
-    /* Filters */
-    .filters{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,.09);
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* Main grid */
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:14px;
-      padding:14px;
-    }
-    @media (max-width: 980px){ .grid{ grid-template-columns:1fr; } }
+    a { color: inherit; text-decoration: none; }
 
-    .panel{
-      background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.09);
-      border-radius:16px;
-      overflow:hidden;
-    }
-    .panel h2{
-      margin:0; padding:12px 14px;
-      font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.8;
-      border-bottom:1px solid rgba(255,255,255,.09);
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-    table{ width:100%; border-collapse:collapse; font-size:13px; }
-    th,td{
-      padding:10px 10px; border-bottom:1px solid rgba(255,255,255,.06);
-      text-align:left; vertical-align:top;
-    }
-    th{ font-size:11px; opacity:.7; letter-spacing:.14em; text-transform:uppercase; }
-    tr:hover td{ background:rgba(0,174,239,.06); cursor:pointer; }
-    .tableWrap{ overflow:auto; max-height:62vh; }
-    .statusBar{
-      padding:10px 14px; font-size:12px;
-      border-top:1px solid rgba(255,255,255,.09);
-      opacity:.88;
-    }
-    .ok{ color:#b6ffcf; }
-    .err{ color:#ffb3b3; }
-
-    /* Right-side form */
-    .formBody{ padding:12px 14px; }
-    .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
-    @media (max-width: 980px){ .row2{ grid-template-columns:1fr; } }
-    label{
-      font-size:11px; opacity:.75; letter-spacing:.14em;
-      text-transform:uppercase; display:block; margin:0 0 6px;
-    }
-    textarea{ min-height:86px; resize:vertical; }
-    .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px; }
-    .note{ font-size:12px; opacity:.76; line-height:1.35; }
-
-    /* Dropdown menu */
-    .menuWrap{ position:relative; }
-    .menu{
-      position:absolute; left:0; top:52px; z-index:30;
-      width:min(420px, calc(100vw - 36px));
-      background:#081622;
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:14px;
-      box-shadow:0 30px 90px rgba(0,0,0,.55);
-      overflow:hidden;
-      display:none;
-    }
-    .menu.open{ display:block; }
-    .menuHead{
-      padding:12px 12px;
-      border-bottom:1px solid rgba(255,255,255,.09);
-      font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.8;
-    }
-    .menuBody{ padding:12px 12px; display:grid; gap:10px; }
-    .menuBody a,.menuBody button{
-      width:100%;
-      text-decoration:none;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      color:#e9f2ff;
-      padding:10px 12px;
-      border-radius:12px;
-      font-weight:900; letter-spacing:.08em; text-transform:uppercase;
-      cursor:pointer;
-      text-align:left;
-    }
-    .menuBody .subRow{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-
-    /* Modal */
-    .modalOverlay{
-      position:fixed; inset:0; z-index:50;
-      background:rgba(0,0,0,.55);
-      display:none; align-items:center; justify-content:center;
-      padding:18px;
-    }
-    .modalOverlay.open{ display:flex; }
-    .modal{
-      width:min(760px, 100%);
-      background:#071522;
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:16px;
-      box-shadow:0 40px 120px rgba(0,0,0,.65);
-      overflow:hidden;
-    }
-    .modalTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,.09);
-    }
-    .modalTop .title{
-      font-weight:900; letter-spacing:.12em; text-transform:uppercase;
+    /* ===== HEADER ===== */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: linear-gradient(180deg, #121826, #0b0f14);
+      border-bottom: 1px solid #1f2937;
     }
 
-    /* Easter eggs */
-    .flash{
-      position:fixed; inset:0; z-index:80;
-      display:none; align-items:center; justify-content:center;
-      pointer-events:none;
-      background:rgba(0,0,0,.35);
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
-    .flash.open{ display:flex; }
-    .flash .emoji{
-      font-size:96px;
-      filter:drop-shadow(0 20px 50px rgba(0,0,0,.6));
-      transform:scale(0.8);
-      animation: pop 700ms ease-out forwards;
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-size: 15px;
+      cursor: pointer;
     }
-    @keyframes pop{
-      0%{ transform:scale(0.6); opacity:0; }
-      35%{ transform:scale(1.15); opacity:1; }
-      100%{ transform:scale(1.0); opacity:0; }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
     }
-    .money{
-      position:fixed; inset:0; z-index:81;
-      pointer-events:none;
-      overflow:hidden;
-      display:none;
+
+    .nav-btn {
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #1f2937;
+      font-size: 12px;
+      cursor: pointer;
     }
-    .money.open{ display:block; }
-    .bill{
-      position:absolute; top:-40px;
-      font-size:22px;
-      opacity:.9;
-      animation: fall 1100ms linear forwards;
-      filter:drop-shadow(0 10px 20px rgba(0,0,0,.55));
+
+    .nav-btn:hover { background: #273244; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    @keyframes fall{
-      to{ transform:translateY(calc(100vh + 80px)) rotate(180deg); opacity:0.2; }
+
+    .currency-toggle {
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .add-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: var(--accent-2);
+      color: #000;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* ===== CALL MENU ===== */
+    .call-menu {
+      position: absolute;
+      top: 54px;
+      left: 18px;
+      background: var(--panel);
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+      z-index: 1000;
+    }
+
+    .call-menu button {
+      display: block;
+      width: 100%;
+      background: #1f2937;
+      color: var(--text);
+      border: none;
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+
+    .call-menu button:hover {
+      background: #273244;
+    }
+
+    /* ===== DASHBOARD ===== */
+    .dashboard {
+      padding: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .stat-title {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    /* ===== FILTER BAR ===== */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .filters select,
+    .filters input {
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    /* ===== INVENTORY TABLE ===== */
+    .table-wrap {
+      background: var(--panel);
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #1f2937;
+      text-align: left;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    tr:hover {
+      background: #0f172a;
+      cursor: pointer;
+    }
+
+    /* ===== MODAL (ADD / EDIT PRODUCT) ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: var(--panel);
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      padding: 18px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      font-size: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .modal input,
+    .modal select,
+    .modal textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .modal textarea { resize: vertical; }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    .btn-cancel {
+      background: #1f2937;
+      color: var(--text);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn-save {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
     }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="menuWrap">
-          <button id="brandBtn" class="brandBtn" type="button">
-            <div>
-              <div>G HUB PRO</div>
-              <div class="sub">Grenada inventory pricing & shipments</div>
-            </div>
-            <div class="caret">▾</div>
-          </button>
 
-          <div id="menu" class="menu" role="menu" aria-label="Quick actions">
-            <div class="menuHead">Quick Actions</div>
-            <div class="menuBody">
-              <div class="subRow">
-                <a id="callMichael" href="tel:+16107035185">Call Michael</a>
-                <a id="callQuencie" href="tel:+14845135528">Call Quencie</a>
-              </div>
-              <div class="subRow">
-                <button id="copyMichael" type="button">Copy Michael #</button>
-                <button id="copyQuencie" type="button">Copy Quencie #</button>
-              </div>
-              <a href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
-              <a href="https://vinylpressusa.com/grenada-dashboard-mobile/" target="_blank" rel="noopener">Dashboard Mobile</a>
-              <div class="note">If a page ever says “Load failed”, open DevTools Console to see the exact error.</div>
-            </div>
-          </div>
-        </div>
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo" id="logoBtn">GRENADA HUB PRO</div>
 
-        <div class="btnRow">
-          <button id="btnReload" class="btn ghost" type="button">Reload</button>
-          <button id="btnAdd" class="btn primary" type="button">+ Add Product</button>
-        </div>
-      </header>
-
-      <!-- KPI bubbles (aligned) -->
-      <div class="topbar">
-        <div class="bubble">
-          <div class="label">Total items (filtered) <span id="kpiItems" class="pill">0</span></div>
-          <div class="hint">Counts what’s currently filtered in the table.</div>
-          <div class="row">
-            <label style="margin:0; opacity:.75;">Currency</label>
-            <select id="currency" class="mini">
-              <option value="USD">USD</option>
-              <option value="XCD">XCD</option>
-            </select>
-            <label style="margin:0; opacity:.75;">FX</label>
-            <input id="fx" class="mini" inputmode="decimal" value="2.70" style="width:92px;" />
-          </div>
-        </div>
-
-        <div class="bubble">
-          <div class="label">Totals <span id="kpiShipCount" class="pill">0 shipments</span></div>
-          <div class="value" id="kpiCost">$0.00</div>
-          <div class="row">
-            <select id="kpiShipment" class="mini" style="min-width:160px;">
-              <option value="">Shipment: All</option>
-            </select>
-            <div class="hint" id="kpiCostHint">Sum of “Cost Price USD” × Quantity</div>
-          </div>
-        </div>
-
-        <div class="bubble">
-          <div class="label">Attention <span id="kpiFlags" class="pill">0 flagged</span></div>
-          <div class="hint">
-            Needs Price Approved: <b id="needApproved">0</b> &nbsp;&nbsp; Missing Resale Price: <b id="needResale">0</b><br/>
-            Tap to filter the table.
-          </div>
-          <div class="row">
-            <label style="margin:0; opacity:.75;">Markup</label>
-            <select id="markupPreset" class="mini">
-              <option value="0.50">50%</option>
-              <option value="1.00">100%</option>
-              <option value="1.50">150%</option>
-              <option value="2.00">200%</option>
-              <option value="custom">Custom</option>
-            </select>
-            <input id="markupCustom" class="mini" inputmode="decimal" placeholder="e.g. 0.85" style="width:110px; display:none;" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Filters -->
-      <div class="filters">
-        <select id="fShipment"><option value="">Shipment</option></select>
-        <select id="fCategory"><option value="">Category</option></select>
-        <select id="fStatus"><option value="">Status</option></select>
-        <select id="fApproved">
-          <option value="">Price Approved</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-          <option value="(blank)">Blank</option>
-        </select>
-        <input id="q" type="search" placeholder="Search Product Name" style="min-width:220px;" />
-        <button id="btnAddShipment" class="btn ghost" type="button">+ Add Shipment</button>
-        <button id="btnClearFilters" class="btn ghost" type="button">Clear Filters</button>
-      </div>
-
-      <div class="grid">
-        <div class="panel">
-          <h2>
-            <span>Inventory</span>
-            <span class="note" id="selNote">No row selected</span>
-          </h2>
-
-          <div class="tableWrap">
-            <table id="tbl">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Shipment</th>
-                  <th>Category</th>
-                  <th>Qty</th>
-                  <th>Cost</th>
-                  <th>Selling</th>
-                  <th>Status</th>
-                  <th>Approved</th>
-                  <th>Ship</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div class="statusBar" id="loadMsg">Loading…</div>
-
-          <div class="filters" style="border-top:1px solid rgba(255,255,255,.09);">
-            <button id="btnDelete" class="btn ghost" type="button">Delete Selected</button>
-            <button id="btnOpenLink" class="btn ghost" type="button">Open Online Link</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Add / Edit Product</h2>
-          <div class="formBody">
-            <div class="note">Use “Add Product” for a modal. Or click a row to edit.</div>
-          </div>
-        </div>
-      </div>
+    <div class="nav-links">
+      <a class="nav-btn" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank">Trip Helper</a>
+      <a class="nav-btn" href="https://vinylpressusa.com/grenada-dashboard-mobile" target="_blank">Dashboard Mobile</a>
     </div>
   </div>
 
-  <!-- Modal -->
-  <div id="modalOverlay" class="modalOverlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modalTop">
-        <div class="title" id="modalTitle">Add / Edit Product</div>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <button id="btnCloseModal" class="btn ghost" type="button">Close</button>
-          <button id="btnSave" class="btn primary" type="button">Save</button>
-        </div>
-      </div>
-      <div class="formBody">
-        <form id="frm" onsubmit="return false;">
-          <div class="row2">
-            <div>
-              <label>Product Name *</label>
-              <input name="Product Name" required />
-            </div>
-            <div>
-              <label>Shipment *</label>
-              <select name="Shipment" id="iShipment"></select>
-              <div class="note" style="margin-top:6px;">
-                <a href="#" id="linkAddShipment" style="color:#8fe0ff; text-decoration:none;">+ Add a new shipment</a>
-              </div>
-            </div>
-          </div>
+  <div class="header-right">
+    <div class="currency-toggle" id="currencyToggle">USD</div>
+    <div class="add-btn" id="addProductBtn">+ Add Product</div>
+  </div>
+</div>
 
-          <div class="row2">
-            <div>
-              <label>Category/Tab *</label>
-              <select name="Category/Tab" id="iCategory"></select>
-              <div class="row" style="margin-top:8px;">
-                <button id="btnAddCategory" class="btn ghost" type="button">+ Category</button>
-                <button id="btnRemoveCategory" class="btn ghost" type="button">Remove Category</button>
-              </div>
-            </div>
-            <div>
-              <label>Status</label>
-              <select name="Status" id="iStatus"></select>
-            </div>
-          </div>
+<!-- ===== CALL MENU ===== -->
+<div class="call-menu" id="callMenu">
+  <button onclick="window.location.href='tel:+14845135528'">Call Quencie</button>
+  <button onclick="window.location.href='tel:+16107035185'">Call Michael</button>
+</div>
 
-          <div class="row2">
-            <div>
-              <label>Cost Price USD</label>
-              <input name="Cost Price USD" id="iCost" inputmode="decimal" placeholder="0.00" />
-              <div class="note">Auto-fills Selling using Markup + FX (unless you override).</div>
-            </div>
-            <div>
-              <label>Selling Price XCD</label>
-              <input name="Selling Price XCD" id="iSell" inputmode="decimal" placeholder="0.00" />
-            </div>
-          </div>
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard">
 
-          <div class="row2">
-            <div>
-              <label>Quantity</label>
-              <select name="Quantity" id="iQty"></select>
-            </div>
-            <div>
-              <label>Price Approved</label>
-              <select name="Price Approved" id="iApproved">
-                <option value=""></option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row2">
-            <div>
-              <label>Shipping Status</label>
-              <select name="Shipping Status" id="iShipStatus"></select>
-            </div>
-            <div>
-              <label>Ship Date</label>
-              <input name="Ship Date" type="date" />
-            </div>
-          </div>
-
-          <div class="row2">
-            <div>
-              <label>Gender</label>
-              <select name="Gender" id="iGender"></select>
-            </div>
-            <div>
-              <label>Size</label>
-              <select name="Size" id="iSize"></select>
-            </div>
-          </div>
-
-          <div class="row2">
-            <div>
-              <label>Shoe Size</label>
-              <select name="Shoe Size" id="iShoe"></select>
-            </div>
-            <div>
-              <label>Image URL</label>
-              <input name="Image URL" placeholder="https://..." />
-              <div class="note">Phone photos are not “URLs” until uploaded (WordPress Media Library, Drive, etc.).</div>
-            </div>
-          </div>
-
-          <div class="row2">
-            <div>
-              <label>Online Link</label>
-              <input name="Online Link" placeholder="https://..." />
-              <div class="note">Saved as a clickable link in the table.</div>
-            </div>
-            <div>
-              <label>Shipped Date (optional)</label>
-              <input name="Shipped Date (optional but recommended)" type="date" />
-            </div>
-          </div>
-
-          <div>
-            <label>Note</label>
-            <textarea name="Note" placeholder="Notes, condition, resale ideas, etc."></textarea>
-          </div>
-
-          <!-- Variants UI (no dev helper text) -->
-          <div style="margin-top:14px; border-top:1px solid rgba(255,255,255,.09); padding-top:12px;">
-            <div class="row" style="justify-content:space-between;">
-              <div class="pill">Variants</div>
-              <div class="row">
-                <button id="btnAddVariant" class="btn ghost" type="button">+ Variant</button>
-                <button id="btnClearVariants" class="btn ghost" type="button">Clear</button>
-              </div>
-            </div>
-
-            <div id="variantsWrap" style="display:grid; gap:10px; margin-top:10px;"></div>
-
-            <input type="hidden" name="Variations JSON" id="iVarJson" />
-          </div>
-
-          <div class="actions">
-            <span id="formMsg" class="note"></span>
-          </div>
-        </form>
-      </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-title">Total Items</div>
+      <div class="stat-value" id="statItems">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Total Cost</div>
+      <div class="stat-value" id="statCost">$0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Expected Revenue</div>
+      <div class="stat-value" id="statRevenue">$0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Needs Price Approval</div>
+      <div class="stat-value" id="statNeedsApproval">0</div>
     </div>
   </div>
 
-  <!-- Easter eggs -->
-  <div id="flash" class="flash"><div class="emoji">👍</div></div>
-  <div id="money" class="money"></div>
+  <!-- FILTERS -->
+  <div class="filters">
+    <select id="shipmentFilter"><option>All Shipments</option></select>
+    <select id="categoryFilter"><option>All Categories</option></select>
+    <select id="statusFilter"><option>All Status</option></select>
+    <input type="search" id="searchInput" placeholder="Search product name…" />
+  </div>
 
+  <!-- INVENTORY TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Shipment</th>
+          <th>Category</th>
+          <th>Qty</th>
+          <th>Sell</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="inventoryBody">
+        <!-- rows injected by JSONP -->
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal" id="productModal">
+  <div class="modal-content">
+    <h2>Add / Edit Product</h2>
+
+    <div class="form-row">
+      <input placeholder="Product Name" />
+      <select><option>Select Shipment</option></select>
+    </div>
+
+    <div class="form-row">
+      <select><option>Category</option></select>
+      <select>
+        <option>Status</option>
+        <option>In Stock</option>
+        <option>Sold</option>
+        <option>Watchlist</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <input placeholder="Cost (USD)" />
+      <input placeholder="Selling Price" />
+    </div>
+
+    <div class="form-row">
+      <input placeholder="Quantity" />
+      <select>
+        <option>Price Approved?</option>
+        <option>No</option>
+        <option>Yes</option>
+      </select>
+    </div>
+
+    <textarea placeholder="Notes"></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BASIC INTERACTION JS (NO DATA YET) ===== -->
 <script>
-/** ================= CONFIG ================= **/
-const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec"; // <-- replace
-// API supports:
-// GET  ?callback=fn               => {ok:true,data:[...]}
-// GET  ?meta=1&callback=fn        => {ok:true,meta:{categories,statuses,shippingStatuses,shipments}}
-// POST with _pm=1 returns postMessage to parent (CORS-safe)
+  const logoBtn = document.getElementById('logoBtn');
+  const callMenu = document.getElementById('callMenu');
+  const addBtn = document.getElementById('addProductBtn');
+  const modal = document.getElementById('productModal');
 
-// Defaults
-const PHONE_MICHAEL = "+16107035185";
-const PHONE_QUENCIE = "+14845135528";
+  logoBtn.onclick = () => {
+    callMenu.style.display = callMenu.style.display === 'block' ? 'none' : 'block';
+  };
 
-const SIZES = ["","XS","S","M","L","XL","2XL","3XL","4XL","5XL"];
-const GENDERS = ["","Male","Female","Unisex","Kids"];
-const SHOE_SIZES = ["",
-  "1","1.5","2","2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","14","15"
-];
+  addBtn.onclick = () => {
+    modal.style.display = 'flex';
+  };
 
-/** ================= DOM ================= **/
-const $ = (s)=>document.querySelector(s);
-const tblBody = $("#tbl tbody");
-const loadMsg = $("#loadMsg");
-
-const brandBtn = $("#brandBtn");
-const menu = $("#menu");
-
-const btnReload = $("#btnReload");
-const btnAdd = $("#btnAdd");
-
-const modalOverlay = $("#modalOverlay");
-const btnCloseModal = $("#btnCloseModal");
-const btnSave = $("#btnSave");
-const frm = $("#frm");
-const formMsg = $("#formMsg");
-const modalTitle = $("#modalTitle");
-
-const btnDelete = $("#btnDelete");
-const btnOpenLink = $("#btnOpenLink");
-const selNote = $("#selNote");
-
-const fShipment = $("#fShipment");
-const fCategory = $("#fCategory");
-const fStatus = $("#fStatus");
-const fApproved = $("#fApproved");
-const q = $("#q");
-
-const kpiItems = $("#kpiItems");
-const kpiCost = $("#kpiCost");
-const kpiShipCount = $("#kpiShipCount");
-const kpiShipment = $("#kpiShipment");
-const needApproved = $("#needApproved");
-const needResale = $("#needResale");
-const kpiFlags = $("#kpiFlags");
-
-const currency = $("#currency");
-const fx = $("#fx");
-const markupPreset = $("#markupPreset");
-const markupCustom = $("#markupCustom");
-
-const iShipment = $("#iShipment");
-const iCategory = $("#iCategory");
-const iStatus = $("#iStatus");
-const iShipStatus = $("#iShipStatus");
-const iGender = $("#iGender");
-const iSize = $("#iSize");
-const iShoe = $("#iShoe");
-const iQty = $("#iQty");
-const iCost = $("#iCost");
-const iSell = $("#iSell");
-const iApproved = $("#iApproved");
-
-const btnAddShipment = $("#btnAddShipment");
-const linkAddShipment = $("#linkAddShipment");
-const btnAddCategory = $("#btnAddCategory");
-const btnRemoveCategory = $("#btnRemoveCategory");
-
-const btnAddVariant = $("#btnAddVariant");
-const btnClearVariants = $("#btnClearVariants");
-const variantsWrap = $("#variantsWrap");
-const iVarJson = $("#iVarJson");
-
-const flash = $("#flash");
-const money = $("#money");
-
-/** ================= STATE ================= **/
-let rows = [];
-let meta = { categories:[], statuses:[], shippingStatuses:[], shipments:[] };
-let selectedKey = null;
-let selectedRow = null;
-let sellWasManuallyEdited = false;
-
-/** ================= UTIL ================= **/
-function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
-function setLoad(t, cls=""){ loadMsg.textContent=t; loadMsg.className="statusBar"+(cls?(" "+cls):""); }
-function moneyRain(){
-  money.innerHTML="";
-  money.classList.add("open");
-  const n=18;
-  for(let i=0;i<n;i++){
-    const d=document.createElement("div");
-    d.className="bill";
-    d.textContent="💸";
-    d.style.left = Math.round(Math.random()*100)+"vw";
-    d.style.animationDuration = (900 + Math.random()*600)+"ms";
-    d.style.animationDelay = (Math.random()*120)+"ms";
-    money.appendChild(d);
-    setTimeout(()=>d.remove(), 1800);
+  function closeModal() {
+    modal.style.display = 'none';
   }
-  setTimeout(()=>money.classList.remove("open"), 1200);
-}
-function thumbsUp(){
-  flash.classList.add("open");
-  setTimeout(()=>flash.classList.remove("open"), 700);
-}
-function fmtMoney(v, cur){
-  const n = Number(v||0);
-  if (!isFinite(n)) return cur==="USD" ? "$0.00" : "EC$0.00";
-  const s = n.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
-  return cur==="USD" ? `$${s}` : `EC$${s}`;
-}
-function toNum(s){
-  const n = Number(String(s||"").replace(/[^0-9.\-]/g,""));
-  return isFinite(n) ? n : 0;
-}
-function keyOf(r){
-  // Unique row key = Product Name + Shipment (matches Apps Script upsert keys)
-  return (String(r["Product Name"]||"").trim()+"||"+String(r["Shipment"]||"").trim()).toLowerCase();
-}
-
-/** ================= JSONP GET ================= **/
-function jsonp(url){
-  return new Promise((resolve,reject)=>{
-    const cb = "cb_"+Math.random().toString(36).slice(2);
-    window[cb] = (data)=>{
-      try{ resolve(data); }
-      finally{
-        delete window[cb];
-        script.remove();
-      }
-    };
-    const script = document.createElement("script");
-    script.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cb + "&_ts=" + Date.now();
-    script.onerror = ()=>{ delete window[cb]; script.remove(); reject(new Error("JSONP load failed")); };
-    document.head.appendChild(script);
-  });
-}
-
-/** ================= POST via hidden iframe ================= **/
-function postPm(params){
-  return new Promise((resolve,reject)=>{
-    const id = "pm_"+Math.random().toString(36).slice(2);
-
-    const iframe = document.createElement("iframe");
-    iframe.name = id;
-    iframe.style.display="none";
-    document.body.appendChild(iframe);
-
-    const form = document.createElement("form");
-    form.method="POST";
-    form.action=API;
-    form.target=id;
-
-    const add = (k,v)=>{
-      const i=document.createElement("input");
-      i.type="hidden"; i.name=k; i.value=v==null?"":String(v);
-      form.appendChild(i);
-    };
-
-    add("_pm","1");
-    Object.keys(params||{}).forEach(k=>add(k, params[k]));
-
-    const onMsg = (ev)=>{
-      // We accept any origin because Apps Script uses googleusercontent iframe; payload is explicit ok/error.
-      if (!ev || !ev.data || typeof ev.data !== "object") return;
-      // resolve the first structured response
-      window.removeEventListener("message", onMsg);
-      cleanup();
-      resolve(ev.data);
-    };
-
-    const timeout = setTimeout(()=>{
-      window.removeEventListener("message", onMsg);
-      cleanup();
-      reject(new Error("Save timed out"));
-    }, 12000);
-
-    function cleanup(){
-      clearTimeout(timeout);
-      form.remove();
-      iframe.remove();
-    }
-
-    window.addEventListener("message", onMsg);
-    document.body.appendChild(form);
-    form.submit();
-  });
-}
-
-/** ================= META + FORM OPTIONS ================= **/
-function fillSelect(selectEl, arr, placeholder=""){
-  selectEl.innerHTML = "";
-  if (placeholder !== null) {
-    const o = document.createElement("option");
-    o.value = ""; o.textContent = placeholder;
-    selectEl.appendChild(o);
-  }
-  arr.forEach(v=>{
-    const o=document.createElement("option");
-    o.value=v; o.textContent=v;
-    selectEl.appendChild(o);
-  });
-}
-
-function rebuildMetaUI(){
-  // Filters
-  fillSelect(fShipment, meta.shipments, "Shipment");
-  fillSelect(fCategory, meta.categories, "Category");
-  fillSelect(fStatus, meta.statuses, "Status");
-
-  // KPI shipment dropdown (All + each)
-  kpiShipment.innerHTML = `<option value="">Shipment: All</option>` + meta.shipments.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("");
-
-  // Form selects
-  fillSelect(iShipment, meta.shipments, "");
-  fillSelect(iCategory, meta.categories, "");
-  fillSelect(iStatus, meta.statuses, "");
-  fillSelect(iShipStatus, meta.shippingStatuses, "");
-  fillSelect(iGender, GENDERS, "");
-  fillSelect(iSize, SIZES, "");
-  fillSelect(iShoe, SHOE_SIZES, "");
-
-  // Quantity 1..100
-  iQty.innerHTML = `<option value=""></option>` + Array.from({length:100},(_,i)=>i+1).map(n=>`<option value="${n}">${n}</option>`).join("");
-}
-
-/** ================= LOAD DATA ================= **/
-async function loadMeta(){
-  const resp = await jsonp(API + "?meta=1");
-  if (!resp || resp.ok !== true) throw new Error(resp?.error || "Meta load failed");
-  meta = resp.meta || meta;
-  rebuildMetaUI();
-}
-
-async function loadRows(){
-  setLoad("Loading…");
-  const resp = await jsonp(API);
-  if (!resp || resp.ok !== true) throw new Error(resp?.error || "Load failed");
-  rows = Array.isArray(resp.data) ? resp.data : [];
-  setLoad("Loaded.", "ok");
-}
-
-/** ================= FILTERS + RENDER ================= **/
-function applyFilters(list){
-  const ship = fShipment.value.trim();
-  const cat = fCategory.value.trim();
-  const st  = fStatus.value.trim();
-  const appr = fApproved.value.trim();
-  const needle = q.value.trim().toLowerCase();
-
-  return list.filter(r=>{
-    const okShip = !ship || String(r["Shipment"]||"").trim() === ship;
-    const okCat  = !cat  || String(r["Category/Tab"]||"").trim() === cat;
-    const okSt   = !st   || String(r["Status"]||"").trim() === st;
-    const valAp  = String(r["Price Approved"]||"").trim();
-    const okAp   = !appr || (appr==="(blank)" ? !valAp : valAp===appr);
-    const okNeed = !needle || String(r["Product Name"]||"").toLowerCase().includes(needle);
-    return okShip && okCat && okSt && okAp && okNeed;
-  });
-}
-
-function currentCurrency(){ return currency.value; }
-function fxRate(){ const n=toNum(fx.value); return n>0 ? n : 2.70; }
-function markup(){
-  if (markupPreset.value === "custom") return toNum(markupCustom.value);
-  return toNum(markupPreset.value);
-}
-
-function computeSellingXcd(costUsd){
-  return costUsd * fxRate() * (1 + markup());
-}
-
-function render(){
-  const list = applyFilters(rows);
-  kpiItems.textContent = String(list.length);
-
-  // KPI totals (per selected shipment in KPI bubble)
-  const kShip = kpiShipment.value.trim();
-  const scope = kShip ? rows.filter(r=>String(r["Shipment"]||"").trim()===kShip) : rows;
-
-  // compute unique shipment count
-  const ships = new Set(rows.map(r=>String(r["Shipment"]||"").trim()).filter(Boolean));
-  kpiShipCount.textContent = ships.size + " shipments";
-
-  const cur = currentCurrency();
-
-  const totalCostUsd = scope.reduce((sum,r)=>{
-    const c = toNum(r["Cost Price USD"]);
-    const qty = Math.max(1, toNum(r["Quantity"]||1));
-    return sum + (c * qty);
-  },0);
-
-  // show total cost in selected currency view
-  const shownCost = (cur==="USD") ? totalCostUsd : totalCostUsd * fxRate();
-  kpiCost.textContent = fmtMoney(shownCost, cur);
-
-  // Attention counts
-  const needAp = rows.filter(r=>String(r["Price Approved"]||"").trim()!=="Yes").length;
-  const needSell = rows.filter(r=>toNum(r["Selling Price XCD"])<=0).length;
-  needApproved.textContent = String(needAp);
-  needResale.textContent = String(needSell);
-  kpiFlags.textContent = String(needAp + needSell) + " flagged";
-
-  // Table
-  tblBody.innerHTML = list.map(r=>{
-    const k = keyOf(r);
-    const qty = r["Quantity"] ?? "";
-    const costUsd = toNum(r["Cost Price USD"]);
-    const sellXcd = toNum(r["Selling Price XCD"]);
-    const costShown = cur==="USD" ? costUsd : costUsd*fxRate();
-    const sellShown = cur==="USD" ? (sellXcd/fxRate()) : sellXcd;
-    const approved = String(r["Price Approved"]||"").trim() || "";
-    const shipStat = String(r["Shipping Status"]||"").trim() || "";
-    return `<tr data-k="${esc(k)}">
-      <td>${esc(r["Product Name"]||"")}</td>
-      <td>${esc(r["Shipment"]||"")}</td>
-      <td>${esc(r["Category/Tab"]||"")}</td>
-      <td>${esc(qty)}</td>
-      <td>${esc(fmtMoney(costShown, cur))}</td>
-      <td>${esc(fmtMoney(sellShown, cur))}</td>
-      <td>${esc(r["Status"]||"")}</td>
-      <td>${esc(approved)}</td>
-      <td>${esc(shipStat)}</td>
-    </tr>`;
-  }).join("");
-
-  tblBody.querySelectorAll("tr").forEach(tr=>{
-    tr.addEventListener("click", ()=>{
-      const k = tr.getAttribute("data-k");
-      const r = rows.find(x=>keyOf(x)===k);
-      if (r) { selectRow(r); openModal("Edit Product"); }
-    });
-  });
-}
-
-function selectRow(r){
-  selectedRow = r;
-  selectedKey = keyOf(r);
-  selNote.textContent = `Selected: ${r["Product Name"]||""} (${r["Shipment"]||""})`;
-}
-
-/** ================= MODAL + FORM ================= **/
-function openModal(title){
-  modalTitle.textContent = title;
-  modalOverlay.classList.add("open");
-  modalOverlay.setAttribute("aria-hidden","false");
-  formMsg.textContent = "";
-  sellWasManuallyEdited = false;
-
-  if (title.toLowerCase().includes("add")) {
-    frm.reset();
-    selectedRow = null;
-    selectedKey = null;
-    // defaults
-    iApproved.value = "";
-    iSell.value = "";
-    iCost.value = "";
-    setVariantsFromJson("");
-  } else if (selectedRow) {
-    loadIntoForm(selectedRow);
-  }
-}
-
-function closeModal(){
-  modalOverlay.classList.remove("open");
-  modalOverlay.setAttribute("aria-hidden","true");
-}
-
-function loadIntoForm(r){
-  frm.reset();
-  for (const el of frm.elements){
-    if (!el.name) continue;
-    el.value = r[el.name] ?? "";
-  }
-  setVariantsFromJson(String(r["Variations JSON"]||""));
-  iCost.value = normalizeMoneyInput(r["Cost Price USD"]);
-  iSell.value = normalizeMoneyInput(r["Selling Price XCD"]);
-  formMsg.textContent = "Loaded.";
-}
-
-function normalizeMoneyInput(v){
-  const n = toNum(v);
-  return n ? String(n.toFixed(2)) : "";
-}
-
-function collectForm(){
-  const params = {};
-  for (const el of frm.elements){
-    if (!el.name) continue;
-    params[el.name] = el.value;
-  }
-  params["Variations JSON"] = iVarJson.value || "";
-  return params;
-}
-
-/** Auto-calc selling when cost changes (unless user edited selling) **/
-iSell.addEventListener("input", ()=>{ sellWasManuallyEdited = true; });
-iCost.addEventListener("input", ()=>{
-  const c = toNum(iCost.value);
-  if (!sellWasManuallyEdited && c>0){
-    const auto = computeSellingXcd(c);
-    iSell.value = auto.toFixed(2);
-  }
-});
-
-/** Markup preset custom **/
-markupPreset.addEventListener("change", ()=>{
-  const isCustom = markupPreset.value === "custom";
-  markupCustom.style.display = isCustom ? "inline-block" : "none";
-  sellWasManuallyEdited = false;
-  // recalc if cost exists
-  const c = toNum(iCost.value);
-  if (c>0){
-    iSell.value = computeSellingXcd(c).toFixed(2);
-  }
-});
-
-/** Currency toggle affects display only **/
-currency.addEventListener("change", render);
-fx.addEventListener("input", ()=>{ render(); /* also affects auto calc */ });
-
-/** Variants UI **/
-function setVariantsFromJson(json){
-  let arr = [];
-  try{
-    if (json && json.trim()) arr = JSON.parse(json);
-    if (!Array.isArray(arr)) arr = [];
-  }catch(e){ arr = []; }
-  renderVariants(arr);
-}
-function renderVariants(arr){
-  variantsWrap.innerHTML = "";
-  if (!arr.length){
-    iVarJson.value = "[]";
-    return;
-  }
-  arr.forEach((v, idx)=>{
-    const row = document.createElement("div");
-    row.className = "row2";
-    row.innerHTML = `
-      <div><label>Variant Name</label><input data-k="name" value="${esc(v.name||"")}" /></div>
-      <div><label>Variant Value</label><input data-k="value" value="${esc(v.value||"")}" /></div>
-      <div><label>Extra Qty</label><input data-k="qty" inputmode="numeric" value="${esc(v.qty||"")}" /></div>
-      <div><label>Price Delta (XCD)</label><input data-k="delta" inputmode="decimal" value="${esc(v.delta||"")}" /></div>
-      <div style="grid-column:1/-1;">
-        <button class="btn ghost" type="button" data-del="${idx}">Remove Variant</button>
-      </div>
-    `;
-    variantsWrap.appendChild(row);
-  });
-  syncVariantsJson();
-  variantsWrap.querySelectorAll("input").forEach(inp=>inp.addEventListener("input", syncVariantsJson));
-  variantsWrap.querySelectorAll("button[data-del]").forEach(btn=>btn.addEventListener("click", ()=>{
-    const i = Number(btn.getAttribute("data-del"));
-    const cur = JSON.parse(iVarJson.value||"[]");
-    cur.splice(i,1);
-    renderVariants(cur);
-  }));
-}
-function syncVariantsJson(){
-  const blocks = Array.from(variantsWrap.querySelectorAll(".row2"));
-  const out = blocks.map(b=>{
-    const get = (k)=>b.querySelector(`input[data-k="${k}"]`)?.value || "";
-    return {
-      name: get("name").trim(),
-      value: get("value").trim(),
-      qty: toNum(get("qty")),
-      delta: toNum(get("delta"))
-    };
-  }).filter(x=>x.name || x.value);
-  iVarJson.value = JSON.stringify(out);
-}
-btnAddVariant.addEventListener("click", ()=>{
-  const cur = JSON.parse(iVarJson.value||"[]");
-  cur.push({name:"",value:"",qty:"",delta:""});
-  renderVariants(cur);
-});
-btnClearVariants.addEventListener("click", ()=>{
-  iVarJson.value="[]";
-  variantsWrap.innerHTML="";
-});
-
-/** ================= META add/remove in-app ================= **/
-async function addShipmentFlow(){
-  const name = prompt("New shipment name (e.g. March 2026 A):");
-  if (!name) return;
-  const resp = await postPm({ _action:"meta_add_shipment", value:name });
-  if (resp.ok !== true) alert(resp.error || "Failed to add shipment");
-  await loadMeta();
-  // select it
-  iShipment.value = name;
-  fShipment.value = name;
-  kpiShipment.value = name;
-  render();
-}
-btnAddShipment.addEventListener("click", addShipmentFlow);
-linkAddShipment.addEventListener("click", (e)=>{ e.preventDefault(); addShipmentFlow(); });
-
-btnAddCategory.addEventListener("click", async ()=>{
-  const name = prompt("New category (e.g. Apparel, Shoes, Electronics):");
-  if (!name) return;
-  const resp = await postPm({ _action:"meta_add_category", value:name });
-  if (resp.ok !== true) alert(resp.error || "Failed to add category");
-  await loadMeta();
-  iCategory.value = name;
-  fCategory.value = name;
-  render();
-});
-
-btnRemoveCategory.addEventListener("click", async ()=>{
-  const cur = iCategory.value || "";
-  if (!cur){ alert("Pick a category first."); return; }
-  // double confirm failsafe
-  if (!confirm(`Remove category "${cur}" from the dropdown list?`)) return;
-  if (!confirm(`Second confirmation: remove "${cur}"? This does not delete existing items.`)) return;
-
-  const resp = await postPm({ _action:"meta_remove_category", value:cur });
-  if (resp.ok !== true) alert(resp.error || "Failed to remove category");
-  await loadMeta();
-  iCategory.value = "";
-});
-
-/** ================= SAVE / DELETE ================= **/
-async function saveCurrent(){
-  formMsg.textContent = "Saving…";
-  const params = collectForm();
-
-  if (!params["Product Name"] || !params["Shipment"] || !params["Category/Tab"]){
-    formMsg.textContent = "Product Name, Shipment, and Category are required.";
-    return;
-  }
-
-  // Ensure money fields normalized
-  if (params["Cost Price USD"]) params["Cost Price USD"] = toNum(params["Cost Price USD"]).toFixed(2);
-  if (params["Selling Price XCD"]) params["Selling Price XCD"] = toNum(params["Selling Price XCD"]).toFixed(2);
-
-  const prevApproved = selectedRow ? String(selectedRow["Price Approved"]||"").trim() : "";
-  const prevShip = selectedRow ? String(selectedRow["Shipping Status"]||"").trim() : "";
-
-  const resp = await postPm({ _action:"update", ...params });
-  if (!resp || resp.ok !== true){
-    formMsg.textContent = "Save failed: " + (resp?.error || "unknown");
-    return;
-  }
-
-  // Reload data
-  await loadRows();
-
-  // Re-select the saved row
-  const k = (String(params["Product Name"]).trim()+"||"+String(params["Shipment"]).trim()).toLowerCase();
-  const r = rows.find(x=>keyOf(x)===k);
-  if (r) { selectRow(r); selectedRow = r; }
-
-  // Easter eggs
-  const nowApproved = String(params["Price Approved"]||"").trim();
-  if (nowApproved === "Yes" && prevApproved !== "Yes") thumbsUp();
-
-  const nowShip = String(params["Shipping Status"]||"").trim();
-  if (nowShip && nowShip !== prevShip) moneyRain();
-
-  formMsg.textContent = "Saved.";
-  closeModal();
-  render();
-}
-
-async function deleteSelected(){
-  if (!selectedRow){ alert("Select a row first."); return; }
-  const name = String(selectedRow["Product Name"]||"");
-  const ship = String(selectedRow["Shipment"]||"");
-  if (!confirm(`Delete "${name}" (${ship}) from the sheet?`)) return;
-
-  setLoad("Deleting…");
-  const resp = await postPm({ _action:"delete", "Product Name": name, "Shipment": ship });
-  if (!resp || resp.ok !== true){ setLoad("Delete failed: "+(resp?.error||"unknown"),"err"); return; }
-
-  selectedRow = null; selectedKey = null;
-  selNote.textContent = "No row selected";
-  await loadRows();
-  render();
-  setLoad("Deleted.", "ok");
-}
-
-btnSave.addEventListener("click", ()=>saveCurrent().catch(e=>formMsg.textContent="Save failed: "+e.message));
-btnDelete.addEventListener("click", ()=>deleteSelected().catch(e=>setLoad("Delete failed: "+e.message,"err")));
-
-btnOpenLink.addEventListener("click", ()=>{
-  if (!selectedRow){ alert("Select a row first."); return; }
-  const url = String(selectedRow["Online Link"]||"").trim();
-  if (!url){ alert("No Online Link for this row."); return; }
-  window.open(url, "_blank", "noopener");
-});
-
-/** ================= MENU + BUTTONS ================= **/
-brandBtn.addEventListener("click", ()=>{
-  menu.classList.toggle("open");
-});
-document.addEventListener("click", (e)=>{
-  if (!menu.contains(e.target) && e.target !== brandBtn) menu.classList.remove("open");
-});
-
-$("#copyMichael").addEventListener("click", async ()=>{
-  try{ await navigator.clipboard.writeText(PHONE_MICHAEL); alert("Copied Michael #"); }catch(e){ alert("Copy failed"); }
-});
-$("#copyQuencie").addEventListener("click", async ()=>{
-  try{ await navigator.clipboard.writeText(PHONE_QUENCIE); alert("Copied Quencie #"); }catch(e){ alert("Copy failed"); }
-});
-
-btnReload.addEventListener("click", async ()=>{
-  await boot();
-});
-
-btnAdd.addEventListener("click", ()=>{
-  selectedRow = null; selectedKey = null;
-  openModal("Add Product");
-});
-
-btnCloseModal.addEventListener("click", closeModal);
-modalOverlay.addEventListener("click", (e)=>{ if (e.target===modalOverlay) closeModal(); });
-
-/** KPI flag quick filters **/
-needApproved.parentElement.addEventListener("click", ()=>{
-  // show only not-approved
-  fApproved.value = "(blank)";
-  // can't represent "not Yes" in dropdown; use blank to at least highlight.
-  render();
-});
-needResale.parentElement.addEventListener("click", ()=>{
-  // filter by missing resale = Selling XCD <= 0 (we do it client-side by quick search hack)
-  q.value = "";
-  render();
-  alert("Missing Resale Price count is shown. To isolate them, we can add a dedicated toggle next.");
-});
-
-/** Filters events **/
-[fShipment,fCategory,fStatus,fApproved,q,kpiShipment].forEach(el=>{
-  el.addEventListener("change", render);
-});
-q.addEventListener("input", render);
-
-btnClearFilters.addEventListener("click", ()=>{
-  fShipment.value=""; fCategory.value=""; fStatus.value=""; fApproved.value=""; q.value="";
-  kpiShipment.value="";
-  render();
-});
-
-/** ================= BOOT ================= **/
-async function boot(){
-  try{
-    setLoad("Loading…");
-    await loadMeta();
-    await loadRows();
-    setLoad("Ready.", "ok");
-    render();
-  }catch(err){
-    setLoad("Load failed: "+err.message, "err");
-    console.error(err);
-  }
-}
-
-// initial
-boot();
 </script>
+
 </body>
 </html>
