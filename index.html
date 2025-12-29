@@ -7,15 +7,22 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- React (UMD) — reliable in WordPress widgets -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+<!-- Babel so we can write JSX in a plain HTML widget -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <style>
-body{margin:0;background:#0a0a0c;color:#fff;font-family:Inter}
-*{box-sizing:border-box}
-::-webkit-scrollbar{display:none}
-input,select,textarea{background:#111;border:1px solid #1a1a1c;color:#fff;border-radius:10px;padding:12px}
-.tab-active{border-color:#00f2ff;color:#00f2ff}
-.all-active{border-color:#00ff88;color:#00ff88}
+  body{margin:0;background:#0a0a0c;color:#fff;font-family:Inter}
+  *{box-sizing:border-box}
+  ::-webkit-scrollbar{display:none}
+  input,select,textarea{background:#111;border:1px solid #1a1a1c;color:#fff;border-radius:10px;padding:12px;width:100%}
+  button{border-radius:10px;border:1px solid #1a1a1c;background:#111;color:#fff;padding:10px 12px;font-family:Orbitron;font-size:10px;cursor:pointer}
+  .tab-active{border-color:#00f2ff;color:#00f2ff}
+  .all-active{border-color:#00ff88;color:#00ff88}
 </style>
 </head>
 
@@ -23,184 +30,266 @@ input,select,textarea{background:#111;border:1px solid #1a1a1c;color:#fff;border
 <div id="root"></div>
 
 <script type="text/babel">
+  /* ================= CONFIG ================= */
+  const API_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+  const EC_RATE = 2.7169;
+  const IMG_SEP = "|||";
+  const DEFAULT_TABS = ["Watchlist"];
 
-/* ================= CONFIG ================= */
-const API_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
-const EC_RATE = 2.7169;
-const IMG_SEP = "|||";
-const DEFAULT_TABS = ["Watchlist"];
+  /* ================= HELPERS ================= */
+  const money = (n) => Number(n || 0);
+  const clampQty = (n) => Math.max(1, parseInt(n || 1, 10));
 
-/* ================= HELPERS ================= */
-const money = n => Number(n||0);
-const clamp = n => Math.max(1, parseInt(n||1,10));
+  async function aiScanServer(dataUrl){
+    const base64 = dataUrl.split(",")[1];
+    const mimeType = dataUrl.match(/^data:(.*?);base64/)?.[1] || "image/jpeg";
 
-async function aiScanServer(dataUrl){
-  const base64 = dataUrl.split(",")[1];
-  const mimeType = dataUrl.match(/^data:(.*?);base64/)?.[1] || "image/jpeg";
-
-  const p = new URLSearchParams();
-  p.append("_action","ai_scan");
-  p.append("base64",base64);
-  p.append("mimeType",mimeType);
-
-  const r = await fetch(API_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-    body:p
-  });
-
-  const j = await r.json();
-  if(!j.ok) throw new Error(j.error||"AI failed");
-  return j;
-}
-
-/* ================= APP ================= */
-function App(){
-  const [items,setItems] = React.useState([]);
-  const [tabs,setTabs] = React.useState(DEFAULT_TABS);
-  const [active,setActive] = React.useState("ALL");
-  const [modal,setModal] = React.useState(null);
-  const [syncing,setSyncing] = React.useState(false);
-
-  async function load(){
-    setSyncing(true);
-    const r = await fetch(API_URL+"?t="+Date.now());
-    const d = await r.json();
-    if(Array.isArray(d)){
-      const mapped = d.map(x=>({
-        name:x["Product Name"]||"",
-        tab:x["Category/Tab"]||"Watchlist",
-        cost:money(x["Cost Price USD"]),
-        sell:money(x["Selling Price XCD"]),
-        qty:clamp(x["Quantity"]),
-        status:x["Status"]||"Assigned",
-        img:(x["Image URL"]||"").split(IMG_SEP).filter(Boolean),
-        note:x["Note"]||""
-      }));
-      setItems(mapped);
-      setTabs([...new Set([...DEFAULT_TABS,...mapped.map(i=>i.tab)])]);
-    }
-    setSyncing(false);
-  }
-
-  React.useEffect(()=>{ load(); },[]);
-
-  async function save(item){
-    setSyncing(true);
     const p = new URLSearchParams();
-    Object.entries({
-      "Product Name":item.name,
-      "Category/Tab":item.tab,
-      "Cost Price USD":item.cost,
-      "Selling Price XCD":item.sell,
-      "Quantity":item.qty,
-      "Status":item.status,
-      "Image URL":item.img.join(IMG_SEP),
-      "_action": items.some(i=>i.name===item.name && i.tab===item.tab) ? "update":"create"
-    }).forEach(([k,v])=>p.append(k,v));
+    p.append("_action","ai_scan");
+    p.append("base64",base64);
+    p.append("mimeType",mimeType);
 
-    await fetch(API_URL,{
+    const r = await fetch(API_URL,{
       method:"POST",
       headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-      body:p,
-      mode:"no-cors"
+      body:p
     });
 
-    setModal(null);
-    setTimeout(load,1500);
+    // If your Apps Script returns plain text for non-ai actions, this must still be JSON for ai_scan.
+    const j = await r.json();
+    if(!j.ok) throw new Error(j.error || "AI failed");
+    return j;
   }
 
-  const visible = active==="ALL" ? items : items.filter(i=>i.tab===active);
+  function App(){
+    const [items,setItems] = React.useState([]);
+    const [tabs,setTabs] = React.useState(DEFAULT_TABS);
+    const [active,setActive] = React.useState("ALL");
+    const [modal,setModal] = React.useState(null);
+    const [syncing,setSyncing] = React.useState(false);
+    const [err,setErr] = React.useState("");
 
-  return (
-    <div style={{maxWidth:480,margin:"0 auto"}}>
-      {syncing && <div style={{padding:10,color:"#00f2ff",textAlign:"center"}}>SYNCING…</div>}
+    async function load(){
+      setErr("");
+      setSyncing(true);
+      try{
+        const r = await fetch(API_URL + "?t=" + Date.now());
+        const d = await r.json();
 
-      <header style={{padding:16,borderBottom:"1px solid #1a1a1c"}}>
-        <h1 style={{fontFamily:"Orbitron",margin:0}}>G-HUB PRO</h1>
-        <button onClick={()=>setModal({name:"",tab:"Watchlist",cost:0,sell:0,qty:1,status:"Assigned",img:[]})}
-          style={{marginTop:12,width:"100%",padding:14,background:"#00f2ff",border:0,fontWeight:800}}>
-          + ADD PRODUCT
-        </button>
-      </header>
+        if(Array.isArray(d)){
+          const mapped = d.map(x=>({
+            name:(x["Product Name"]||"").toString().trim(),
+            tab:(x["Category/Tab"]||"Watchlist").toString().trim(),
+            cost:money(x["Cost Price USD"]),
+            sell:money(x["Selling Price XCD"]),
+            qty:clampQty(x["Quantity"]),
+            status:(x["Status"]||"Assigned").toString(),
+            img:(x["Image URL"]||"").toString().split(IMG_SEP).filter(Boolean),
+            note:(x["Note"]||"").toString()
+          }));
 
-      <div style={{display:"flex",gap:8,padding:12,overflowX:"auto"}}>
-        <button onClick={()=>setActive("ALL")} className={active==="ALL"?"all-active":""}>ALL</button>
-        {tabs.map(t=>(
-          <button key={t} onClick={()=>setActive(t)} className={active===t?"tab-active":""}>
-            {t.toUpperCase()}
+          setItems(mapped);
+          setTabs([...new Set([...DEFAULT_TABS, ...mapped.map(i=>i.tab).filter(Boolean)])]);
+        } else {
+          setErr("API did not return an array. Check Apps Script doGet().");
+        }
+      }catch(e){
+        setErr("Load failed: " + (e?.message || String(e)));
+      }finally{
+        setSyncing(false);
+      }
+    }
+
+    React.useEffect(()=>{ load(); },[]);
+
+    async function save(item){
+      setErr("");
+      setSyncing(true);
+      try{
+        const p = new URLSearchParams();
+        const action = items.some(i=>i.name===item.name && i.tab===item.tab) ? "update" : "create";
+
+        const payload = {
+          "Product Name": item.name,
+          "Category/Tab": item.tab,
+          "Cost Price USD": money(item.cost).toFixed(2),
+          "Selling Price XCD": money(item.sell).toFixed(2),
+          "Quantity": clampQty(item.qty),
+          "Status": item.status || "Assigned",
+          "Image URL": (item.img||[]).join(IMG_SEP),
+          "Note": item.note || "",
+          "_action": action
+        };
+
+        Object.entries(payload).forEach(([k,v])=>p.append(k,v));
+
+        await fetch(API_URL,{
+          method:"POST",
+          headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+          body:p,
+          mode:"no-cors"
+        });
+
+        setModal(null);
+        setTimeout(load, 1500);
+      }catch(e){
+        setErr("Save failed: " + (e?.message || String(e)));
+        setSyncing(false);
+      }
+    }
+
+    const visible = (active==="ALL") ? items : items.filter(i=>i.tab===active);
+
+    return (
+      <div style={{maxWidth:520,margin:"0 auto",minHeight:"100vh",borderLeft:"1px solid #1a1a1c",borderRight:"1px solid #1a1a1c"}}>
+        <header style={{padding:16,borderBottom:"1px solid #1a1a1c",position:"sticky",top:0,background:"rgba(10,10,12,.95)",backdropFilter:"blur(10px)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <h1 style={{fontFamily:"Orbitron",margin:0,letterSpacing:2,fontSize:16}}>G-HUB PRO</h1>
+            <button onClick={load}><i className="fas fa-rotate"></i></button>
+          </div>
+
+          {syncing && <div style={{marginTop:10,color:"#00f2ff",fontFamily:"Orbitron",fontSize:10}}>SYNCING…</div>}
+          {err && <div style={{marginTop:10,color:"#ff4d4d",fontFamily:"Inter",fontSize:12,whiteSpace:"pre-wrap"}}>{err}</div>}
+
+          <button
+            onClick={()=>setModal({name:"",tab:"Watchlist",cost:0,sell:0,qty:1,status:"Assigned",img:[],note:""})}
+            style={{marginTop:12,width:"100%",padding:14,background:"#00f2ff",border:"none",color:"#000",fontWeight:900}}
+          >
+            + ADD PRODUCT
           </button>
-        ))}
-      </div>
+        </header>
 
-      {visible.map((i,idx)=>(
-        <div key={idx} onClick={()=>setModal(i)}
-          style={{margin:12,padding:14,border:"1px solid #1a1a1c",borderRadius:14}}>
-          <strong>{i.name}</strong>
-          <div style={{fontSize:12,color:"#00f2ff"}}>EC${(i.sell*i.qty).toFixed(2)}</div>
+        <div style={{display:"flex",gap:8,padding:12,overflowX:"auto"}}>
+          <button onClick={()=>setActive("ALL")} className={active==="ALL" ? "all-active" : ""}>ALL</button>
+          {tabs.map(t=>(
+            <button key={t} onClick={()=>setActive(t)} className={active===t ? "tab-active" : ""}>
+              {t.toUpperCase()}
+            </button>
+          ))}
         </div>
-      ))}
 
-      {modal && (
-        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.9)",display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <div style={{background:"#0a0a0c",padding:20,borderRadius:20,width:"90%",maxWidth:420}}>
-            <input placeholder="Product name" value={modal.name}
-              onChange={e=>setModal({...modal,name:e.target.value})} />
+        <main style={{paddingBottom:40}}>
+          {visible.length===0 && (
+            <div style={{padding:30,textAlign:"center",color:"#444",fontFamily:"Orbitron",fontSize:10}}>NO RECORDS</div>
+          )}
 
-            <input type="number" placeholder="Cost USD"
-              value={modal.cost}
-              onChange={e=>{
-                const c = money(e.target.value);
-                setModal({...modal,cost:c,sell:(c*EC_RATE*1.5).toFixed(2)});
-              }} />
-
-            <input type="number" placeholder="Qty"
-              value={modal.qty}
-              onChange={e=>setModal({...modal,qty:clamp(e.target.value)})} />
-
-            <div style={{margin:"12px 0"}}>
-              <label style={{border:"1px dashed #00f2ff",padding:14,display:"block",textAlign:"center"}}>
-                <i className="fas fa-camera"></i> ADD PHOTO
-                <input type="file" hidden accept="image/*" capture
-                  onChange={async e=>{
-                    const f = e.target.files[0];
-                    if(!f) return;
-                    const r = new FileReader();
-                    r.onload = async ()=>{
-                      const data = r.result;
-                      try{
-                        const ai = await aiScanServer(data);
-                        setModal(m=>({
-                          ...m,
-                          name:ai.name||m.name,
-                          cost:ai.costUSD||m.cost,
-                          sell:ai.costUSD?(ai.costUSD*EC_RATE*1.5).toFixed(2):m.sell,
-                          img:[...m.img,data]
-                        }));
-                      }catch{
-                        setModal(m=>({...m,img:[...m.img,data]}));
-                      }
-                    };
-                    r.readAsDataURL(f);
-                  }} />
-              </label>
+          {visible.map((i,idx)=>(
+            <div key={idx}
+              onClick={()=>setModal({...i})}
+              style={{margin:"0 12px 12px",padding:14,border:"1px solid #1a1a1c",borderRadius:14,cursor:"pointer"}}
+            >
+              <div style={{fontFamily:"Orbitron",fontSize:10,color:"#444"}}>{(i.tab||"").toUpperCase()} • {(i.status||"").toUpperCase()}</div>
+              <div style={{fontSize:15,fontWeight:700,marginTop:6}}>{i.name || "(No name)"}</div>
+              <div style={{marginTop:8,color:"#00f2ff",fontFamily:"Orbitron",fontWeight:900}}>
+                EC${(money(i.sell)*clampQty(i.qty)).toFixed(2)}
+              </div>
             </div>
+          ))}
+        </main>
 
-            <div style={{display:"flex",gap:10}}>
-              <button onClick={()=>setModal(null)} style={{flex:1}}>Cancel</button>
-              <button onClick={()=>save(modal)} style={{flex:2,background:"#00f2ff",border:0,fontWeight:800}}>
-                SAVE
-              </button>
+        {modal && (
+          <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.9)",display:"flex",alignItems:"center",justifyContent:"center",padding:14}}>
+            <div style={{background:"#0a0a0c",border:"1px solid #1a1a1c",borderRadius:18,width:"100%",maxWidth:460,padding:16}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                <div style={{fontFamily:"Orbitron",fontSize:11,color:"#00f2ff"}}>EDIT ITEM</div>
+                <button onClick={()=>setModal(null)} style={{border:"none"}}><i className="fas fa-xmark"></i></button>
+              </div>
+
+              <div style={{display:"grid",gap:10}}>
+                <input placeholder="Product name" value={modal.name} onChange={e=>setModal({...modal,name:e.target.value})} />
+                <input placeholder="Category/Tab" value={modal.tab} onChange={e=>setModal({...modal,tab:e.target.value})} />
+
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+                  <input type="number" step="0.01" placeholder="Cost USD" value={modal.cost}
+                    onChange={e=>{
+                      const c = money(e.target.value);
+                      // default auto sell @ 50% markup (simple baseline)
+                      const sell = (c*EC_RATE*1.5);
+                      setModal({...modal,cost:c,sell:sell});
+                    }}
+                  />
+                  <input type="number" step="0.01" placeholder="Sell XCD" value={modal.sell}
+                    onChange={e=>setModal({...modal,sell:money(e.target.value)})}
+                  />
+                </div>
+
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+                  <input type="number" placeholder="Qty" value={modal.qty} onChange={e=>setModal({...modal,qty:clampQty(e.target.value)})} />
+                  <select value={modal.status} onChange={e=>setModal({...modal,status:e.target.value})}>
+                    <option value="Assigned">Assigned</option>
+                    <option value="Purchased">Purchased</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Received">Received</option>
+                  </select>
+                </div>
+
+                <textarea placeholder="Notes" value={modal.note} onChange={e=>setModal({...modal,note:e.target.value})}></textarea>
+
+                <div style={{display:"flex",gap:10}}>
+                  <label style={{flex:1,display:"block",textAlign:"center",padding:12,border:"1px dashed #00f2ff",borderRadius:12,color:"#00f2ff",fontFamily:"Orbitron",fontSize:10,cursor:"pointer"}}>
+                    <i className="fas fa-camera" style={{marginRight:8}}></i>PHOTO
+                    <input type="file" hidden accept="image/*" capture="environment"
+                      onChange={e=>{
+                        const f = e.target.files?.[0];
+                        if(!f) return;
+                        const r = new FileReader();
+                        r.onload = ()=>setModal(m=>({...m,img:[...(m.img||[]), r.result]}));
+                        r.readAsDataURL(f);
+                      }}
+                    />
+                  </label>
+
+                  <label style={{flex:1,display:"block",textAlign:"center",padding:12,border:"1px dashed #ffaa00",borderRadius:12,color:"#ffaa00",fontFamily:"Orbitron",fontSize:10,cursor:"pointer"}}>
+                    <i className="fas fa-wand-magic-sparkles" style={{marginRight:8}}></i>AI SCAN
+                    <input type="file" hidden accept="image/*" capture="environment"
+                      onChange={async e=>{
+                        const f = e.target.files?.[0];
+                        if(!f) return;
+                        const r = new FileReader();
+                        r.onload = async ()=>{
+                          try{
+                            setSyncing(true);
+                            const dataUrl = r.result;
+                            const ai = await aiScanServer(dataUrl);
+                            const c = (ai.costUSD!=null && ai.costUSD!=="") ? money(ai.costUSD) : money(modal.cost);
+                            const sell = (c*EC_RATE*1.5);
+                            setModal(m=>({
+                              ...m,
+                              img:[...(m.img||[]), dataUrl],
+                              name: ai.name || m.name,
+                              cost: c,
+                              sell: sell,
+                            }));
+                          }catch(ex){
+                            setErr("AI Scan failed: " + (ex?.message || String(ex)));
+                          }finally{
+                            setSyncing(false);
+                          }
+                        };
+                        r.readAsDataURL(f);
+                      }}
+                    />
+                  </label>
+                </div>
+
+                <div style={{display:"flex",gap:10}}>
+                  <button onClick={()=>setModal(null)} style={{flex:1}}>CANCEL</button>
+                  <button onClick={()=>save(modal)} style={{flex:2,background:"#00f2ff",border:"none",color:"#000",fontWeight:900}}>SAVE</button>
+                </div>
+
+                <div style={{fontSize:11,color:"#444"}}>
+                  If the screen is blank: open browser console. Most issues are API URL, Apps Script doGet() not returning JSON, or CORS / permissions.
+                </div>
+              </div>
+
             </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
+        )}
+      </div>
+    );
+  }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
