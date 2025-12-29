@@ -1,60 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>G-HUB PRO</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- React UMD (good for GitHub Pages + simple hosting) -->
+  <!-- React UMD (stable for GitHub Pages) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-
-  <!-- Babel for JSX (single-file workflow) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    *{box-sizing:border-box;-webkit-font-smoothing:antialiased}
-    body{margin:0;background:#0a0a0c;color:#fff;font-family:Inter,system-ui;overflow-x:hidden}
+    *{box-sizing:border-box}
+    body{margin:0;background:#0a0a0c;color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
     ::-webkit-scrollbar{display:none}
-
-    .wrap{width:100%;max-width:520px;margin:0 auto;min-height:100vh;border-left:1px solid #1a1a1c;border-right:1px solid #1a1a1c}
-    .header{padding:18px 14px;border-bottom:1px solid #1a1a1c;position:sticky;top:0;background:rgba(10,10,12,.95);backdrop-filter:blur(10px);z-index:50}
+    a{color:inherit}
+    .shell{max-width:520px;margin:0 auto;min-height:100vh;border-left:1px solid #1a1a1c;border-right:1px solid #1a1a1c}
+    .header{padding:16px;border-bottom:1px solid #1a1a1c;position:sticky;top:0;background:rgba(10,10,12,.95);backdrop-filter:blur(10px);z-index:10}
     .title{font-family:Orbitron;margin:0;letter-spacing:2px;font-size:16px}
-    .row{display:flex;align-items:center;justify-content:space-between;gap:10}
-    .btn{border-radius:10px;border:1px solid #1a1a1c;background:#111;color:#fff;padding:10px 12px;font-family:Orbitron;font-size:10px;cursor:pointer}
-    .btnPrimary{background:#00f2ff;border:none;color:#000;font-weight:900}
-    .btnIcon{width:40px;height:40px;display:flex;align-items:center;justify-content:center}
-
-    input,select,textarea{
-      background:#111;border:1px solid #1a1a1c;color:#fff;border-radius:10px;padding:12px;width:100%;
-      outline:none
-    }
-    input:focus,select:focus,textarea:focus{border-color:#00f2ff}
-
-    .tabs{display:flex;gap:8;padding:12px 14px;overflow-x:auto;align-items:center}
-    .tab{padding:10px 14px;border-radius:10px;border:1px solid #1a1a1c;background:transparent;color:#444;font-family:Orbitron;font-size:9px;cursor:pointer;white-space:nowrap}
-    .tabActive{border-color:#00f2ff;color:#00f2ff;background:rgba(0,242,255,0.03)}
-    .tabAllActive{border-color:#00ff88;color:#00ff88;background:rgba(0,255,136,0.03)}
-    .tabPlus{width:36px;height:36px;border-radius:50%;border:1px dashed #222;color:#333;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-
-    .meta{margin-top:10px;color:#00f2ff;font-family:Orbitron;font-size:10px}
-    .err{margin-top:10px;color:#ff4d4d;font-family:Inter;font-size:12px;white-space:pre-wrap}
-
-    .list{padding-bottom:60px}
-    .card{margin:0 14px 12px;padding:14px;border:1px solid #1a1a1c;border-radius:14px;background:rgba(255,255,255,0.01);cursor:pointer}
-    .cardTop{font-family:Orbitron;font-size:10px;color:#444;display:flex;gap:10;flex-wrap:wrap}
-    .name{font-size:15px;font-weight:700;margin-top:6;color:#fff}
+    .row{display:flex;justify-content:space-between;align-items:center;gap:10}
+    .btn{border-radius:12px;border:1px solid #1a1a1c;background:#111;color:#fff;padding:10px 12px;font-family:Orbitron;font-size:10px;cursor:pointer}
+    .btnIcon{width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center}
+    .btnPrimary{background:#00f2ff;border:none;color:#000;font-weight:900;padding:14px 12px;width:100%}
+    .status{margin-top:10;color:#00f2ff;font-family:Orbitron;font-size:10px}
+    .error{margin-top:10;color:#ff4d4d;font-family:Inter;font-size:12px;white-space:pre-wrap}
+    .tabs{display:flex;gap:8;padding:12px;overflow-x:auto;align-items:center}
+    .tab{border-radius:12px;border:1px solid #1a1a1c;background:#111;color:#bbb;padding:10px 12px;font-family:Orbitron;font-size:10px;cursor:pointer;white-space:nowrap}
+    .tabActive{border-color:#00f2ff;color:#00f2ff}
+    .tabAllActive{border-color:#00ff88;color:#00ff88}
+    .tabPlus{width:40px;height:40px;border-radius:12px;border:1px dashed #222;background:#0a0a0c;color:#555;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
+    .main{padding-bottom:40}
+    .empty{padding:30;text-align:center;color:#444;font-family:Orbitron;font-size:10px}
+    .card{margin:0 12px 12px;padding:14px;border:1px solid #1a1a1c;border-radius:14px;background:rgba(255,255,255,.01);cursor:pointer}
+    .meta{font-family:Orbitron;font-size:10px;color:#444}
+    .name{font-size:15px;font-weight:700;margin-top:6}
     .price{margin-top:8;color:#00f2ff;font-family:Orbitron;font-weight:900}
 
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;padding:14px;z-index:999}
-    .modal{background:#0a0a0c;border:1px solid #1a1a1c;border-radius:18px;width:100%;max-width:480px;padding:16px}
-    .grid{display:grid;gap:10}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
+    .modal{background:#0a0a0c;border:1px solid #1a1a1c;border-radius:18px;width:100%;max-width:460px;padding:16px}
+    .field{width:100%;background:#111;border:1px solid #1a1a1c;color:#fff;border-radius:12px;padding:12px;font-family:Inter;font-size:14px;outline:none}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10}
-    textarea{min-height:90px;resize:vertical}
-    .hint{font-size:11px;color:#444;margin-top:10px;line-height:1.3}
+    .label{font-family:Orbitron;font-size:10px;color:#555;letter-spacing:1px;margin:10px 0 6px}
+    textarea.field{min-height:90px;resize:vertical}
   </style>
 </head>
 
@@ -62,22 +52,21 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    /* ========= CONFIG ========= */
+    /* ================= CONFIG ================= */
     const API_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
-    const EC_RATE = 2.7169;
     const IMG_SEP = "|||";
-    const DEFAULT_TABS = ["Watchlist"];
+    const DEFAULT_TABS = ["Watchlist"]; // these are "Category/Tab" values, not sheet tabs
 
-    /* ========= HELPERS ========= */
+    /* ================= HELPERS ================= */
     const money = (n) => {
-      const v = Number(String(n ?? "").replace(/[^0-9.\-]/g,""));
+      const v = Number(n);
       return Number.isFinite(v) ? v : 0;
     };
-    const qty1 = (n) => {
-      const v = parseInt(n ?? 1, 10);
+    const clampQty = (n) => {
+      const v = parseInt(n, 10);
       return Number.isFinite(v) && v > 0 ? v : 1;
     };
-    const s = (v) => (v ?? "").toString();
+    const str = (v) => (v == null ? "" : String(v)).trim();
 
     function App(){
       const [items,setItems] = React.useState([]);
@@ -91,38 +80,35 @@
         setErr("");
         setSyncing(true);
         try{
-          const r = await fetch(API_URL + "?cache=" + Date.now(), { method:"GET" });
+          const r = await fetch(API_URL + "?t=" + Date.now(), { method:"GET" });
+          if(!r.ok) throw new Error("HTTP " + r.status);
           const d = await r.json();
 
-          if(!Array.isArray(d)){
-            setErr("Apps Script doGet() did not return an array.\nFix: doGet must return JSON array of row objects.");
-            setItems([]);
-            return;
+          if(Array.isArray(d)){
+            const mapped = d.map(x=>({
+              name: str(x["Product Name"]),
+              tab: str(x["Category/Tab"]) || "Watchlist",
+              cost: money(x["Cost Price USD"]),
+              sell: money(x["Selling Price XCD"]),
+              qty: clampQty(x["Quantity"]),
+              link: str(x["Online Link"]),
+              note: str(x["Note"]),
+              status: str(x["Status"]) || "Assigned",
+              type: str(x["Product Type"]),
+              gender: str(x["Gender"]),
+              size: str(x["Size"]),
+              shoeSize: str(x["Shoe Size"]),
+              img: str(x["Image URL"]).split(IMG_SEP).filter(Boolean)
+            }));
+
+            setItems(mapped);
+            const sheetTabs = [...new Set(mapped.map(i=>i.tab).filter(Boolean))];
+            setTabs([...new Set([...DEFAULT_TABS, ...sheetTabs])]);
+          } else {
+            throw new Error("API did not return an array (check doGet JSON).");
           }
-
-          const mapped = d.map(x => ({
-            name: s(x["Product Name"]).trim(),
-            tab:  s(x["Category/Tab"]).trim() || "Watchlist",
-            img:  s(x["Image URL"]).split(IMG_SEP).filter(Boolean),
-            cost: money(x["Cost Price USD"]),
-            sell: money(x["Selling Price XCD"]),
-            qty:  qty1(x["Quantity"]),
-            link: s(x["Online Link"]),
-            note: s(x["Note"]),
-            status: s(x["Status"]) || "Assigned",
-            type: s(x["Product Type"]) || "Misc",
-            gender: s(x["Gender"]) || "Unisex",
-            size: s(x["Size"]),
-            shoeSize: s(x["Shoe Size"]),
-          }));
-
-          setItems(mapped);
-
-          const sheetTabs = [...new Set(mapped.map(i=>i.tab).filter(Boolean))];
-          setTabs([...new Set([...DEFAULT_TABS, ...sheetTabs])]);
         }catch(e){
           setErr("Load failed: " + (e?.message || String(e)));
-          setItems([]);
         }finally{
           setSyncing(false);
         }
@@ -131,25 +117,12 @@
       React.useEffect(()=>{ load(); },[]);
 
       function addCategory(){
-        const name = prompt("Enter new shipment name (Category/Tab):");
+        const name = prompt("Enter new Category/Tab value (e.g., January B, Seasonal):");
         if(!name) return;
         const clean = name.trim();
         if(!clean) return;
         setTabs(prev => [...new Set([...prev, clean])]);
         setActive(clean);
-      }
-
-      async function performSync(payload){
-        const params = new URLSearchParams();
-        Object.entries(payload).forEach(([k,v]) => params.append(k, v));
-
-        // Using no-cors because many users keep their script returning text for POST.
-        await fetch(API_URL, {
-          method:"POST",
-          mode:"no-cors",
-          headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-          body: params
-        });
       }
 
       async function save(item){
@@ -159,119 +132,136 @@
           const exists = items.some(i => i.name === item.name && i.tab === item.tab);
           const action = exists ? "update" : "create";
 
-          await performSync({
-            "_action": action,
-            "Product Name": item.name || "",
-            "Category/Tab": item.tab || "Watchlist",
-            "Image URL": (item.img || []).join(IMG_SEP),
+          const payload = {
+            "Product Name": str(item.name),
+            "Category/Tab": str(item.tab),
             "Cost Price USD": money(item.cost).toFixed(2),
             "Selling Price XCD": money(item.sell).toFixed(2),
-            "Quantity": qty1(item.qty),
-            "Online Link": item.link || "",
-            "Note": item.note || "",
-            "Status": item.status || "Assigned",
-            "Product Type": item.type || "Misc",
-            "Gender": item.gender || "Unisex",
-            "Size": item.size || "",
-            "Shoe Size": item.shoeSize || ""
+            "Quantity": clampQty(item.qty),
+            "Online Link": str(item.link),
+            "Note": str(item.note),
+            "Status": str(item.status) || "Assigned",
+            "Product Type": str(item.type),
+            "Gender": str(item.gender),
+            "Size": str(item.size),
+            "Shoe Size": str(item.shoeSize),
+            "Image URL": (item.img || []).join(IMG_SEP),
+            "_action": action
+          };
+
+          const p = new URLSearchParams();
+          Object.entries(payload).forEach(([k,v])=>p.append(k,v));
+
+          const r = await fetch(API_URL, {
+            method:"POST",
+            headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+            body:p
           });
 
+          // We expect JSON from the new Apps Script
+          const j = await r.json().catch(()=>null);
+          if(!j || j.ok !== true) throw new Error(j?.error || "Save failed");
+
           setModal(null);
-          setTimeout(load, 1500);
+          await load();
         }catch(e){
           setErr("Save failed: " + (e?.message || String(e)));
+        }finally{
           setSyncing(false);
         }
       }
 
       async function del(item){
-        if(!confirm(`Delete "${item.name}" from "${item.tab}"?`)) return;
+        if(!confirm("Delete " + item.name + " (" + item.tab + ")?")) return;
         setErr("");
         setSyncing(true);
         try{
-          await performSync({
-            "_action":"delete",
-            "Product Name": item.name || "",
-            "Category/Tab": item.tab || ""
+          const p = new URLSearchParams();
+          p.append("_action","delete");
+          p.append("Product Name", str(item.name));
+          p.append("Category/Tab", str(item.tab));
+
+          const r = await fetch(API_URL, {
+            method:"POST",
+            headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+            body:p
           });
+
+          const j = await r.json().catch(()=>null);
+          if(!j || j.ok !== true) throw new Error(j?.error || "Delete failed");
+
           setModal(null);
-          setTimeout(load, 1500);
+          await load();
         }catch(e){
           setErr("Delete failed: " + (e?.message || String(e)));
+        }finally{
           setSyncing(false);
         }
       }
 
-      const visible = (active==="ALL") ? items : items.filter(i => i.tab === active);
+      const visible = (active==="ALL") ? items : items.filter(i=>i.tab===active);
 
       return (
-        <div className="wrap">
-          <header className="header">
+        <div className="shell">
+          <div className="header">
             <div className="row">
               <h1 className="title">G-HUB PRO</h1>
               <button className="btn btnIcon" onClick={load} title="Refresh">
-                <i className="fa-solid fa-rotate"></i>
+                <i className="fas fa-rotate"></i>
               </button>
             </div>
 
-            {syncing && <div className="meta">SYNCING…</div>}
-            {err && <div className="err">{err}</div>}
+            {syncing && <div className="status">SYNCING…</div>}
+            {err && <div className="error">{err}</div>}
 
             <button
               className="btn btnPrimary"
-              style={{marginTop:12,width:"100%",padding:14}}
-              onClick={() => setModal({
-                name:"",
-                tab: (active==="ALL" ? "Watchlist" : active),
-                img:[],
-                cost:0,
-                sell:0,
-                qty:1,
-                link:"",
-                note:"",
-                status:"Assigned",
-                type:"Misc",
-                gender:"Unisex",
-                size:"",
-                shoeSize:""
-              })}
+              onClick={()=>{
+                setModal({
+                  name:"",
+                  tab: active==="ALL" ? "Watchlist" : active,
+                  cost:0,
+                  sell:0,
+                  qty:1,
+                  link:"",
+                  note:"",
+                  status:"Assigned",
+                  type:"",
+                  gender:"",
+                  size:"",
+                  shoeSize:"",
+                  img:[]
+                });
+              }}
+              style={{marginTop:12}}
             >
               + ADD PRODUCT
             </button>
-          </header>
+          </div>
 
           <div className="tabs">
             <button className={"tab " + (active==="ALL" ? "tabAllActive" : "")} onClick={()=>setActive("ALL")}>ALL</button>
-            {tabs.map(t => (
+            {tabs.map(t=>(
               <button key={t} className={"tab " + (active===t ? "tabActive" : "")} onClick={()=>setActive(t)}>
                 {t.toUpperCase()}
               </button>
             ))}
-            <div className="tabPlus" onClick={addCategory} title="Add Category/Tab">
-              <i className="fa-solid fa-plus"></i>
-            </div>
+            <button className="tabPlus" onClick={addCategory} title="Add Category/Tab">
+              <i className="fas fa-plus"></i>
+            </button>
           </div>
 
-          <main className="list">
-            {visible.length===0 && (
-              <div style={{padding:30,textAlign:"center",color:"#444",fontFamily:"Orbitron",fontSize:10}}>
-                NO RECORDS
-              </div>
-            )}
+          <div className="main">
+            {visible.length===0 && <div className="empty">NO RECORDS</div>}
 
             {visible.map((i,idx)=>(
               <div className="card" key={idx} onClick={()=>setModal({...i})}>
-                <div className="cardTop">
-                  <span>{(i.tab||"").toUpperCase()}</span>
-                  <span>•</span>
-                  <span>{(i.status||"").toUpperCase()}</span>
-                  {i.type ? <><span>•</span><span>{i.type.toUpperCase()}</span></> : null}
-                </div>
+                <div className="meta">{(i.tab||"").toUpperCase()} • {(i.status||"").toUpperCase()}</div>
                 <div className="name">{i.name || "(No name)"}</div>
-                <div className="price">EC${(money(i.sell)*qty1(i.qty)).toFixed(2)}</div>
+                <div className="price">EC${(money(i.sell) * clampQty(i.qty)).toFixed(2)}</div>
               </div>
             ))}
-          </main>
+          </div>
 
           {modal && (
             <div className="overlay" onClick={()=>setModal(null)}>
@@ -279,80 +269,96 @@
                 <div className="row" style={{marginBottom:10}}>
                   <div style={{fontFamily:"Orbitron",fontSize:11,color:"#00f2ff"}}>EDIT ITEM</div>
                   <button className="btn btnIcon" onClick={()=>setModal(null)} title="Close">
-                    <i className="fa-solid fa-xmark"></i>
+                    <i className="fas fa-xmark"></i>
                   </button>
                 </div>
 
-                <div className="grid">
-                  <input placeholder="Product Name" value={modal.name} onChange={e=>setModal({...modal,name:e.target.value})} />
-                  <input placeholder="Category/Tab (e.g., January A)" value={modal.tab} onChange={e=>setModal({...modal,tab:e.target.value})} />
+                <div className="label">PRODUCT NAME</div>
+                <input className="field" value={modal.name} placeholder="Product Name"
+                  onChange={e=>setModal({...modal,name:e.target.value})} />
 
-                  <div className="grid2">
-                    <input type="number" step="0.01" placeholder="Cost Price USD" value={modal.cost}
+                <div className="label">CATEGORY/TAB (this is NOT a sheet tab)</div>
+                <input className="field" value={modal.tab} placeholder="January A / Seasonal / Watchlist"
+                  onChange={e=>setModal({...modal,tab:e.target.value})} />
+
+                <div className="grid2" style={{marginTop:10}}>
+                  <div>
+                    <div className="label">COST PRICE USD</div>
+                    <input className="field" type="number" step="0.01" value={modal.cost}
                       onChange={e=>setModal({...modal,cost:money(e.target.value)})} />
-                    <input type="number" step="0.01" placeholder="Selling Price XCD" value={modal.sell}
+                  </div>
+                  <div>
+                    <div className="label">SELLING PRICE XCD</div>
+                    <input className="field" type="number" step="0.01" value={modal.sell}
                       onChange={e=>setModal({...modal,sell:money(e.target.value)})} />
                   </div>
+                </div>
 
-                  <div className="grid2">
-                    <input type="number" placeholder="Quantity" value={modal.qty}
-                      onChange={e=>setModal({...modal,qty:qty1(e.target.value)})} />
-                    <select value={modal.status} onChange={e=>setModal({...modal,status:e.target.value})}>
+                <div className="grid2" style={{marginTop:10}}>
+                  <div>
+                    <div className="label">QUANTITY</div>
+                    <input className="field" type="number" value={modal.qty}
+                      onChange={e=>setModal({...modal,qty:clampQty(e.target.value)})} />
+                  </div>
+                  <div>
+                    <div className="label">STATUS</div>
+                    <select className="field" value={modal.status}
+                      onChange={e=>setModal({...modal,status:e.target.value})}>
                       <option value="Assigned">Assigned</option>
                       <option value="Purchased">Purchased</option>
                       <option value="Shipped">Shipped</option>
                       <option value="Received">Received</option>
                     </select>
                   </div>
+                </div>
 
-                  <div className="grid2">
-                    <input placeholder="Online Link" value={modal.link} onChange={e=>setModal({...modal,link:e.target.value})} />
-                    <select value={modal.type} onChange={e=>setModal({...modal,type:e.target.value})}>
-                      <option value="Misc">Misc</option>
-                      <option value="Apparel">Apparel</option>
-                      <option value="Footwear">Footwear</option>
-                      <option value="Food">Food</option>
-                      <option value="Cleaning products">Cleaning products</option>
-                      <option value="Used items">Used items</option>
-                      <option value="Electronics">Electronics</option>
-                      <option value="Luxury">Luxury</option>
-                    </select>
+                <div className="grid2" style={{marginTop:10}}>
+                  <div>
+                    <div className="label">ONLINE LINK</div>
+                    <input className="field" value={modal.link} placeholder="https://..."
+                      onChange={e=>setModal({...modal,link:e.target.value})} />
                   </div>
-
-                  <div className="grid2">
-                    <select value={modal.gender} onChange={e=>setModal({...modal,gender:e.target.value})}>
-                      <option value="Unisex">Unisex</option>
-                      <option value="Men's">Men's</option>
-                      <option value="Women's">Women's</option>
-                      <option value="Children's">Children's</option>
-                    </select>
-                    <input placeholder="Size (or Shoe Size below)" value={modal.size} onChange={e=>setModal({...modal,size:e.target.value})} />
+                  <div>
+                    <div className="label">PRODUCT TYPE</div>
+                    <input className="field" value={modal.type} placeholder="Electronics / Apparel / etc"
+                      onChange={e=>setModal({...modal,type:e.target.value})} />
                   </div>
+                </div>
 
-                  <input placeholder="Shoe Size" value={modal.shoeSize} onChange={e=>setModal({...modal,shoeSize:e.target.value})} />
-
-                  <textarea placeholder="Note" value={modal.note} onChange={e=>setModal({...modal,note:e.target.value})}></textarea>
-
-                  <div className="grid2">
-                    <button className="btn" onClick={()=>setModal(null)}>CANCEL</button>
-                    <button className="btn btnPrimary" onClick={()=>save(modal)}>SAVE</button>
+                <div className="grid2" style={{marginTop:10}}>
+                  <div>
+                    <div className="label">GENDER</div>
+                    <input className="field" value={modal.gender} placeholder="Men's / Women's / Unisex"
+                      onChange={e=>setModal({...modal,gender:e.target.value})} />
                   </div>
+                  <div>
+                    <div className="label">SIZE / SHOE SIZE</div>
+                    <input className="field" value={(modal.size || modal.shoeSize || "")} placeholder="M / 10.5 / etc"
+                      onChange={e=>setModal({...modal,size:e.target.value,shoeSize:""})} />
+                  </div>
+                </div>
 
+                <div className="label">NOTE</div>
+                <textarea className="field" value={modal.note} placeholder="Notes..."
+                  onChange={e=>setModal({...modal,note:e.target.value})}></textarea>
+
+                <div style={{display:"flex",gap:10,marginTop:12}}>
                   {modal.name && (
-                    <button className="btn" style={{borderColor:"rgba(255,77,77,0.25)", color:"#ff4d4d"}} onClick={()=>del(modal)}>
-                      <i className="fa-solid fa-trash" style={{marginRight:8}}></i>DELETE
+                    <button className="btn" style={{flex:1,borderColor:"rgba(255,77,77,.35)",color:"#ff4d4d"}} onClick={()=>del(modal)}>
+                      DELETE
                     </button>
                   )}
+                  <button className="btn" style={{flex:2,background:"#00f2ff",border:"none",color:"#000",fontWeight:900}} onClick={()=>save(modal)}>
+                    SAVE
+                  </button>
+                </div>
 
-                  <div className="hint">
-                    If this page is blank: open DevTools Console and look for a fetch error.
-                    Most common causes are: wrong API_URL, Apps Script not deployed as Web App, or your Web App access set too restrictive.
-                  </div>
+                <div style={{marginTop:10,fontSize:11,color:"#444"}}>
+                  If you see “Load failed”: open the Web App URL directly and confirm it shows JSON.
                 </div>
               </div>
             </div>
           )}
-
         </div>
       );
     }
