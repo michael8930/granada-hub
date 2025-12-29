@@ -1,369 +1,327 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>G-HUB PRO</title>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <!-- React UMD (stable for GitHub Pages) -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>G HUB PRO</title>
   <style>
-    *{box-sizing:border-box}
-    body{margin:0;background:#0a0a0c;color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    ::-webkit-scrollbar{display:none}
-    a{color:inherit}
-    .shell{max-width:520px;margin:0 auto;min-height:100vh;border-left:1px solid #1a1a1c;border-right:1px solid #1a1a1c}
-    .header{padding:16px;border-bottom:1px solid #1a1a1c;position:sticky;top:0;background:rgba(10,10,12,.95);backdrop-filter:blur(10px);z-index:10}
-    .title{font-family:Orbitron;margin:0;letter-spacing:2px;font-size:16px}
-    .row{display:flex;justify-content:space-between;align-items:center;gap:10}
-    .btn{border-radius:12px;border:1px solid #1a1a1c;background:#111;color:#fff;padding:10px 12px;font-family:Orbitron;font-size:10px;cursor:pointer}
-    .btnIcon{width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center}
-    .btnPrimary{background:#00f2ff;border:none;color:#000;font-weight:900;padding:14px 12px;width:100%}
-    .status{margin-top:10;color:#00f2ff;font-family:Orbitron;font-size:10px}
-    .error{margin-top:10;color:#ff4d4d;font-family:Inter;font-size:12px;white-space:pre-wrap}
-    .tabs{display:flex;gap:8;padding:12px;overflow-x:auto;align-items:center}
-    .tab{border-radius:12px;border:1px solid #1a1a1c;background:#111;color:#bbb;padding:10px 12px;font-family:Orbitron;font-size:10px;cursor:pointer;white-space:nowrap}
-    .tabActive{border-color:#00f2ff;color:#00f2ff}
-    .tabAllActive{border-color:#00ff88;color:#00ff88}
-    .tabPlus{width:40px;height:40px;border-radius:12px;border:1px dashed #222;background:#0a0a0c;color:#555;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
-    .main{padding-bottom:40}
-    .empty{padding:30;text-align:center;color:#444;font-family:Orbitron;font-size:10px}
-    .card{margin:0 12px 12px;padding:14px;border:1px solid #1a1a1c;border-radius:14px;background:rgba(255,255,255,.01);cursor:pointer}
-    .meta{font-family:Orbitron;font-size:10px;color:#444}
-    .name{font-size:15px;font-weight:700;margin-top:6}
-    .price{margin-top:8;color:#00f2ff;font-family:Orbitron;font-weight:900}
+    :root { color-scheme: dark; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#071018; color:#e8f2ff; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 22px; }
+    .card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; box-shadow: 0 30px 90px rgba(0,0,0,.45); overflow:hidden; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 16px 18px; background: linear-gradient(180deg, rgba(0,174,239,.14), rgba(255,255,255,0)); border-bottom: 1px solid rgba(255,255,255,.08); }
+    header .title { display:flex; flex-direction:column; gap:4px; }
+    header h1 { margin:0; font-size: 18px; letter-spacing:.08em; text-transform: uppercase; }
+    header .sub { font-size: 12px; opacity:.75; }
+    .btn { appearance:none; border:0; border-radius: 999px; padding: 10px 14px; font-weight: 800; letter-spacing:.06em; text-transform: uppercase; cursor:pointer; }
+    .btn.primary { background:#00AEEF; color:#001018; }
+    .btn.ghost { background: rgba(255,255,255,.08); color:#e8f2ff; border:1px solid rgba(255,255,255,.12); }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
 
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
-    .modal{background:#0a0a0c;border:1px solid #1a1a1c;border-radius:18px;width:100%;max-width:460px;padding:16px}
-    .field{width:100%;background:#111;border:1px solid #1a1a1c;color:#fff;border-radius:12px;padding:12px;font-family:Inter;font-size:14px;outline:none}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10}
-    .label{font-family:Orbitron;font-size:10px;color:#555;letter-spacing:1px;margin:10px 0 6px}
-    textarea.field{min-height:90px;resize:vertical}
-  </style>
-</head>
-
-<body>
-  <div id="root"></div>
-
-  <script type="text/babel">
-    /* ================= CONFIG ================= */
-    const API_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
-    const IMG_SEP = "|||";
-    const DEFAULT_TABS = ["Watchlist"]; // these are "Category/Tab" values, not sheet tabs
-
-    /* ================= HELPERS ================= */
-    const money = (n) => {
-      const v = Number(n);
-      return Number.isFinite(v) ? v : 0;
-    };
-    const clampQty = (n) => {
-      const v = parseInt(n, 10);
-      return Number.isFinite(v) && v > 0 ? v : 1;
-    };
-    const str = (v) => (v == null ? "" : String(v)).trim();
-
-    function App(){
-      const [items,setItems] = React.useState([]);
-      const [tabs,setTabs] = React.useState(DEFAULT_TABS);
-      const [active,setActive] = React.useState("ALL");
-      const [modal,setModal] = React.useState(null);
-      const [syncing,setSyncing] = React.useState(false);
-      const [err,setErr] = React.useState("");
-
-      async function load(){
-        setErr("");
-        setSyncing(true);
-        try{
-          const r = await fetch(API_URL + "?t=" + Date.now(), { method:"GET" });
-          if(!r.ok) throw new Error("HTTP " + r.status);
-          const d = await r.json();
-
-          if(Array.isArray(d)){
-            const mapped = d.map(x=>({
-              name: str(x["Product Name"]),
-              tab: str(x["Category/Tab"]) || "Watchlist",
-              cost: money(x["Cost Price USD"]),
-              sell: money(x["Selling Price XCD"]),
-              qty: clampQty(x["Quantity"]),
-              link: str(x["Online Link"]),
-              note: str(x["Note"]),
-              status: str(x["Status"]) || "Assigned",
-              type: str(x["Product Type"]),
-              gender: str(x["Gender"]),
-              size: str(x["Size"]),
-              shoeSize: str(x["Shoe Size"]),
-              img: str(x["Image URL"]).split(IMG_SEP).filter(Boolean)
-            }));
-
-            setItems(mapped);
-            const sheetTabs = [...new Set(mapped.map(i=>i.tab).filter(Boolean))];
-            setTabs([...new Set([...DEFAULT_TABS, ...sheetTabs])]);
-          } else {
-            throw new Error("API did not return an array (check doGet JSON).");
-          }
-        }catch(e){
-          setErr("Load failed: " + (e?.message || String(e)));
-        }finally{
-          setSyncing(false);
-        }
-      }
-
-      React.useEffect(()=>{ load(); },[]);
-
-      function addCategory(){
-        const name = prompt("Enter new Category/Tab value (e.g., January B, Seasonal):");
-        if(!name) return;
-        const clean = name.trim();
-        if(!clean) return;
-        setTabs(prev => [...new Set([...prev, clean])]);
-        setActive(clean);
-      }
-
-      async function save(item){
-        setErr("");
-        setSyncing(true);
-        try{
-          const exists = items.some(i => i.name === item.name && i.tab === item.tab);
-          const action = exists ? "update" : "create";
-
-          const payload = {
-            "Product Name": str(item.name),
-            "Category/Tab": str(item.tab),
-            "Cost Price USD": money(item.cost).toFixed(2),
-            "Selling Price XCD": money(item.sell).toFixed(2),
-            "Quantity": clampQty(item.qty),
-            "Online Link": str(item.link),
-            "Note": str(item.note),
-            "Status": str(item.status) || "Assigned",
-            "Product Type": str(item.type),
-            "Gender": str(item.gender),
-            "Size": str(item.size),
-            "Shoe Size": str(item.shoeSize),
-            "Image URL": (item.img || []).join(IMG_SEP),
-            "_action": action
-          };
-
-          const p = new URLSearchParams();
-          Object.entries(payload).forEach(([k,v])=>p.append(k,v));
-
-          const r = await fetch(API_URL, {
-            method:"POST",
-            headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-            body:p
-          });
-
-          // We expect JSON from the new Apps Script
-          const j = await r.json().catch(()=>null);
-          if(!j || j.ok !== true) throw new Error(j?.error || "Save failed");
-
-          setModal(null);
-          await load();
-        }catch(e){
-          setErr("Save failed: " + (e?.message || String(e)));
-        }finally{
-          setSyncing(false);
-        }
-      }
-
-      async function del(item){
-        if(!confirm("Delete " + item.name + " (" + item.tab + ")?")) return;
-        setErr("");
-        setSyncing(true);
-        try{
-          const p = new URLSearchParams();
-          p.append("_action","delete");
-          p.append("Product Name", str(item.name));
-          p.append("Category/Tab", str(item.tab));
-
-          const r = await fetch(API_URL, {
-            method:"POST",
-            headers:{ "Content-Type":"application/x-www-form-urlencoded" },
-            body:p
-          });
-
-          const j = await r.json().catch(()=>null);
-          if(!j || j.ok !== true) throw new Error(j?.error || "Delete failed");
-
-          setModal(null);
-          await load();
-        }catch(e){
-          setErr("Delete failed: " + (e?.message || String(e)));
-        }finally{
-          setSyncing(false);
-        }
-      }
-
-      const visible = (active==="ALL") ? items : items.filter(i=>i.tab===active);
-
-      return (
-        <div className="shell">
-          <div className="header">
-            <div className="row">
-              <h1 className="title">G-HUB PRO</h1>
-              <button className="btn btnIcon" onClick={load} title="Refresh">
-                <i className="fas fa-rotate"></i>
-              </button>
-            </div>
-
-            {syncing && <div className="status">SYNCING…</div>}
-            {err && <div className="error">{err}</div>}
-
-            <button
-              className="btn btnPrimary"
-              onClick={()=>{
-                setModal({
-                  name:"",
-                  tab: active==="ALL" ? "Watchlist" : active,
-                  cost:0,
-                  sell:0,
-                  qty:1,
-                  link:"",
-                  note:"",
-                  status:"Assigned",
-                  type:"",
-                  gender:"",
-                  size:"",
-                  shoeSize:"",
-                  img:[]
-                });
-              }}
-              style={{marginTop:12}}
-            >
-              + ADD PRODUCT
-            </button>
-          </div>
-
-          <div className="tabs">
-            <button className={"tab " + (active==="ALL" ? "tabAllActive" : "")} onClick={()=>setActive("ALL")}>ALL</button>
-            {tabs.map(t=>(
-              <button key={t} className={"tab " + (active===t ? "tabActive" : "")} onClick={()=>setActive(t)}>
-                {t.toUpperCase()}
-              </button>
-            ))}
-            <button className="tabPlus" onClick={addCategory} title="Add Category/Tab">
-              <i className="fas fa-plus"></i>
-            </button>
-          </div>
-
-          <div className="main">
-            {visible.length===0 && <div className="empty">NO RECORDS</div>}
-
-            {visible.map((i,idx)=>(
-              <div className="card" key={idx} onClick={()=>setModal({...i})}>
-                <div className="meta">{(i.tab||"").toUpperCase()} • {(i.status||"").toUpperCase()}</div>
-                <div className="name">{i.name || "(No name)"}</div>
-                <div className="price">EC${(money(i.sell) * clampQty(i.qty)).toFixed(2)}</div>
-              </div>
-            ))}
-          </div>
-
-          {modal && (
-            <div className="overlay" onClick={()=>setModal(null)}>
-              <div className="modal" onClick={(e)=>e.stopPropagation()}>
-                <div className="row" style={{marginBottom:10}}>
-                  <div style={{fontFamily:"Orbitron",fontSize:11,color:"#00f2ff"}}>EDIT ITEM</div>
-                  <button className="btn btnIcon" onClick={()=>setModal(null)} title="Close">
-                    <i className="fas fa-xmark"></i>
-                  </button>
-                </div>
-
-                <div className="label">PRODUCT NAME</div>
-                <input className="field" value={modal.name} placeholder="Product Name"
-                  onChange={e=>setModal({...modal,name:e.target.value})} />
-
-                <div className="label">CATEGORY/TAB (this is NOT a sheet tab)</div>
-                <input className="field" value={modal.tab} placeholder="January A / Seasonal / Watchlist"
-                  onChange={e=>setModal({...modal,tab:e.target.value})} />
-
-                <div className="grid2" style={{marginTop:10}}>
-                  <div>
-                    <div className="label">COST PRICE USD</div>
-                    <input className="field" type="number" step="0.01" value={modal.cost}
-                      onChange={e=>setModal({...modal,cost:money(e.target.value)})} />
-                  </div>
-                  <div>
-                    <div className="label">SELLING PRICE XCD</div>
-                    <input className="field" type="number" step="0.01" value={modal.sell}
-                      onChange={e=>setModal({...modal,sell:money(e.target.value)})} />
-                  </div>
-                </div>
-
-                <div className="grid2" style={{marginTop:10}}>
-                  <div>
-                    <div className="label">QUANTITY</div>
-                    <input className="field" type="number" value={modal.qty}
-                      onChange={e=>setModal({...modal,qty:clampQty(e.target.value)})} />
-                  </div>
-                  <div>
-                    <div className="label">STATUS</div>
-                    <select className="field" value={modal.status}
-                      onChange={e=>setModal({...modal,status:e.target.value})}>
-                      <option value="Assigned">Assigned</option>
-                      <option value="Purchased">Purchased</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Received">Received</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid2" style={{marginTop:10}}>
-                  <div>
-                    <div className="label">ONLINE LINK</div>
-                    <input className="field" value={modal.link} placeholder="https://..."
-                      onChange={e=>setModal({...modal,link:e.target.value})} />
-                  </div>
-                  <div>
-                    <div className="label">PRODUCT TYPE</div>
-                    <input className="field" value={modal.type} placeholder="Electronics / Apparel / etc"
-                      onChange={e=>setModal({...modal,type:e.target.value})} />
-                  </div>
-                </div>
-
-                <div className="grid2" style={{marginTop:10}}>
-                  <div>
-                    <div className="label">GENDER</div>
-                    <input className="field" value={modal.gender} placeholder="Men's / Women's / Unisex"
-                      onChange={e=>setModal({...modal,gender:e.target.value})} />
-                  </div>
-                  <div>
-                    <div className="label">SIZE / SHOE SIZE</div>
-                    <input className="field" value={(modal.size || modal.shoeSize || "")} placeholder="M / 10.5 / etc"
-                      onChange={e=>setModal({...modal,size:e.target.value,shoeSize:""})} />
-                  </div>
-                </div>
-
-                <div className="label">NOTE</div>
-                <textarea className="field" value={modal.note} placeholder="Notes..."
-                  onChange={e=>setModal({...modal,note:e.target.value})}></textarea>
-
-                <div style={{display:"flex",gap:10,marginTop:12}}>
-                  {modal.name && (
-                    <button className="btn" style={{flex:1,borderColor:"rgba(255,77,77,.35)",color:"#ff4d4d"}} onClick={()=>del(modal)}>
-                      DELETE
-                    </button>
-                  )}
-                  <button className="btn" style={{flex:2,background:"#00f2ff",border:"none",color:"#000",fontWeight:900}} onClick={()=>save(modal)}>
-                    SAVE
-                  </button>
-                </div>
-
-                <div style={{marginTop:10,fontSize:11,color:"#444"}}>
-                  If you see “Load failed”: open the Web App URL directly and confirm it shows JSON.
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      );
+    .toolbar { display:flex; gap:10px; align-items:center; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,.08); flex-wrap:wrap; }
+    .toolbar input, .toolbar select {
+      background: rgba(0,0,0,.35); color:#e8f2ff; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 10px 12px; outline:none;
     }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-  </script>
+    .grid { display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px; padding: 14px; }
+    @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+
+    .panel { background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow:hidden; }
+    .panel h2 { margin:0; padding: 12px 14px; font-size: 12px; letter-spacing:.18em; text-transform: uppercase; opacity:.8; border-bottom:1px solid rgba(255,255,255,.08); }
+    .panel .body { padding: 12px 14px; }
+
+    table { width:100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; }
+    th { font-size: 11px; opacity:.7; letter-spacing:.14em; text-transform: uppercase; }
+    tr:hover td { background: rgba(0,174,239,.06); cursor:pointer; }
+
+    .status { padding: 10px 14px; font-size: 12px; border-top:1px solid rgba(255,255,255,.08); opacity:.85; }
+    .status.error { color:#ffb3b3; }
+    .status.ok { color:#b6ffcf; }
+
+    form .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    form label { font-size: 11px; opacity:.75; letter-spacing:.14em; text-transform: uppercase; display:block; margin: 0 0 6px; }
+    form input, form textarea, form select {
+      width:100%; box-sizing:border-box;
+      background: rgba(0,0,0,.35); color:#e8f2ff;
+      border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 10px 12px; outline:none;
+    }
+    form textarea { min-height: 92px; resize: vertical; }
+    .actions { display:flex; gap:10px; align-items:center; margin-top: 10px; flex-wrap:wrap; }
+
+    .note { font-size: 12px; opacity:.75; line-height:1.45; }
+    .pill { display:inline-block; padding: 6px 10px; border-radius: 999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); font-size: 11px; letter-spacing:.08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="title">
+          <h1>G HUB PRO</h1>
+          <div class="sub">Inventory — loaded from Google Sheets</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button id="btnReload" class="btn ghost">Reload</button>
+          <button id="btnAdd" class="btn primary">+ Add Product</button>
+        </div>
+      </header>
+
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Search product name..." />
+        <select id="statusFilter">
+          <option value="">All Status</option>
+        </select>
+        <span id="count" class="pill">0 items</span>
+      </div>
+
+      <div class="grid">
+        <div class="panel">
+          <h2>Inventory</h2>
+          <div class="body" style="padding:0;">
+            <div style="overflow:auto; max-height: 62vh;">
+              <table id="tbl">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category/Tab</th>
+                    <th>Qty</th>
+                    <th>Selling</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div id="loadMsg" class="status">Loading…</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Edit / Add</h2>
+          <div class="body">
+            <form id="frm">
+              <div class="row">
+                <div>
+                  <label>Product Name *</label>
+                  <input name="Product Name" required />
+                </div>
+                <div>
+                  <label>Category/Tab *</label>
+                  <input name="Category/Tab" required />
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Selling Price XCD</label>
+                  <input name="Selling Price XCD" inputmode="decimal" />
+                </div>
+                <div>
+                  <label>Quantity</label>
+                  <input name="Quantity" inputmode="numeric" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label>Status</label>
+                  <input name="Status" placeholder="In Stock / Sold / Watchlist" />
+                </div>
+                <div>
+                  <label>Image URL</label>
+                  <input name="Image URL" />
+                </div>
+              </div>
+
+              <div>
+                <label>Online Link</label>
+                <input name="Online Link" />
+              </div>
+
+              <div style="margin-top:10px;">
+                <label>Note</label>
+                <textarea name="Note"></textarea>
+              </div>
+
+              <div class="actions">
+                <button id="btnSave" type="submit" class="btn primary">Save (Upsert)</button>
+                <button id="btnDelete" type="button" class="btn ghost">Delete</button>
+                <span id="formMsg" class="note"></span>
+              </div>
+            </form>
+          </div>
+          <div class="status note" style="border-top:1px solid rgba(255,255,255,.08);">
+            Tip: Click a row on the left to load it into the form.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // === CONFIG: your Apps Script Web App URL (JSON API) ===
+  const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+
+  const $ = (sel) => document.querySelector(sel);
+  const tblBody = $("#tbl tbody");
+  const loadMsg = $("#loadMsg");
+  const q = $("#q");
+  const statusFilter = $("#statusFilter");
+  const countEl = $("#count");
+  const frm = $("#frm");
+  const formMsg = $("#formMsg");
+  const btnReload = $("#btnReload");
+  const btnAdd = $("#btnAdd");
+  const btnDelete = $("#btnDelete");
+
+  let rows = [];
+  let selectedKey = null;
+
+  function setLoad(text, type="") {
+    loadMsg.textContent = text;
+    loadMsg.className = "status" + (type ? " " + type : "");
+  }
+
+  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  function keyOf(r){
+    return (String(r["Product Name"]||"").trim()+"||"+String(r["Category/Tab"]||"").trim()).toLowerCase();
+  }
+
+  function buildStatusOptions() {
+    const set = new Set();
+    rows.forEach(r => {
+      const s = String(r["Status"]||"").trim();
+      if (s) set.add(s);
+    });
+    const cur = statusFilter.value;
+    statusFilter.innerHTML = '<option value="">All Status</option>' +
+      [...set].sort().map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
+    statusFilter.value = cur;
+  }
+
+  function applyFilters(list) {
+    const needle = q.value.trim().toLowerCase();
+    const st = statusFilter.value.trim();
+    return list.filter(r => {
+      const name = String(r["Product Name"]||"").toLowerCase();
+      const okName = !needle || name.includes(needle);
+      const okStatus = !st || String(r["Status"]||"").trim() === st;
+      return okName && okStatus;
+    });
+  }
+
+  function render() {
+    const filtered = applyFilters(rows);
+    countEl.textContent = `${filtered.length} items`;
+    tblBody.innerHTML = filtered.map(r => {
+      const k = keyOf(r);
+      return `<tr data-k="${esc(k)}">
+        <td>${esc(r["Product Name"])}</td>
+        <td>${esc(r["Category/Tab"])}</td>
+        <td>${esc(r["Quantity"] ?? "")}</td>
+        <td>${esc(r["Selling Price XCD"] ?? "")}</td>
+        <td>${esc(r["Status"] ?? "")}</td>
+      </tr>`;
+    }).join("");
+
+    tblBody.querySelectorAll("tr").forEach(tr => {
+      tr.addEventListener("click", () => {
+        const k = tr.getAttribute("data-k");
+        const r = rows.find(x => keyOf(x) === k);
+        if (r) loadIntoForm(r);
+      });
+    });
+  }
+
+  function clearForm() {
+    frm.reset();
+    selectedKey = null;
+    formMsg.textContent = "";
+  }
+
+  function loadIntoForm(r) {
+    selectedKey = keyOf(r);
+    for (const el of frm.elements) {
+      if (!el.name) continue;
+      el.value = r[el.name] ?? "";
+    }
+    formMsg.textContent = "Loaded.";
+  }
+
+  async function apiGet() {
+    setLoad("Loading…");
+    const res = await fetch(API, { method:"GET", cache:"no-store" });
+    const data = await res.json();
+
+    if (data && data.ok === false) throw new Error(data.error || "API error");
+    if (!Array.isArray(data)) throw new Error("Unexpected response (expected JSON array).");
+
+    rows = data;
+    buildStatusOptions();
+    render();
+    setLoad("Loaded.", "ok");
+  }
+
+  async function apiPost(params) {
+    const body = new URLSearchParams(params);
+    const res = await fetch(API, { method:"POST", body });
+    const out = await res.json();
+    if (!out || out.ok !== true) throw new Error(out?.error || "Save failed");
+    return out;
+  }
+
+  frm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    formMsg.textContent = "Saving…";
+    const params = { _action: "update" };
+    for (const el of frm.elements) {
+      if (!el.name) continue;
+      params[el.name] = el.value;
+    }
+    if (!params["Product Name"] || !params["Category/Tab"]) {
+      formMsg.textContent = "Product Name and Category/Tab are required.";
+      return;
+    }
+    try {
+      const out = await apiPost(params);
+      formMsg.textContent = out.action === "created" ? "Created." : "Updated.";
+      await apiGet();
+      // reselect
+      const k = (String(params["Product Name"]).trim()+"||"+String(params["Category/Tab"]).trim()).toLowerCase();
+      const r = rows.find(x => keyOf(x) === k);
+      if (r) loadIntoForm(r);
+    } catch (err) {
+      formMsg.textContent = "Save failed: " + err.message;
+    }
+  });
+
+  btnDelete.addEventListener("click", async () => {
+    const name = frm.elements["Product Name"]?.value?.trim();
+    const tab = frm.elements["Category/Tab"]?.value?.trim();
+    if (!name || !tab) { formMsg.textContent = "Product Name and Category/Tab are required to delete."; return; }
+    if (!confirm(`Delete "${name}" (${tab}) from the sheet?`)) return;
+
+    formMsg.textContent = "Deleting…";
+    try {
+      const out = await apiPost({ _action:"delete", "Product Name": name, "Category/Tab": tab });
+      formMsg.textContent = out.action === "deleted" ? "Deleted." : "Not found.";
+      clearForm();
+      await apiGet();
+    } catch (err) {
+      formMsg.textContent = "Delete failed: " + err.message;
+    }
+  });
+
+  btnReload.addEventListener("click", apiGet);
+  btnAdd.addEventListener("click", clearForm);
+  q.addEventListener("input", render);
+  statusFilter.addEventListener("change", render);
+
+  // Boot
+  apiGet().catch(err => setLoad("Load failed: " + err.message, "error"));
+</script>
 </body>
 </html>
