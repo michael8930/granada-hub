@@ -4,1472 +4,994 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>G HUB PRO — Grenada Inventory</title>
-  <meta name="color-scheme" content="dark" />
   <style>
-    :root{
-      --bg:#071018;
-      --card:rgba(255,255,255,.04);
-      --card2:rgba(0,0,0,.22);
-      --stroke:rgba(255,255,255,.10);
-      --stroke2:rgba(255,255,255,.07);
-      --text:#e8f2ff;
-      --muted:rgba(232,242,255,.72);
-      --brand:#00AEEF;
-      --brand2:#7fe6ff;
-      --danger:#ff7b7b;
-      --ok:#9effc0;
-      --warn:#ffd38a;
-      --radius:18px;
-      --radius2:14px;
-      --shadow:0 30px 90px rgba(0,0,0,.45);
-      --shadow2:0 18px 55px rgba(0,0,0,.50);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0; font-family:var(--sans);
-      background:
-        radial-gradient(900px 500px at 15% -10%, rgba(0,174,239,.22), transparent 60%),
-        radial-gradient(800px 500px at 90% 0%, rgba(126,97,255,.20), transparent 60%),
-        radial-gradient(900px 600px at 50% 120%, rgba(0,174,239,.10), transparent 55%),
-        var(--bg);
-      color:var(--text);
-    }
-    a{ color:var(--brand2); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
+    :root { color-scheme: dark; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#071018; color:#e8f2ff; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 18px; }
+    .card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; box-shadow: 0 30px 90px rgba(0,0,0,.45); overflow:hidden; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 14px 16px; background: linear-gradient(180deg, rgba(0,174,239,.14), rgba(255,255,255,0)); border-bottom: 1px solid rgba(255,255,255,.08); }
+    header .title { display:flex; flex-direction:column; gap:4px; }
+    header h1 { margin:0; font-size: 16px; letter-spacing:.10em; text-transform: uppercase; }
+    header .sub { font-size: 12px; opacity:.75; }
 
-    .wrap{ max-width:1280px; margin:0 auto; padding:18px; }
-    .card{
-      background:var(--card);
-      border:1px solid var(--stroke);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    /* Header */
-    .top{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:14px 16px;
-      background: linear-gradient(180deg, rgba(0,174,239,.16), rgba(255,255,255,0));
-      border-bottom:1px solid var(--stroke);
-    }
-    .brand{
-      display:flex; gap:12px; align-items:center; min-width:260px;
-    }
-    .logo{
-      width:38px; height:38px; border-radius:12px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(0,174,239,.25) 45%, rgba(0,0,0,.10) 70%);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: 0 12px 30px rgba(0,174,239,.18);
-      display:grid; place-items:center;
-      font-weight:900;
-    }
-    .title h1{ margin:0; font-size:16px; letter-spacing:.10em; text-transform:uppercase; }
-    .title .sub{ font-size:12px; color:var(--muted); margin-top:3px; }
-
-    .topActions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
-    .btn{
-      appearance:none; border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06); color:var(--text);
-      border-radius:999px; padding:10px 12px;
-      font-weight:800; letter-spacing:.06em; text-transform:uppercase;
-      cursor:pointer; line-height:1;
-      box-shadow: 0 10px 28px rgba(0,0,0,.22);
-    }
-    .btn:hover{ border-color: rgba(255,255,255,.20); }
-    .btn.primary{ background:var(--brand); color:#001018; border-color: rgba(0,174,239,.55); }
-    .btn.primary:hover{ filter:brightness(1.05); }
-    .btn.danger{ background: rgba(255,123,123,.18); border-color: rgba(255,123,123,.35); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    .menuWrap{ position:relative; }
-    .menu{
-      position:absolute; right:0; top:48px;
-      width:min(420px, calc(100vw - 32px));
-      background: rgba(8,18,28,.98);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:16px;
-      box-shadow: var(--shadow2);
-      padding:12px;
-      display:none;
-      z-index:50;
-    }
-    .menu.open{ display:block; }
-    .menu h3{ margin:0 0 10px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; opacity:.85; }
-    .menuGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    .menu .btn{ width:100%; justify-content:center; }
-    .menu .hint{ margin-top:10px; font-size:12px; color:var(--muted); line-height:1.35; }
-
-    /* Dashboard row */
-    .dash{
-      display:grid;
-      grid-template-columns: 1.1fr 1.2fr 1.2fr;
-      gap:12px;
-      padding:12px;
-      border-bottom:1px solid var(--stroke);
-      background: rgba(0,0,0,.12);
-    }
-    @media (max-width: 980px){
-      .dash{ grid-template-columns: 1fr; }
-      .brand{ min-width:auto; }
-    }
-    .stat{
-      background: var(--card2);
-      border:1px solid var(--stroke2);
-      border-radius:16px;
-      padding:12px 14px;
-      box-shadow: 0 12px 38px rgba(0,0,0,.30);
-      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
-    }
-    .stat .k{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
-    .stat .v{ margin-top:6px; font-size:24px; font-weight:900; }
-    .stat .small{ margin-top:4px; font-size:12px; color:var(--muted); }
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
+    .toplinks { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .pilllink {
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 10px 12px; border-radius: 999px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
-      font-size:11px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      white-space:nowrap;
+      color:#e8f2ff; text-decoration:none;
+      font-size: 12px; letter-spacing:.06em; text-transform: uppercase; font-weight: 800;
+      min-height: 40px;
     }
-    .pill strong{ letter-spacing:.02em; }
-    .pill .dot{ width:8px; height:8px; border-radius:50%; background: rgba(255,255,255,.35); }
-    .pill.ok .dot{ background: var(--ok); }
-    .pill.warn .dot{ background: var(--warn); }
-    .pill.bad .dot{ background: var(--danger); }
+    .pilllink:hover { background: rgba(0,174,239,.10); border-color: rgba(0,174,239,.35); }
 
-    /* Filters */
-    .filters{
-      display:flex; gap:10px; align-items:center;
-      padding:12px; flex-wrap:wrap;
-      border-bottom:1px solid var(--stroke);
-    }
-    .field{
-      display:flex; flex-direction:column; gap:6px;
-      min-width: 180px;
-    }
-    .field label{
-      font-size:10px; letter-spacing:.16em; text-transform:uppercase;
-      color:var(--muted);
-    }
-    .input, select{
-      height:40px;
-      background: rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:12px;
-      color:var(--text);
-      padding:0 12px;
-      outline:none;
-    }
-    .input:focus, select:focus{
-      border-color: rgba(0,174,239,.55);
-      box-shadow: 0 0 0 3px rgba(0,174,239,.16);
-    }
-    .searchWrap{ min-width: 260px; flex: 1 1 260px; }
-    .rowActions{ display:flex; gap:10px; align-items:center; margin-left:auto; flex-wrap:wrap; }
+    .btn { appearance:none; border:0; border-radius: 999px; padding: 10px 14px; font-weight: 900; letter-spacing:.06em; text-transform: uppercase; cursor:pointer; }
+    .btn.primary { background:#00AEEF; color:#001018; }
+    .btn.ghost { background: rgba(255,255,255,.08); color:#e8f2ff; border:1px solid rgba(255,255,255,.12); }
+    .btn.danger { background: rgba(255,80,80,.18); color:#ffd1d1; border:1px solid rgba(255,80,80,.25); }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
 
-    /* Table */
-    .tableWrap{ padding:12px; }
-    .tableBox{
-      border:1px solid var(--stroke2);
-      border-radius:16px;
-      overflow:hidden;
-      background: rgba(0,0,0,.16);
+    .toolbar { display:flex; gap:10px; align-items:center; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); flex-wrap:wrap; }
+    .toolbar input, .toolbar select {
+      background: rgba(0,0,0,.35); color:#e8f2ff; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 10px 12px; outline:none;
     }
-    table{ width:100%; border-collapse:collapse; font-size:13px; }
-    th,td{ padding:10px 10px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; }
-    th{
-      font-size:11px; opacity:.75; letter-spacing:.14em; text-transform:uppercase;
-      background: rgba(0,0,0,.25);
-    }
-    tr:hover td{ background: rgba(0,174,239,.07); cursor:pointer; }
-    .mono{ font-family:var(--mono); font-size:12px; }
-    .badge{
-      display:inline-flex; align-items:center; gap:8px;
-      border-radius:999px; padding:6px 10px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      font-size:11px;
-      white-space:nowrap;
-    }
-    .badge.good{ border-color: rgba(158,255,192,.35); background: rgba(158,255,192,.10); }
-    .badge.bad{ border-color: rgba(255,123,123,.35); background: rgba(255,123,123,.10); }
 
-    .statusLine{
-      padding:10px 12px;
-      border-top:1px solid var(--stroke);
-      font-size:12px;
-      color:var(--muted);
-      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-    }
-    .statusLine .left{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    .statusLine .right{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .hintSmall{ font-size:12px; color:var(--muted); }
+    .dash { display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:10px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    @media (max-width: 1100px){ .dash{ grid-template-columns: 1fr 1fr; } }
+    .kpi { background: rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 12px 12px; }
+    .kpi .k { font-size: 11px; letter-spacing:.14em; text-transform: uppercase; opacity:.72; display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .kpi .v { font-size: 20px; font-weight: 900; margin-top: 6px; }
+    .kpi .s { font-size: 12px; opacity:.75; margin-top: 4px; }
+    .kpi .mini { font-size: 11px; opacity:.8; }
+    .kpi button { margin-top: 8px; }
+
+    .grid { display:grid; grid-template-columns: 1.3fr .7fr; gap: 12px; padding: 12px; }
+    @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+    .panel { background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow:hidden; }
+    .panel h2 { margin:0; padding: 12px 14px; font-size: 12px; letter-spacing:.18em; text-transform: uppercase; opacity:.8; border-bottom:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center; }
+    .panel .body { padding: 12px 14px; }
+
+    table { width:100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; }
+    th { font-size: 11px; opacity:.7; letter-spacing:.14em; text-transform: uppercase; position: sticky; top: 0; background: rgba(7,16,24,.95); }
+    tr:hover td { background: rgba(0,174,239,.06); cursor:pointer; }
+
+    .statusbar { padding: 10px 14px; font-size: 12px; border-top:1px solid rgba(255,255,255,.08); opacity:.90; }
+    .statusbar.error { color:#ffb3b3; }
+    .statusbar.ok { color:#b6ffcf; }
 
     /* Modal */
-    .modalBack{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.65);
-      display:none;
-      place-items:center;
-      padding:18px;
-      z-index:80;
+    .modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.62); display:none; align-items:center; justify-content:center; padding: 18px; z-index: 9999; }
+    .modalOverlay.show { display:flex; }
+    .modal { width: min(860px, 100%); max-height: 92vh; overflow:auto; background: rgba(10,18,26,.98); border:1px solid rgba(255,255,255,.10); border-radius: 18px; box-shadow: 0 30px 120px rgba(0,0,0,.65); }
+    .modalHead { display:flex; justify-content:space-between; gap:10px; align-items:center; padding: 12px 14px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .modalHead .t { font-weight: 900; letter-spacing:.10em; text-transform: uppercase; font-size: 12px; opacity:.85; }
+    .modalBody { padding: 12px 14px; }
+    form .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    @media (max-width: 760px){ form .row{ grid-template-columns: 1fr; } }
+    form label { font-size: 11px; opacity:.75; letter-spacing:.14em; text-transform: uppercase; display:block; margin: 0 0 6px; }
+    form input, form textarea, form select {
+      width:100%; box-sizing:border-box;
+      background: rgba(0,0,0,.35); color:#e8f2ff;
+      border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 10px 12px; outline:none;
     }
-    .modalBack.open{ display:grid; }
-    .modal{
-      width:min(920px, 100%);
-      background: rgba(8,18,28,.98);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:18px;
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-    }
-    .modalHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(0,174,239,.14), rgba(255,255,255,0));
-    }
-    .modalHead h2{
-      margin:0; font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.9;
-    }
-    .modalBody{ padding:14px; }
-    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-    @media (max-width: 900px){ .grid2{ grid-template-columns:1fr; } }
-    .grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; }
-    @media (max-width: 900px){ .grid3{ grid-template-columns:1fr; } }
-
-    .modalBody label{
-      font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
-      display:block; margin:0 0 6px;
-    }
-    .modalBody input, .modalBody select, .modalBody textarea{
-      width:100%;
-      background: rgba(0,0,0,.35);
+    form textarea { min-height: 86px; resize: vertical; }
+    .actions { display:flex; gap:10px; align-items:center; margin-top: 10px; flex-wrap:wrap; }
+    .note { font-size: 12px; opacity:.75; line-height:1.45; }
+    .muted { opacity:.7; }
+    .chip { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); font-size: 11px; letter-spacing:.06em; text-transform: uppercase; }
+    .dropdown { position: relative; }
+    .menu {
+      position: absolute; right: 0; top: calc(100% + 8px);
+      min-width: 300px;
+      background: rgba(10,18,26,.98);
       border:1px solid rgba(255,255,255,.12);
-      border-radius:12px;
-      color:var(--text);
-      padding:10px 12px;
-      outline:none;
+      border-radius: 14px;
+      box-shadow: 0 20px 80px rgba(0,0,0,.6);
+      padding: 10px;
+      display:none;
+      z-index: 50;
     }
-    .modalBody textarea{ min-height:88px; resize:vertical; }
-    .modalBody input:focus, .modalBody select:focus, .modalBody textarea:focus{
-      border-color: rgba(0,174,239,.55);
-      box-shadow: 0 0 0 3px rgba(0,174,239,.16);
-    }
-    .modalFoot{
-      padding:12px 14px;
-      border-top:1px solid rgba(255,255,255,.10);
-      display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-    }
-    .modalFoot .note{ color:var(--muted); font-size:12px; line-height:1.35; }
-
-    /* Variations */
-    .vars{
-      margin-top:10px;
-      padding:12px;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:14px;
-      background: rgba(0,0,0,.18);
-    }
-    .varsHead{
-      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .varsHead .t{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
-    .varRow{
-      display:grid; grid-template-columns: 1.2fr .8fr .8fr .8fr .6fr auto;
-      gap:10px; align-items:end;
-      padding:10px 0;
-      border-top:1px solid rgba(255,255,255,.08);
-    }
-    .varRow:first-of-type{ border-top:0; padding-top:0; }
-    @media (max-width: 980px){
-      .varRow{ grid-template-columns: 1fr 1fr; }
-    }
-    .miniBtn{
-      height:40px; border-radius:12px; padding:0 12px;
+    .menu.show { display:block; }
+    .menu h3 { margin: 0 0 8px; font-size: 11px; letter-spacing:.14em; text-transform: uppercase; opacity:.8; }
+    .menu .rowbtn { display:flex; gap:8px; flex-wrap:wrap; }
+    .menu .rowbtn a, .menu .rowbtn button {
+      text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 12px; border-radius: 999px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
-      color:var(--text); cursor:pointer;
-      font-weight:900; letter-spacing:.06em; text-transform:uppercase;
+      color:#e8f2ff; font-weight: 900; letter-spacing:.06em; text-transform: uppercase; font-size: 11px;
+      cursor:pointer;
     }
-    .miniBtn:hover{ border-color: rgba(255,255,255,.20); }
-    .miniBtn.danger{ background: rgba(255,123,123,.16); border-color: rgba(255,123,123,.35); }
+    .menu .rowbtn a:hover, .menu .rowbtn button:hover { background: rgba(0,174,239,.10); border-color: rgba(0,174,239,.35); }
 
-    /* Toast + Easter eggs */
-    .toast{
-      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
-      background: rgba(8,18,28,.98);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:999px;
-      padding:10px 14px;
-      box-shadow: var(--shadow2);
-      color:var(--text);
-      font-size:12px;
-      letter-spacing:.02em;
+    /* Small “easter egg” overlays */
+    .toast {
+      position: fixed; left: 50%; top: 12%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.75);
+      border: 1px solid rgba(255,255,255,.15);
+      padding: 14px 16px;
+      border-radius: 16px;
+      box-shadow: 0 20px 80px rgba(0,0,0,.6);
+      font-weight: 900;
+      letter-spacing:.08em;
+      text-transform: uppercase;
       display:none;
-      z-index:100;
-      max-width: calc(100vw - 36px);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      z-index: 10000;
     }
-    .toast.show{ display:block; }
-
-    .overlayFx{
-      position:fixed; inset:0;
-      pointer-events:none;
-      display:none;
-      z-index:120;
-    }
-    .overlayFx.show{ display:block; }
-    .thumb{
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      font-size:110px;
-      animation: pop 900ms ease-out forwards;
-      text-shadow: 0 25px 75px rgba(0,0,0,.55);
-    }
-    @keyframes pop{
-      0%{ transform:scale(.6); opacity:0; }
-      18%{ transform:scale(1.05); opacity:1; }
-      70%{ transform:scale(1.0); opacity:1; }
-      100%{ transform:scale(1.0); opacity:0; }
-    }
-
-    .money{
-      position:absolute; left:0; top:0; width:100%; height:100%;
-      overflow:hidden;
-    }
-    .bill{
-      position:absolute; top:-40px;
-      font-size:26px;
-      opacity:.95;
-      animation: fall 1100ms linear forwards;
-      filter: drop-shadow(0 18px 22px rgba(0,0,0,.55));
-    }
-    @keyframes fall{
-      to { transform: translateY(calc(100vh + 80px)) rotate(240deg); opacity:.85; }
-    }
+    .toast.show { display:block; }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card">
-      <div class="top">
-        <div class="brand">
-          <div class="logo">G</div>
-          <div class="title">
-            <h1>G HUB PRO</h1>
-            <div class="sub" id="subLine">Loading…</div>
-          </div>
+
+      <header>
+        <div class="title">
+          <h1>G HUB PRO</h1>
+          <div class="sub">Grenada Inventory</div>
         </div>
 
-        <div class="topActions">
-          <a class="btn" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
-          <a class="btn" href="https://vinylpressusa.com/grenada-dashboard-mobile" target="_blank" rel="noopener">Dashboard Mobile</a>
+        <div class="toplinks">
+          <a class="pilllink" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
+          <a class="pilllink" href="https://vinylpressusa.com/grenada-dashboard-mobile" target="_blank" rel="noopener">Dashboard Mobile</a>
 
-          <div class="menuWrap">
-            <button class="btn" id="btnMenu">GPRO Hub ▾</button>
-            <div class="menu" id="menu">
+          <div class="dropdown">
+            <button id="btnHub" class="btn ghost">GPRO Hub ▾</button>
+            <div id="hubMenu" class="menu" aria-hidden="true">
               <h3>Quick Actions</h3>
-              <div class="menuGrid">
-                <a class="btn primary" href="tel:+16107035185">Call Michael</a>
-                <a class="btn primary" href="tel:+14845135528">Call Quencie</a>
-                <button class="btn" id="btnCopyMichael">Copy Michael #</button>
-                <button class="btn" id="btnCopyQuencie">Copy Quencie #</button>
+              <div class="rowbtn">
+                <a href="tel:+16107035185">Call Michael</a>
+                <a href="tel:+14845135528">Call Quencie</a>
+                <button type="button" data-copy="+16107035185">Copy Michael #</button>
+                <button type="button" data-copy="+14845135528">Copy Quencie #</button>
               </div>
-              <div class="hint">
-                If a page ever says “Load failed”, open your browser DevTools Console to see the exact error.
+              <div class="note" style="margin-top:10px;">
+                If a page ever says “Load failed”, open DevTools Console to see the exact error.
               </div>
             </div>
           </div>
 
-          <button class="btn" id="btnReload">Reload</button>
-          <button class="btn primary" id="btnAdd">+ Add Product</button>
         </div>
+      </header>
+
+      <div class="toolbar">
+        <button id="btnReload" class="btn ghost">Reload</button>
+        <button id="btnAdd" class="btn primary">+ Add Product</button>
+
+        <span class="chip">Shipment:
+          <select id="shipFilter" style="padding:8px 10px; border-radius:10px;">
+            <option value="">All</option>
+          </select>
+        </span>
+
+        <span class="chip">Category:
+          <select id="catFilter" style="padding:8px 10px; border-radius:10px;">
+            <option value="">All</option>
+          </select>
+        </span>
+
+        <span class="chip">Status:
+          <select id="statusFilter" style="padding:8px 10px; border-radius:10px;">
+            <option value="">All</option>
+          </select>
+        </span>
+
+        <span class="chip">Price Approved:
+          <select id="approvedFilter" style="padding:8px 10px; border-radius:10px;">
+            <option value="">All</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="(blank)">(blank)</option>
+          </select>
+        </span>
+
+        <input id="q" type="search" placeholder="Search Product Name..." style="min-width: 220px;" />
+        <button id="btnClear" class="btn ghost">Clear Filters</button>
+
+        <button id="btnAddShipment" class="btn ghost">+ Add Shipment</button>
       </div>
 
       <div class="dash">
-        <div class="stat">
-          <div>
-            <div class="k">Total items (filtered)</div>
-            <div class="v" id="statItems">0</div>
-            <div class="small" id="statShipLabel">Shipment: All</div>
-          </div>
-          <div class="pill ok" id="pillLoaded"><span class="dot"></span><strong id="pillLoadedText">Loading…</strong></div>
+        <div class="kpi">
+          <div class="k">Total items <span class="mini muted">(filtered)</span></div>
+          <div id="kpiItems" class="v">0</div>
+          <div class="s muted">Count of rows</div>
         </div>
 
-        <div class="stat">
-          <div>
-            <div class="k">Total cost (USD)</div>
-            <div class="v" id="statCost">$0.00</div>
-            <div class="small">Sum of “Cost Price USD” × Quantity</div>
-          </div>
-          <div class="pill" id="pillShipment"><span class="dot"></span><strong id="pillShipCount">0</strong> shipments</div>
+        <div class="kpi">
+          <div class="k">Total cost (USD)</div>
+          <div id="kpiCost" class="v">$0.00</div>
+          <div class="s muted">Sum of Cost Price USD × Quantity</div>
         </div>
 
-        <div class="stat">
-          <div>
-            <div class="k">Attention</div>
-            <div class="small" style="margin-top:8px; display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="btn" id="btnNeedsPrice">Needs Price Approved: <strong id="needPriceCount">0</strong></button>
-              <button class="btn" id="btnNeedsResale">Missing Resale Price: <strong id="needResaleCount">0</strong></button>
-            </div>
-            <div class="small" style="margin-top:8px; color:var(--muted);">Tap to filter the table.</div>
+        <div class="kpi">
+          <div class="k">Shipments</div>
+          <div id="kpiShips" class="v">0</div>
+          <div class="s muted">Unique shipment names</div>
+        </div>
+
+        <div class="kpi">
+          <div class="k">Attention</div>
+          <div class="s">
+            Needs Price Approved: <b id="kpiNeedApproved">0</b><br/>
+            Missing Resale Price: <b id="kpiNeedResale">0</b>
           </div>
-          <div class="pill warn" id="pillNeeds"><span class="dot"></span><strong id="needTotal">0</strong> flagged</div>
+          <div class="note muted" style="margin-top:8px;">Tap a button to filter the table.</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+            <button id="btnFilterNeedApproved" class="btn ghost">Needs Approval</button>
+            <button id="btnFilterNeedResale" class="btn ghost">Needs Resale Price</button>
+          </div>
         </div>
       </div>
 
-      <div class="filters">
-        <div class="field">
-          <label>Shipment</label>
-          <select id="fShipment"></select>
-        </div>
-
-        <div class="field">
-          <label>Category</label>
-          <select id="fCategory"></select>
-        </div>
-
-        <div class="field">
-          <label>Status</label>
-          <select id="fStatus"></select>
-        </div>
-
-        <div class="field">
-          <label>Price Approved</label>
-          <select id="fPriceApproved">
-            <option value="">All</option>
-            <option value="yes">Yes</option>
-            <option value="no">No / Blank</option>
-          </select>
-        </div>
-
-        <div class="field searchWrap">
-          <label>Search Product Name</label>
-          <input id="fSearch" class="input" type="search" placeholder="Type a product name…" />
-        </div>
-
-        <div class="rowActions">
-          <button class="btn" id="btnAddShipment">+ Add Shipment</button>
-          <button class="btn" id="btnClear">Clear Filters</button>
-        </div>
-      </div>
-
-      <div class="tableWrap">
-        <div class="tableBox">
-          <div style="overflow:auto; max-height:62vh;">
-            <table id="tbl">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Shipment</th>
-                  <th>Category</th>
-                  <th>Qty</th>
-                  <th>Cost USD</th>
-                  <th>Selling XCD</th>
-                  <th>Status</th>
-                  <th>Price Approved</th>
-                  <th>Shipping Status</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+      <div class="grid">
+        <div class="panel">
+          <h2>
+            <span>Inventory</span>
+            <span id="selectedLabel" class="muted" style="font-size:11px; letter-spacing:.08em; text-transform: uppercase;">No row selected</span>
+          </h2>
+          <div class="body" style="padding:0;">
+            <div style="overflow:auto; max-height: 62vh;">
+              <table id="tbl">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Shipment</th>
+                    <th>Category</th>
+                    <th>Qty</th>
+                    <th>Cost USD</th>
+                    <th>Selling XCD</th>
+                    <th>Status</th>
+                    <th>Price Approved</th>
+                    <th>Shipping Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div id="loadMsg" class="statusbar">Loading…</div>
           </div>
-          <div class="statusLine">
-            <div class="left">
-              <span class="hintSmall" id="lineHint">Click a row to edit.</span>
-              <span class="hintSmall mono" id="lineKey"></span>
+        </div>
+
+        <div class="panel">
+          <h2>Actions</h2>
+          <div class="body">
+            <div class="note muted">Click a row to edit. Use Add Product to create.</div>
+            <div class="actions" style="margin-top:12px;">
+              <button id="btnOpenModal" class="btn primary" disabled>Edit Selected</button>
+              <button id="btnDelete" class="btn danger" disabled>Delete</button>
+              <button id="btnOpenLink" class="btn ghost" disabled>Open Online Link</button>
             </div>
-            <div class="right">
-              <button class="btn danger" id="btnDelete" disabled>Delete Selected</button>
-              <button class="btn" id="btnOpenLink" disabled>Open Online Link</button>
-            </div>
+          </div>
+          <div class="statusbar note">
+            Tip: Online Link becomes clickable from the table and via the button.
           </div>
         </div>
       </div>
 
     </div>
   </div>
+
+  <div id="toast" class="toast"></div>
 
   <!-- Modal -->
-  <div class="modalBack" id="modalBack" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Add/Edit Product">
+  <div id="modalOverlay" class="modalOverlay" aria-hidden="true">
+    <div class="modal">
       <div class="modalHead">
-        <h2 id="modalTitle">Add / Edit Product</h2>
+        <div class="t" id="modalTitle">Add / Edit Product</div>
         <div style="display:flex; gap:10px; align-items:center;">
-          <button class="btn" id="btnClose">Close</button>
-          <button class="btn primary" id="btnSave">Save</button>
+          <button id="btnCloseModal" class="btn ghost">Close</button>
+          <button id="btnSave" class="btn primary">Save</button>
         </div>
       </div>
-
       <div class="modalBody">
-        <div class="grid2">
-          <div>
-            <label>Product Name *</label>
-            <input id="inName" />
-          </div>
-          <div>
-            <label>Shipment *</label>
-            <input id="inShipment" list="dlShipments" placeholder="e.g., March Shipment 4-7-3" />
-            <datalist id="dlShipments"></datalist>
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:12px;">
-          <div>
-            <label>Category/Tab *</label>
-            <input id="inCategory" list="dlCategories" placeholder="Apparel / Shoes / Electronics / Used / …" />
-            <datalist id="dlCategories"></datalist>
-          </div>
-          <div>
-            <label>Status</label>
-            <select id="inStatus"></select>
-          </div>
-        </div>
-
-        <div class="grid3" style="margin-top:12px;">
-          <div>
-            <label>Cost Price USD</label>
-            <input id="inCost" inputmode="decimal" placeholder="e.g., 12.99" />
-          </div>
-          <div>
-            <label>Selling Price XCD</label>
-            <input id="inSell" inputmode="decimal" placeholder="e.g., 45.00" />
-          </div>
-          <div>
-            <label>Quantity</label>
-            <input id="inQty" inputmode="numeric" placeholder="e.g., 6" />
-          </div>
-        </div>
-
-        <div class="grid3" style="margin-top:12px;">
-          <div>
-            <label>Price Approved</label>
-            <select id="inPriceApproved">
-              <option value="">Blank</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-          <div>
-            <label>Shipping Status</label>
-            <select id="inShippingStatus"></select>
-          </div>
-          <div>
-            <label>Ship Date</label>
-            <input id="inShipDate" type="date" />
-          </div>
-        </div>
-
-        <div class="grid3" style="margin-top:12px;">
-          <div>
-            <label>Shipped Date (optional)</label>
-            <input id="inShippedDate" type="date" />
-          </div>
-          <div>
-            <label>Gender</label>
-            <input id="inGender" placeholder="Men / Women / Unisex" />
-          </div>
-          <div>
-            <label>Size / Shoe Size</label>
-            <div style="display:flex; gap:10px;">
-              <input id="inSize" placeholder="Size" />
-              <input id="inShoe" placeholder="Shoe Size" />
+        <form id="frm">
+          <div class="row">
+            <div>
+              <label>Product Name *</label>
+              <input name="Product Name" required />
             </div>
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:12px;">
-          <div>
-            <label>Image URL</label>
-            <input id="inImage" placeholder="Paste image URL (Google Drive public link, WP Media URL, etc.)" />
-            <div class="hintSmall" style="margin-top:6px;">
-              Phone camera photos are not “URLs” until uploaded somewhere (WordPress Media Library, Google Drive shared, etc.).
-            </div>
-          </div>
-          <div>
-            <label>Online Link</label>
-            <input id="inLink" placeholder="https://…" />
-            <div class="hintSmall" style="margin-top:6px;">This becomes clickable from the table.</div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px;">
-          <label>Note</label>
-          <textarea id="inNote" placeholder="Notes…"></textarea>
-        </div>
-
-        <!-- Variations -->
-        <div class="vars">
-          <div class="varsHead">
-            <div class="t">Variants (stored into “Variations JSON”)</div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="miniBtn" id="btnAddVar" type="button">+ Add Variant</button>
-              <button class="miniBtn" id="btnClearVars" type="button">Clear Variants</button>
+            <div>
+              <label>Shipment *</label>
+              <input name="Shipment" required placeholder="e.g., March shipment 4-7-3" list="shipmentList" />
+              <datalist id="shipmentList"></datalist>
             </div>
           </div>
 
-          <div id="varsList"></div>
-
-          <div class="hintSmall" style="margin-top:10px;">
-            Recommended structure: one “Product” row with variants inside JSON (colors/sizes/qty/price deltas).
+          <div class="row">
+            <div>
+              <label>Category/Tab *</label>
+              <input name="Category/Tab" required list="categoryList" placeholder="Choose or type" />
+              <datalist id="categoryList"></datalist>
+            </div>
+            <div>
+              <label>Status</label>
+              <input name="Status" list="statusList" placeholder="In Stock / Sold / Watchlist" />
+              <datalist id="statusList"></datalist>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="modalFoot">
-        <div class="note" id="modalMsg">Ready.</div>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <span class="badge" id="badgeSelected">No row selected</span>
-        </div>
+          <div class="row">
+            <div>
+              <label>Cost Price USD</label>
+              <input name="Cost Price USD" inputmode="decimal" placeholder="" />
+            </div>
+            <div>
+              <label>Selling Price XCD</label>
+              <input name="Selling Price XCD" inputmode="decimal" placeholder="" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Quantity</label>
+              <input name="Quantity" inputmode="numeric" placeholder="" />
+            </div>
+            <div>
+              <label>Price Approved</label>
+              <select name="Price Approved">
+                <option value=""></option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Shipping Status</label>
+              <input name="Shipping Status" list="shipStatusList" placeholder="In Inventory / Ready / Shipped" />
+              <datalist id="shipStatusList"></datalist>
+            </div>
+            <div>
+              <label>Ship Date</label>
+              <input name="Ship Date" placeholder="Optional" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Shipped Date (optional)</label>
+              <input name="Shipped Date (optional but recommended)" placeholder="Optional" />
+            </div>
+            <div>
+              <label>Gender</label>
+              <input name="Gender" placeholder="Optional" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Size</label>
+              <input name="Size" placeholder="Optional" />
+            </div>
+            <div>
+              <label>Shoe Size</label>
+              <input name="Shoe Size" placeholder="Optional" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Image URL</label>
+              <input name="Image URL" placeholder="Must be a web URL (uploaded somewhere)" />
+              <div class="note muted" style="margin-top:6px;">
+                Phone camera photos are not “URLs” until uploaded (WordPress Media Library, Google Drive shared, etc.).
+              </div>
+            </div>
+            <div>
+              <label>Online Link</label>
+              <input name="Online Link" placeholder="https://…" />
+              <div class="note muted" style="margin-top:6px;">This becomes clickable from the table.</div>
+            </div>
+          </div>
+
+          <div>
+            <label>Note</label>
+            <textarea name="Note"></textarea>
+          </div>
+
+          <div style="margin-top:14px;">
+            <label>Variants (stored into “Variations JSON”)</label>
+            <div class="note muted" style="margin-bottom:10px;">
+              One product row + variants stored as JSON for color/size breakdown.
+            </div>
+            <div id="variantList" class="note"></div>
+            <div class="actions">
+              <button id="btnAddVariant" type="button" class="btn ghost">+ Add Variant</button>
+              <button id="btnClearVariants" type="button" class="btn ghost">Clear Variants</button>
+            </div>
+            <input type="hidden" name="Variations JSON" />
+          </div>
+
+          <div class="actions" style="margin-top:16px;">
+            <button id="btnDeleteInModal" type="button" class="btn danger">Delete</button>
+            <span id="formMsg" class="note"></span>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 
-  <!-- Toast + FX -->
-  <div class="toast" id="toast"></div>
-  <div class="overlayFx" id="fx">
-    <div class="thumb" id="fxThumb">👍</div>
-    <div class="money" id="fxMoney"></div>
-  </div>
+<script>
+  // === CONFIG: Apps Script Web App URL ===
+  const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
 
-  <script>
-    /**********************
-     * CONFIG
-     **********************/
-    const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+  const $ = (sel) => document.querySelector(sel);
 
-    // Headers expected in the sheet (must match your actual header row spelling)
-    const HEADERS = [
-      "Product Name","Shipment","Category/Tab","Image URL","Cost Price USD","Selling Price XCD","Quantity",
-      "Online Link","Note","Status","Price Approved","Ship Date","Gender","Size","Shoe Size",
-      "Shipping Status","Shipped Date","Variations JSON"
-    ];
+  // UI
+  const tblBody = $("#tbl tbody");
+  const loadMsg = $("#loadMsg");
+  const q = $("#q");
+  const shipFilter = $("#shipFilter");
+  const catFilter = $("#catFilter");
+  const statusFilter = $("#statusFilter");
+  const approvedFilter = $("#approvedFilter");
+  const btnReload = $("#btnReload");
+  const btnAdd = $("#btnAdd");
+  const btnClear = $("#btnClear");
+  const btnAddShipment = $("#btnAddShipment");
 
-    // Presets (if sheet contains different/new values, they will be merged)
-    const STATUS_PRESET = [
-      "In Stock","Sold","Watchlist","Needs Resale Price","Price Check"
-    ];
-    const SHIP_STATUS_PRESET = [
-      "Not Shipped","Ready to Ship","Shipped"
-    ];
+  const kpiItems = $("#kpiItems");
+  const kpiCost = $("#kpiCost");
+  const kpiShips = $("#kpiShips");
+  const kpiNeedApproved = $("#kpiNeedApproved");
+  const kpiNeedResale = $("#kpiNeedResale");
+  const btnFilterNeedApproved = $("#btnFilterNeedApproved");
+  const btnFilterNeedResale = $("#btnFilterNeedResale");
 
-    const PHONE_MICHAEL = "+16107035185";
-    const PHONE_QUENCIE = "+14845135528";
+  const btnOpenModal = $("#btnOpenModal");
+  const btnDelete = $("#btnDelete");
+  const btnOpenLink = $("#btnOpenLink");
+  const selectedLabel = $("#selectedLabel");
 
-    /**********************
-     * DOM
-     **********************/
-    const $ = (s)=>document.querySelector(s);
-    const tblBody = $("#tbl tbody");
+  // Hub menu
+  const btnHub = $("#btnHub");
+  const hubMenu = $("#hubMenu");
 
-    const subLine = $("#subLine");
+  // Modal/form
+  const modalOverlay = $("#modalOverlay");
+  const btnCloseModal = $("#btnCloseModal");
+  const btnSave = $("#btnSave");
+  const frm = $("#frm");
+  const formMsg = $("#formMsg");
+  const btnDeleteInModal = $("#btnDeleteInModal");
 
-    const pillLoaded = $("#pillLoaded");
-    const pillLoadedText = $("#pillLoadedText");
+  // datalists
+  const shipmentList = $("#shipmentList");
+  const categoryList = $("#categoryList");
+  const statusList = $("#statusList");
+  const shipStatusList = $("#shipStatusList");
 
-    const statItems = $("#statItems");
-    const statCost = $("#statCost");
-    const statShipLabel = $("#statShipLabel");
-    const pillShipCount = $("#pillShipCount");
+  // variants
+  const variantList = $("#variantList");
+  const btnAddVariant = $("#btnAddVariant");
+  const btnClearVariants = $("#btnClearVariants");
 
-    const needPriceCount = $("#needPriceCount");
-    const needResaleCount = $("#needResaleCount");
-    const needTotal = $("#needTotal");
+  // toast
+  const toast = $("#toast");
 
-    const fShipment = $("#fShipment");
-    const fCategory = $("#fCategory");
-    const fStatus = $("#fStatus");
-    const fPriceApproved = $("#fPriceApproved");
-    const fSearch = $("#fSearch");
+  // Data
+  let rows = [];
+  let selected = null; // actual object row
+  let variants = []; // array of {color,size,gender,qty,notes}
 
-    const btnReload = $("#btnReload");
-    const btnAdd = $("#btnAdd");
-    const btnClear = $("#btnClear");
-    const btnAddShipment = $("#btnAddShipment");
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const norm = (s) => String(s ?? "").trim();
+  const lower = (s) => norm(s).toLowerCase();
 
-    const btnNeedsPrice = $("#btnNeedsPrice");
-    const btnNeedsResale = $("#btnNeedsResale");
+  function moneyUSD(n){
+    const x = Number(String(n ?? "").replace(/[^0-9.\-]/g,""));
+    if (!isFinite(x)) return 0;
+    return x;
+  }
+  function qtyNum(n){
+    const x = Number(String(n ?? "").replace(/[^0-9.\-]/g,""));
+    if (!isFinite(x)) return 0;
+    return x;
+  }
 
-    const btnDelete = $("#btnDelete");
-    const btnOpenLink = $("#btnOpenLink");
-    const lineKey = $("#lineKey");
+  function setLoad(text, type="") {
+    loadMsg.textContent = text;
+    loadMsg.className = "statusbar" + (type ? " " + type : "");
+  }
 
-    const btnMenu = $("#btnMenu");
-    const menu = $("#menu");
-    const btnCopyMichael = $("#btnCopyMichael");
-    const btnCopyQuencie = $("#btnCopyQuencie");
+  function showToast(text, ms=1200){
+    toast.textContent = text;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), ms);
+  }
 
-    const modalBack = $("#modalBack");
-    const btnClose = $("#btnClose");
-    const btnSave = $("#btnSave");
-    const modalTitle = $("#modalTitle");
-    const modalMsg = $("#modalMsg");
-    const badgeSelected = $("#badgeSelected");
+  function keyOf(r){
+    return lower(r["Product Name"]) + "||" + lower(r["Shipment"]) + "||" + lower(r["Category/Tab"]);
+  }
 
-    const inName = $("#inName");
-    const inShipment = $("#inShipment");
-    const inCategory = $("#inCategory");
-    const inStatus = $("#inStatus");
+  function openModal(modeText){
+    $("#modalTitle").textContent = modeText;
+    modalOverlay.classList.add("show");
+    modalOverlay.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  }
+  function closeModal(){
+    modalOverlay.classList.remove("show");
+    modalOverlay.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+  }
 
-    const inCost = $("#inCost");
-    const inSell = $("#inSell");
-    const inQty = $("#inQty");
+  function clearForm(){
+    frm.reset();
+    selected = null;
+    variants = [];
+    frm.elements["Variations JSON"].value = "";
+    renderVariants();
+    formMsg.textContent = "";
+  }
 
-    const inPriceApproved = $("#inPriceApproved");
-    const inShippingStatus = $("#inShippingStatus");
-    const inShipDate = $("#inShipDate");
-    const inShippedDate = $("#inShippedDate");
-
-    const inGender = $("#inGender");
-    const inSize = $("#inSize");
-    const inShoe = $("#inShoe");
-
-    const inImage = $("#inImage");
-    const inLink = $("#inLink");
-    const inNote = $("#inNote");
-
-    const dlShipments = $("#dlShipments");
-    const dlCategories = $("#dlCategories");
-
-    const varsList = $("#varsList");
-    const btnAddVar = $("#btnAddVar");
-    const btnClearVars = $("#btnClearVars");
-
-    const toast = $("#toast");
-    const fx = $("#fx");
-    const fxThumb = $("#fxThumb");
-    const fxMoney = $("#fxMoney");
-
-    /**********************
-     * STATE
-     **********************/
-    let rows = [];         // raw data rows
-    let filtered = [];     // filtered for table
-    let selected = null;   // selected row object (reference from rows)
-    let selectedKey = "";  // key string
-
-    // quick filters toggles
-    let quickNeedPrice = false;
-    let quickNeedResale = false;
-
-    /**********************
-     * UTIL
-     **********************/
-    const esc = (s)=>String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    const nnum = (v)=> {
-      const x = String(v ?? "").replace(/[^0-9.\-]/g,"").trim();
-      if (!x) return 0;
-      const f = Number(x);
-      return Number.isFinite(f) ? f : 0;
-    };
-    const int0 = (v)=> {
-      const x = String(v ?? "").replace(/[^0-9\-]/g,"").trim();
-      if (!x) return 0;
-      const i = parseInt(x,10);
-      return Number.isFinite(i) ? i : 0;
-    };
-    const moneyUSD = (v)=> {
-      const f = Number(v);
-      try { return f.toLocaleString(undefined,{style:"currency",currency:"USD"}); }
-      catch { return "$" + f.toFixed(2); }
-    };
-    const lower = (s)=>String(s ?? "").trim().toLowerCase();
-
-    // Key = Product Name + Shipment + Category (prevents collisions)
-    const keyOf = (r)=> `${lower(r["Product Name"])}||${lower(r["Shipment"])}||${lower(r["Category/Tab"])}`;
-
-    function toastShow(msg){
-      toast.textContent = msg;
-      toast.classList.add("show");
-      setTimeout(()=>toast.classList.remove("show"), 2200);
+  function loadIntoForm(r){
+    clearForm();
+    selected = r;
+    for (const el of frm.elements) {
+      if (!el.name) continue;
+      el.value = r[el.name] ?? "";
     }
+    // load variants
+    try {
+      const v = r["Variations JSON"];
+      if (v) {
+        const parsed = JSON.parse(v);
+        if (Array.isArray(parsed)) variants = parsed;
+      }
+    } catch {}
+    frm.elements["Variations JSON"].value = variants.length ? JSON.stringify(variants) : "";
+    renderVariants();
+    selectedLabel.textContent = `${norm(r["Product Name"])} — ${norm(r["Shipment"])} — ${norm(r["Category/Tab"])}`.trim();
+    btnOpenModal.disabled = false;
+    btnDelete.disabled = false;
+    btnOpenLink.disabled = !norm(r["Online Link"]);
+  }
 
-    function setLoaded(ok, msg){
-      pillLoaded.classList.remove("ok","warn","bad");
-      pillLoaded.classList.add(ok ? "ok" : "bad");
-      pillLoadedText.textContent = msg;
-      subLine.textContent = msg;
-    }
+  function buildOptionsFromData(){
+    const shipSet = new Set();
+    const catSet = new Set();
+    const stSet = new Set();
+    const shipStatusSet = new Set();
 
-    function openModal(mode){
-      modalBack.classList.add("open");
-      modalBack.setAttribute("aria-hidden","false");
-      modalTitle.textContent = mode === "add" ? "Add Product" : "Edit Product";
-      modalMsg.textContent = "Ready.";
-      // close menu if open
-      menu.classList.remove("open");
-      setTimeout(()=>inName.focus(), 50);
-    }
-    function closeModal(){
-      modalBack.classList.remove("open");
-      modalBack.setAttribute("aria-hidden","true");
-    }
+    rows.forEach(r => {
+      const sh = norm(r["Shipment"]);
+      const ca = norm(r["Category/Tab"]);
+      const st = norm(r["Status"]);
+      const ss = norm(r["Shipping Status"]);
+      if (sh) shipSet.add(sh);
+      if (ca) catSet.add(ca);
+      if (st) stSet.add(st);
+      if (ss) shipStatusSet.add(ss);
+    });
 
-    function parseVariations(){
-      // returns array of objects
-      const list = [];
-      varsList.querySelectorAll("[data-varrow]").forEach(row=>{
-        const get = (name)=> row.querySelector(`[data-var="${name}"]`)?.value ?? "";
-        const obj = {
-          label: get("label").trim(),
-          color: get("color").trim(),
-          gender: get("gender").trim(),
-          size: get("size").trim(),
-          shoeSize: get("shoe").trim(),
-          qty: int0(get("qty")),
-        };
-        // drop empty rows
-        const meaningful = obj.label || obj.color || obj.gender || obj.size || obj.shoeSize || obj.qty;
-        if (meaningful) list.push(obj);
+    // filter dropdowns
+    const curShip = shipFilter.value;
+    const curCat = catFilter.value;
+    const curSt = statusFilter.value;
+
+    shipFilter.innerHTML = `<option value="">All</option>` + [...shipSet].sort().map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join("");
+    catFilter.innerHTML  = `<option value="">All</option>` + [...catSet].sort().map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join("");
+    statusFilter.innerHTML = `<option value="">All</option>` + [...stSet].sort().map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join("");
+
+    shipFilter.value = curShip;
+    catFilter.value = curCat;
+    statusFilter.value = curSt;
+
+    // datalists for form
+    shipmentList.innerHTML = [...shipSet].sort().map(x => `<option value="${esc(x)}"></option>`).join("");
+    categoryList.innerHTML = [...catSet].sort().map(x => `<option value="${esc(x)}"></option>`).join("");
+    statusList.innerHTML   = [...stSet].sort().map(x => `<option value="${esc(x)}"></option>`).join("");
+    shipStatusList.innerHTML = [...shipStatusSet].sort().map(x => `<option value="${esc(x)}"></option>`).join("");
+  }
+
+  function applyFilters(list){
+    const needle = lower(q.value);
+    const ship = norm(shipFilter.value);
+    const cat = norm(catFilter.value);
+    const st  = norm(statusFilter.value);
+    const ap  = norm(approvedFilter.value);
+
+    return list.filter(r => {
+      const okName = !needle || lower(r["Product Name"]).includes(needle);
+      const okShip = !ship || norm(r["Shipment"]) === ship;
+      const okCat  = !cat || norm(r["Category/Tab"]) === cat;
+      const okSt   = !st || norm(r["Status"]) === st;
+
+      let okAp = true;
+      const val = norm(r["Price Approved"]);
+      if (ap === "Yes" || ap === "No") okAp = (val === ap);
+      if (ap === "(blank)") okAp = (val === "");
+
+      return okName && okShip && okCat && okSt && okAp;
+    });
+  }
+
+  function computeKPIs(filtered){
+    kpiItems.textContent = String(filtered.length);
+
+    let totalCost = 0;
+    const shipSet = new Set();
+    let needApproved = 0;
+    let needResale = 0;
+
+    filtered.forEach(r => {
+      shipSet.add(norm(r["Shipment"]));
+      const qty = qtyNum(r["Quantity"]);
+      const cost = moneyUSD(r["Cost Price USD"]);
+      totalCost += qty * cost;
+
+      const approved = norm(r["Price Approved"]);
+      if (approved !== "Yes") needApproved++;
+
+      const selling = norm(r["Selling Price XCD"]);
+      if (!selling) needResale++;
+    });
+
+    kpiCost.textContent = totalCost.toLocaleString(undefined, { style:"currency", currency:"USD" });
+    kpiShips.textContent = String([...shipSet].filter(Boolean).length);
+    kpiNeedApproved.textContent = String(needApproved);
+    kpiNeedResale.textContent = String(needResale);
+  }
+
+  function renderTable(){
+    const filtered = applyFilters(rows);
+    computeKPIs(filtered);
+
+    tblBody.innerHTML = filtered.map(r => {
+      const k = keyOf(r);
+      return `<tr data-k="${esc(k)}">
+        <td>${esc(r["Product Name"])}</td>
+        <td>${esc(r["Shipment"])}</td>
+        <td>${esc(r["Category/Tab"])}</td>
+        <td>${esc(r["Quantity"] ?? "")}</td>
+        <td>${esc(r["Cost Price USD"] ?? "")}</td>
+        <td>${esc(r["Selling Price XCD"] ?? "")}</td>
+        <td>${esc(r["Status"] ?? "")}</td>
+        <td>${esc(r["Price Approved"] ?? "")}</td>
+        <td>${esc(r["Shipping Status"] ?? "")}</td>
+      </tr>`;
+    }).join("");
+
+    tblBody.querySelectorAll("tr").forEach(tr => {
+      tr.addEventListener("click", () => {
+        const k = tr.getAttribute("data-k");
+        const r = rows.find(x => keyOf(x) === k);
+        if (r) loadIntoForm(r);
       });
-      return list;
-    }
+    });
+  }
 
-    function renderVarRows(vars){
-      varsList.innerHTML = "";
-      (vars || []).forEach(v => addVarRow(v));
-      if (!vars || vars.length === 0) addVarRow({});
-    }
+  // ===== JSONP GET =====
+  function jsonp(url){
+    return new Promise((resolve, reject) => {
+      const cb = "cb_" + Math.random().toString(36).slice(2);
+      const s = document.createElement("script");
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error("JSONP timeout"));
+      }, 15000);
 
-    function addVarRow(v={}){
-      const row = document.createElement("div");
-      row.className = "varRow";
-      row.setAttribute("data-varrow","1");
-      row.innerHTML = `
-        <div>
-          <label>Label</label>
-          <input data-var="label" placeholder="e.g., Tee - Blue - L" value="${esc(v.label||"")}">
-        </div>
-        <div>
-          <label>Color</label>
-          <input data-var="color" placeholder="Blue" value="${esc(v.color||"")}">
-        </div>
-        <div>
-          <label>Gender</label>
-          <input data-var="gender" placeholder="Men/Women" value="${esc(v.gender||"")}">
-        </div>
-        <div>
-          <label>Size</label>
-          <input data-var="size" placeholder="L" value="${esc(v.size||"")}">
-        </div>
-        <div>
-          <label>Shoe</label>
-          <input data-var="shoe" placeholder="10" value="${esc(v.shoeSize||"")}">
-        </div>
-        <div>
-          <label>Qty</label>
-          <div style="display:flex; gap:10px;">
-            <input data-var="qty" inputmode="numeric" placeholder="0" value="${esc(v.qty ?? "")}">
-            <button class="miniBtn danger" type="button" title="Remove">✕</button>
-          </div>
-        </div>
-      `;
-      row.querySelector("button").addEventListener("click", ()=>{
-        row.remove();
-        if (varsList.children.length === 0) addVarRow({});
-      });
-      varsList.appendChild(row);
-    }
+      function cleanup(){
+        clearTimeout(timer);
+        delete window[cb];
+        s.remove();
+      }
 
-    function safeJsonParse(s){
-      try{ return JSON.parse(s); } catch{ return null; }
-    }
+      window[cb] = (payload) => {
+        cleanup();
+        resolve(payload);
+      };
 
-    function isBlank(v){
-      return String(v ?? "").trim() === "";
-    }
+      s.onerror = () => { cleanup(); reject(new Error("JSONP load error")); };
+      const sep = url.includes("?") ? "&" : "?";
+      s.src = url + sep + "callback=" + encodeURIComponent(cb) + "&_ts=" + Date.now();
+      document.head.appendChild(s);
+    });
+  }
 
-    function normalizeYesNo(v){
-      const x = lower(v);
-      if (x === "yes" || x === "y" || x === "true" || x === "approved") return "yes";
-      if (x === "no" || x === "n" || x === "false") return "no";
-      return "";
-    }
+  async function apiGet(){
+    setLoad("Loading…");
+    try {
+      const payload = await jsonp(API);
+      if (!payload || payload.ok !== true) throw new Error(payload?.error || "API error");
+      if (!Array.isArray(payload.data)) throw new Error("Unexpected response");
+      rows = payload.data;
 
-    /**********************
-     * JSONP GET (GitHub-safe)
-     **********************/
-    function apiGetJSONP(){
-      return new Promise((resolve,reject)=>{
-        const cb = "cb_" + Math.random().toString(16).slice(2);
-        const script = document.createElement("script");
-        const timeout = setTimeout(()=>{
-          cleanup();
-          reject(new Error("JSONP timeout"));
-        }, 15000);
-
-        function cleanup(){
-          clearTimeout(timeout);
-          delete window[cb];
-          script.remove();
-        }
-
-        window[cb] = (payload)=>{
-          cleanup();
-          resolve(payload);
-        };
-
-        script.onerror = ()=>{
-          cleanup();
-          reject(new Error("JSONP load error"));
-        };
-
-        // Cache-bust:
-        script.src = API + "?callback=" + encodeURIComponent(cb) + "&_t=" + Date.now();
-        document.head.appendChild(script);
-      });
-    }
-
-    /**********************
-     * POST via hidden iframe + postMessage (GitHub-safe)
-     * Requires your Apps Script doPost to support _pm=1 and parent.postMessage()
-     **********************/
-    function apiPostPM(params){
-      return new Promise((resolve,reject)=>{
-        const frame = document.createElement("iframe");
-        frame.style.display = "none";
-        frame.name = "pm_" + Math.random().toString(16).slice(2);
-
-        const form = document.createElement("form");
-        form.style.display = "none";
-        form.target = frame.name;
-        form.method = "POST";
-        form.action = API;
-
-        // Ensure postMessage response
-        params._pm = "1";
-
-        Object.keys(params).forEach(k=>{
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = k;
-          input.value = params[k] ?? "";
-          form.appendChild(input);
-        });
-
-        const timer = setTimeout(()=>{
-          cleanup();
-          reject(new Error("Save timeout"));
-        }, 20000);
-
-        function onMsg(ev){
-          // We cannot reliably origin-check because Apps Script posts "*"
-          const data = ev.data;
-          if (!data || typeof data !== "object") return;
-          if (!("ok" in data)) return;
-
-          cleanup();
-          resolve(data);
-        }
-
-        function cleanup(){
-          clearTimeout(timer);
-          window.removeEventListener("message", onMsg);
-          frame.remove();
-          form.remove();
-        }
-
-        window.addEventListener("message", onMsg);
-        document.body.appendChild(frame);
-        document.body.appendChild(form);
-        form.submit();
-      });
-    }
-
-    /**********************
-     * BUILD DROPDOWNS FROM DATA
-     **********************/
-    function uniqSorted(list){
-      return [...new Set(list.map(x=>String(x||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-    }
-
-    function fillSelect(select, values, firstLabel="All"){
-      select.innerHTML = `<option value="">${esc(firstLabel)}</option>` + values.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
-    }
-
-    function fillDatalist(dl, values){
-      dl.innerHTML = values.map(v=>`<option value="${esc(v)}"></option>`).join("");
-    }
-
-    function fillStatusSelect(){
-      const dataVals = uniqSorted(rows.map(r=>r["Status"]));
-      const merged = uniqSorted([...STATUS_PRESET, ...dataVals]);
-      inStatus.innerHTML = merged.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
-      fillSelect(fStatus, merged, "All Status");
-    }
-
-    function fillShipStatusSelect(){
-      const dataVals = uniqSorted(rows.map(r=>r["Shipping Status"]));
-      const merged = uniqSorted([...SHIP_STATUS_PRESET, ...dataVals]);
-      inShippingStatus.innerHTML = merged.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
-    }
-
-    function fillShipmentOptions(){
-      const ships = uniqSorted(rows.map(r=>r["Shipment"]));
-      fillSelect(fShipment, ships, "All Shipments");
-      fillDatalist(dlShipments, ships);
-      pillShipCount.textContent = ships.length;
-    }
-
-    function fillCategoryOptions(){
-      const cats = uniqSorted(rows.map(r=>r["Category/Tab"]));
-      fillSelect(fCategory, cats, "All Categories");
-      fillDatalist(dlCategories, cats);
-    }
-
-    /**********************
-     * FILTER + RENDER
-     **********************/
-    function applyFilters(){
-      const ship = fShipment.value.trim();
-      const cat = fCategory.value.trim();
-      const st  = fStatus.value.trim();
-      const appr = fPriceApproved.value;
-
-      const needle = fSearch.value.trim().toLowerCase();
-
-      filtered = rows.filter(r=>{
-        const okShip = !ship || String(r["Shipment"]||"").trim() === ship;
-        const okCat  = !cat  || String(r["Category/Tab"]||"").trim() === cat;
-        const okSt   = !st   || String(r["Status"]||"").trim() === st;
-
-        const pa = normalizeYesNo(r["Price Approved"]);
-        const okAppr =
-          !appr ||
-          (appr==="yes" ? pa==="yes" : pa!=="yes");
-
-        const okNeedPrice = !quickNeedPrice || (normalizeYesNo(r["Price Approved"]) !== "yes");
-        const okNeedResale = !quickNeedResale || isBlank(r["Selling Price XCD"]);
-
-        const name = String(r["Product Name"]||"").toLowerCase();
-        const okNeedle = !needle || name.includes(needle);
-
-        return okShip && okCat && okSt && okAppr && okNeedPrice && okNeedResale && okNeedle;
-      });
-
+      buildOptionsFromData();
       renderTable();
-      renderStats();
+      setLoad("Loaded.", "ok");
+    } catch (err){
+      setLoad("Load failed: " + err.message, "error");
     }
+  }
 
-    function renderTable(){
-      tblBody.innerHTML = filtered.map(r=>{
-        const k = keyOf(r);
-        const qty = int0(r["Quantity"]);
-        const cost = nnum(r["Cost Price USD"]);
-        const costTotal = cost * (qty || 0);
-        const sell = String(r["Selling Price XCD"] ?? "").trim();
-        const pa = normalizeYesNo(r["Price Approved"]) === "yes";
+  // ===== iframe POST + postMessage =====
+  function apiPost(params){
+    return new Promise((resolve, reject) => {
+      const iframeName = "pm_ifr_" + Math.random().toString(36).slice(2);
+      const iframe = document.createElement("iframe");
+      iframe.name = iframeName;
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
 
-        const shipStatus = String(r["Shipping Status"]||"").trim();
-        const shipBadge = shipStatus ? `<span class="badge">${esc(shipStatus)}</span>` : `<span class="badge">—</span>`;
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = API;
+      form.target = iframeName;
 
-        return `<tr data-k="${esc(k)}">
-          <td><strong>${esc(r["Product Name"]||"")}</strong></td>
-          <td>${esc(r["Shipment"]||"")}</td>
-          <td>${esc(r["Category/Tab"]||"")}</td>
-          <td class="mono">${esc(qty || "")}</td>
-          <td class="mono">${esc(cost ? moneyUSD(costTotal) : "")}</td>
-          <td class="mono">${esc(sell)}</td>
-          <td>${esc(r["Status"]||"")}</td>
-          <td>${pa ? `<span class="badge good">Approved</span>` : `<span class="badge bad">Needs</span>`}</td>
-          <td>${shipBadge}</td>
-        </tr>`;
-      }).join("");
+      // tell Apps Script to respond with postMessage HTML
+      params._pm = "1";
 
-      tblBody.querySelectorAll("tr").forEach(tr=>{
-        tr.addEventListener("click", ()=>{
-          const k = tr.getAttribute("data-k");
-          const r = rows.find(x=>keyOf(x)===k);
-          if (r) selectRow(r);
-        });
+      Object.entries(params).forEach(([k,v]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = k;
+        input.value = v ?? "";
+        form.appendChild(input);
       });
+
+      const timeout = setTimeout(() => {
+        cleanup();
+        reject(new Error("POST timeout"));
+      }, 20000);
+
+      function cleanup(){
+        clearTimeout(timeout);
+        window.removeEventListener("message", onMsg);
+        form.remove();
+        iframe.remove();
+      }
+
+      function onMsg(ev){
+        // Apps Script posts with "*" so we accept but validate shape.
+        const data = ev.data;
+        if (!data || typeof data !== "object" || data.ok === undefined) return;
+        cleanup();
+        if (data.ok !== true) reject(new Error(data.error || "Save failed"));
+        else resolve(data);
+      }
+
+      window.addEventListener("message", onMsg);
+
+      document.body.appendChild(form);
+      form.submit();
+    });
+  }
+
+  // Variants UI
+  function renderVariants(){
+    if (!variants.length){
+      variantList.innerHTML = `<div class="muted">No variants.</div>`;
+      frm.elements["Variations JSON"].value = "";
+      return;
     }
+    frm.elements["Variations JSON"].value = JSON.stringify(variants);
 
-    function renderStats(){
-      const ship = fShipment.value.trim();
-      statShipLabel.textContent = "Shipment: " + (ship || "All");
+    variantList.innerHTML = variants.map((v,i) => {
+      const c = esc(v.color || "");
+      const s = esc(v.size || "");
+      const g = esc(v.gender || "");
+      const q = esc(v.qty || "");
+      const n = esc(v.note || "");
+      return `<div style="display:flex; gap:10px; align-items:center; justify-content:space-between; padding:8px 10px; border:1px solid rgba(255,255,255,.10); border-radius: 12px; background: rgba(255,255,255,.05); margin-bottom:8px;">
+        <div style="font-size:12px;">
+          <b>${c || "(color)"}</b> • ${g || "(gender)"} • ${s || "(size)"} • Qty: ${q || "?"}
+          ${n ? `<div class="muted" style="margin-top:4px;">${n}</div>` : ""}
+        </div>
+        <button type="button" class="btn ghost" data-del-variant="${i}">Remove</button>
+      </div>`;
+    }).join("");
 
-      statItems.textContent = String(filtered.length);
-
-      // cost sum in filtered
-      let sum = 0;
-      filtered.forEach(r=>{
-        const qty = int0(r["Quantity"]);
-        const cost = nnum(r["Cost Price USD"]);
-        sum += cost * (qty || 0);
+    variantList.querySelectorAll("[data-del-variant]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = Number(btn.getAttribute("data-del-variant"));
+        variants.splice(i,1);
+        renderVariants();
       });
-      statCost.textContent = moneyUSD(sum);
+    });
+  }
 
-      // Attention counts based on ALL rows (or could be filtered-by-shipment only; do both: respect shipment filter)
-      const base = rows.filter(r => !ship || String(r["Shipment"]||"").trim()===ship);
+  btnAddVariant.addEventListener("click", () => {
+    const color = prompt("Variant color (optional):","") ?? "";
+    const gender = prompt("Variant gender (optional):","") ?? "";
+    const size = prompt("Variant size (optional):","") ?? "";
+    const qty = prompt("Variant quantity (optional):","") ?? "";
+    const note = prompt("Variant note (optional):","") ?? "";
+    variants.push({ color, gender, size, qty, note });
+    renderVariants();
+  });
 
-      const needPrice = base.filter(r => normalizeYesNo(r["Price Approved"]) !== "yes").length;
-      const needResale = base.filter(r => isBlank(r["Selling Price XCD"])).length;
+  btnClearVariants.addEventListener("click", () => {
+    variants = [];
+    renderVariants();
+  });
 
-      needPriceCount.textContent = String(needPrice);
-      needResaleCount.textContent = String(needResale);
-      needTotal.textContent = String(needPrice + needResale);
+  // Actions
+  btnReload.addEventListener("click", apiGet);
+
+  btnClear.addEventListener("click", () => {
+    q.value = "";
+    shipFilter.value = "";
+    catFilter.value = "";
+    statusFilter.value = "";
+    approvedFilter.value = "";
+    renderTable();
+  });
+
+  q.addEventListener("input", renderTable);
+  shipFilter.addEventListener("change", renderTable);
+  catFilter.addEventListener("change", renderTable);
+  statusFilter.addEventListener("change", renderTable);
+  approvedFilter.addEventListener("change", renderTable);
+
+  btnFilterNeedApproved.addEventListener("click", () => {
+    approvedFilter.value = "No";
+    renderTable();
+  });
+
+  btnFilterNeedResale.addEventListener("click", () => {
+    // “Missing resale price” means Selling Price XCD blank.
+    // We implement it by setting search needle to empty and filtering in render by manual pass:
+    // quick approach: set status to all, approved to all, then narrow via query token.
+    // Instead: set q to empty and use a temporary filter flag.
+    q.value = "";
+    renderTable();
+    // show a quick note
+    showToast("Filter: Missing Resale Price");
+    // apply manual filter by removing rows in DOM not matching (simple & safe)
+    [...tblBody.querySelectorAll("tr")].forEach(tr => {
+      const k = tr.getAttribute("data-k");
+      const r = rows.find(x => keyOf(x) === k);
+      const ok = r && !norm(r["Selling Price XCD"]);
+      tr.style.display = ok ? "" : "none";
+    });
+  });
+
+  btnAddShipment.addEventListener("click", () => {
+    const name = prompt("New shipment name to add (example: March shipment 4-7-3):","");
+    if (!name) return;
+    // Add to filter + datalist immediately (not saved until you save a row)
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    shipFilter.appendChild(opt);
+
+    const d = document.createElement("option");
+    d.value = name;
+    shipmentList.appendChild(d);
+
+    shipFilter.value = name;
+    renderTable();
+    showToast("Shipment added");
+  });
+
+  // Modal open
+  btnAdd.addEventListener("click", () => {
+    clearForm();
+    $("#modalTitle").textContent = "Add Product";
+    openModal("Add Product");
+  });
+
+  btnOpenModal.addEventListener("click", () => {
+    if (!selected) return;
+    openModal("Edit Product");
+  });
+
+  btnCloseModal.addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) closeModal();
+  });
+
+  // Save
+  btnSave.addEventListener("click", async () => {
+    formMsg.textContent = "Saving…";
+
+    const params = { _action: "update" };
+    for (const el of frm.elements) {
+      if (!el.name) continue;
+      params[el.name] = el.value;
+    }
+    if (!params["Product Name"] || !params["Shipment"] || !params["Category/Tab"]) {
+      formMsg.textContent = "Product Name, Shipment, and Category/Tab are required.";
+      return;
     }
 
-    /**********************
-     * SELECT + FORM LOAD
-     **********************/
-    function clearSelection(){
-      selected = null;
-      selectedKey = "";
+    // Ensure JSON stored
+    params["Variations JSON"] = variants.length ? JSON.stringify(variants) : "";
+
+    try {
+      const out = await apiPost(params);
+
+      // Easter egg: thumbs up on add/update
+      showToast("👍 Saved", 1000);
+
+      await apiGet();
+
+      // reselect
+      const k = lower(params["Product Name"]) + "||" + lower(params["Shipment"]) + "||" + lower(params["Category/Tab"]);
+      const r = rows.find(x => keyOf(x) === k);
+      if (r) loadIntoForm(r);
+
+      formMsg.textContent = (out.action === "created") ? "Created." : "Updated.";
+      closeModal();
+    } catch (err){
+      formMsg.textContent = "Save failed: " + err.message;
+    }
+  });
+
+  // Delete
+  async function doDelete(){
+    const name = norm(frm.elements["Product Name"]?.value);
+    const ship = norm(frm.elements["Shipment"]?.value);
+    const cat  = norm(frm.elements["Category/Tab"]?.value);
+    if (!name || !ship || !cat){ formMsg.textContent = "Select a row first."; return; }
+    if (!confirm(`Delete "${name}" (${ship} / ${cat}) from the sheet?`)) return;
+
+    formMsg.textContent = "Deleting…";
+    try {
+      await apiPost({ _action:"delete", "Product Name": name, "Shipment": ship, "Category/Tab": cat });
+
+      showToast("Deleted", 900);
+
+      clearForm();
+      closeModal();
+      await apiGet();
+      selectedLabel.textContent = "No row selected";
+      btnOpenModal.disabled = true;
       btnDelete.disabled = true;
       btnOpenLink.disabled = true;
-      lineKey.textContent = "";
-      badgeSelected.textContent = "No row selected";
+    } catch (err){
+      formMsg.textContent = "Delete failed: " + err.message;
     }
+  }
 
-    function selectRow(r){
-      selected = r;
-      selectedKey = keyOf(r);
-      btnDelete.disabled = false;
-      const link = String(r["Online Link"]||"").trim();
-      btnOpenLink.disabled = !link;
+  btnDeleteInModal.addEventListener("click", doDelete);
+  btnDelete.addEventListener("click", () => {
+    if (!selected) return;
+    // load to modal so delete matches keys
+    openModal("Edit Product");
+  });
 
-      lineKey.textContent = `Selected: ${r["Product Name"]||""} / ${r["Shipment"]||""} / ${r["Category/Tab"]||""}`;
-      badgeSelected.textContent = "Selected row loaded";
+  // Open link
+  btnOpenLink.addEventListener("click", () => {
+    if (!selected) return;
+    const url = norm(selected["Online Link"]);
+    if (url) window.open(url, "_blank", "noopener");
+  });
 
-      // Load into modal inputs (but do not auto-open modal)
-      loadIntoForm(r);
-    }
-
-    function loadIntoForm(r){
-      inName.value = r["Product Name"] ?? "";
-      inShipment.value = r["Shipment"] ?? "";
-      inCategory.value = r["Category/Tab"] ?? "";
-
-      // status selects
-      inStatus.value = r["Status"] ?? "";
-
-      inCost.value = (r["Cost Price USD"] ?? "").toString();
-      inSell.value = (r["Selling Price XCD"] ?? "").toString();
-      inQty.value  = (r["Quantity"] ?? "").toString();
-
-      inPriceApproved.value = (r["Price Approved"] ?? "").toString();
-      inShippingStatus.value = (r["Shipping Status"] ?? "").toString();
-
-      // date fields accept yyyy-mm-dd
-      inShipDate.value = (r["Ship Date"] ?? "").toString().slice(0,10);
-      inShippedDate.value = (r["Shipped Date"] ?? "").toString().slice(0,10);
-
-      inGender.value = r["Gender"] ?? "";
-      inSize.value = r["Size"] ?? "";
-      inShoe.value = r["Shoe Size"] ?? "";
-
-      inImage.value = r["Image URL"] ?? "";
-      inLink.value = r["Online Link"] ?? "";
-      inNote.value = r["Note"] ?? "";
-
-      // variations json
-      const vraw = String(r["Variations JSON"] ?? "").trim();
-      const parsed = vraw ? safeJsonParse(vraw) : null;
-      renderVarRows(Array.isArray(parsed) ? parsed : []);
-    }
-
-    function clearFormForAdd(){
-      selected = null;
-      selectedKey = "";
-      badgeSelected.textContent = "Adding new row";
-      inName.value = "";
-      inShipment.value = fShipment.value || "";
-      inCategory.value = fCategory.value || "";
-      inStatus.value = inStatus.options[0]?.value || "";
-
-      inCost.value = "";
-      inSell.value = "";
-      inQty.value  = "";
-
-      inPriceApproved.value = "";
-      inShippingStatus.value = inShippingStatus.options[0]?.value || "";
-
-      inShipDate.value = "";
-      inShippedDate.value = "";
-
-      inGender.value = "";
-      inSize.value = "";
-      inShoe.value = "";
-
-      inImage.value = "";
-      inLink.value = "";
-      inNote.value = "";
-
-      renderVarRows([]);
-    }
-
-    /**********************
-     * SAVE / DELETE
-     **********************/
-    function buildPayloadFromForm(){
-      const payload = {};
-      // Only send known headers (matches Apps Script behavior)
-      payload["Product Name"] = inName.value.trim();
-      payload["Shipment"] = inShipment.value.trim();
-      payload["Category/Tab"] = inCategory.value.trim();
-      payload["Image URL"] = inImage.value.trim();
-      payload["Cost Price USD"] = inCost.value.trim();
-      payload["Selling Price XCD"] = inSell.value.trim();
-      payload["Quantity"] = inQty.value.trim();
-      payload["Online Link"] = inLink.value.trim();
-      payload["Note"] = inNote.value.trim();
-      payload["Status"] = inStatus.value.trim();
-      payload["Price Approved"] = inPriceApproved.value.trim();
-      payload["Ship Date"] = inShipDate.value.trim();
-      payload["Gender"] = inGender.value.trim();
-      payload["Size"] = inSize.value.trim();
-      payload["Shoe Size"] = inShoe.value.trim();
-      payload["Shipping Status"] = inShippingStatus.value.trim();
-      payload["Shipped Date"] = inShippedDate.value.trim();
-
-      const vars = parseVariations();
-      payload["Variations JSON"] = vars.length ? JSON.stringify(vars) : "";
-
-      return payload;
-    }
-
-    function validatePayload(p){
-      if (!p["Product Name"]) return "Product Name is required.";
-      if (!p["Shipment"]) return "Shipment is required.";
-      if (!p["Category/Tab"]) return "Category/Tab is required.";
-      return "";
-    }
-
-    function fxThumbUp(){
-      fxThumb.textContent = "👍";
-      fxMoney.innerHTML = "";
-      fx.classList.add("show");
-      setTimeout(()=>fx.classList.remove("show"), 950);
-    }
-
-    function fxMoneyRain(){
-      fxMoney.innerHTML = "";
-      fxThumb.textContent = "";
-      fx.classList.add("show");
-
-      const count = 18;
-      for (let i=0;i<count;i++){
-        const d = document.createElement("div");
-        d.className = "bill";
-        d.textContent = "💵";
-        d.style.left = (Math.random()*100).toFixed(2) + "%";
-        d.style.animationDelay = (Math.random()*0.25).toFixed(2) + "s";
-        d.style.transform = `translateY(0) rotate(${Math.random()*60}deg)`;
-        fxMoney.appendChild(d);
+  // Hub dropdown + copy
+  btnHub.addEventListener("click", (e) => {
+    e.preventDefault();
+    hubMenu.classList.toggle("show");
+  });
+  document.addEventListener("click", (e) => {
+    if (!hubMenu.classList.contains("show")) return;
+    if (hubMenu.contains(e.target) || btnHub.contains(e.target)) return;
+    hubMenu.classList.remove("show");
+  });
+  hubMenu.querySelectorAll("[data-copy]").forEach(b => {
+    b.addEventListener("click", async () => {
+      const t = b.getAttribute("data-copy");
+      try {
+        await navigator.clipboard.writeText(t);
+        showToast("Copied");
+      } catch {
+        prompt("Copy this number:", t);
       }
-      setTimeout(()=>fx.classList.remove("show"), 1250);
-    }
-
-    async function saveCurrent(){
-      const payload = buildPayloadFromForm();
-      const err = validatePayload(payload);
-      if (err){ modalMsg.textContent = err; toastShow(err); return; }
-
-      modalMsg.textContent = "Saving…";
-      btnSave.disabled = true;
-
-      // Action: upsert
-      const params = { _action: "update" };
-      HEADERS.forEach(h => { if (payload[h] != null) params[h] = payload[h]; });
-
-      try{
-        const out = await apiPostPM(params);
-        if (!out || out.ok !== true) throw new Error(out?.error || "Save failed");
-
-        // Easter eggs:
-        // 1) Save => thumbs up
-        fxThumbUp();
-
-        // 2) If shipping status set to "Shipped" OR shipped date present => money rain
-        const ss = lower(payload["Shipping Status"]);
-        if (ss === "shipped" || !!payload["Shipped Date"]) fxMoneyRain();
-
-        toastShow(out.action === "created" ? "Created." : "Updated.");
-        modalMsg.textContent = out.action === "created" ? "Created." : "Updated.";
-
-        await loadAll(); // reload fresh
-        // reselect row
-        const k = lower(payload["Product Name"]) + "||" + lower(payload["Shipment"]) + "||" + lower(payload["Category/Tab"]);
-        const r = rows.find(x=>keyOf(x)===k);
-        if (r) selectRow(r);
-
-        closeModal();
-      }catch(e){
-        modalMsg.textContent = "Save failed: " + e.message;
-        toastShow("Save failed: " + e.message);
-      }finally{
-        btnSave.disabled = false;
-      }
-    }
-
-    async function deleteSelected(){
-      if (!selected) return;
-      const name = String(selected["Product Name"]||"").trim();
-      const ship = String(selected["Shipment"]||"").trim();
-      const cat  = String(selected["Category/Tab"]||"").trim();
-      if (!name || !ship || !cat) return;
-
-      if (!confirm(`Delete:\n\n${name}\nShipment: ${ship}\nCategory: ${cat}\n\nThis removes the row from Google Sheets.`)) return;
-
-      btnDelete.disabled = true;
-      toastShow("Deleting…");
-
-      try{
-        const out = await apiPostPM({ _action:"delete", "Product Name": name, "Shipment": ship, "Category/Tab": cat, _pm:"1" });
-        if (!out || out.ok !== true) throw new Error(out?.error || "Delete failed");
-        toastShow(out.action === "deleted" ? "Deleted." : "Not found.");
-        await loadAll();
-        clearSelection();
-      }catch(e){
-        toastShow("Delete failed: " + e.message);
-        btnDelete.disabled = false;
-      }
-    }
-
-    /**********************
-     * LOAD
-     **********************/
-    async function loadAll(){
-      setLoaded(true, "Loading…");
-      pillLoaded.classList.remove("bad");
-      try{
-        const payload = await apiGetJSONP();
-        if (!payload || payload.ok !== true) throw new Error(payload?.error || "API error");
-        if (!Array.isArray(payload.data)) throw new Error("Unexpected response");
-
-        rows = payload.data;
-
-        fillShipmentOptions();
-        fillCategoryOptions();
-        fillStatusSelect();
-        fillShipStatusSelect();
-
-        // Ensure form selects have sane defaults
-        if (!inStatus.value && inStatus.options.length) inStatus.value = inStatus.options[0].value;
-        if (!inShippingStatus.value && inShippingStatus.options.length) inShippingStatus.value = inShippingStatus.options[0].value;
-
-        // Subline (keep it clean; not “loaded from Google Sheets”)
-        setLoaded(true, `Loaded ${rows.length} items.`);
-        applyFilters();
-      }catch(e){
-        setLoaded(false, "Load failed: " + e.message);
-        tblBody.innerHTML = "";
-        statItems.textContent = "0";
-        statCost.textContent = "$0.00";
-        needPriceCount.textContent = "0";
-        needResaleCount.textContent = "0";
-        needTotal.textContent = "0";
-      }
-    }
-
-    /**********************
-     * EVENTS
-     **********************/
-    btnReload.addEventListener("click", ()=>loadAll());
-
-    btnAdd.addEventListener("click", ()=>{
-      clearFormForAdd();
-      openModal("add");
+      hubMenu.classList.remove("show");
     });
+  });
 
-    btnClose.addEventListener("click", closeModal);
-    modalBack.addEventListener("click", (e)=>{ if (e.target === modalBack) closeModal(); });
-
-    btnSave.addEventListener("click", saveCurrent);
-
-    btnDelete.addEventListener("click", deleteSelected);
-
-    btnOpenLink.addEventListener("click", ()=>{
-      if (!selected) return;
-      const link = String(selected["Online Link"]||"").trim();
-      if (!link) return;
-      window.open(link, "_blank", "noopener");
-    });
-
-    btnClear.addEventListener("click", ()=>{
-      fShipment.value = "";
-      fCategory.value = "";
-      fStatus.value = "";
-      fPriceApproved.value = "";
-      fSearch.value = "";
-      quickNeedPrice = false;
-      quickNeedResale = false;
-      applyFilters();
-      toastShow("Filters cleared.");
-    });
-
-    [fShipment,fCategory,fStatus,fPriceApproved].forEach(el=> el.addEventListener("change", ()=>{
-      quickNeedPrice = false;
-      quickNeedResale = false;
-      applyFilters();
-    }));
-    fSearch.addEventListener("input", ()=>applyFilters());
-
-    btnNeedsPrice.addEventListener("click", ()=>{
-      quickNeedPrice = !quickNeedPrice;
-      quickNeedResale = false;
-      applyFilters();
-      toastShow(quickNeedPrice ? "Filtered: Needs Price Approved" : "Filter off");
-    });
-
-    btnNeedsResale.addEventListener("click", ()=>{
-      quickNeedResale = !quickNeedResale;
-      quickNeedPrice = false;
-      applyFilters();
-      toastShow(quickNeedResale ? "Filtered: Missing Resale Price" : "Filter off");
-    });
-
-    btnAddShipment.addEventListener("click", ()=>{
-      const name = prompt("New shipment name (example: March shipment 4-7-3):");
-      if (!name) return;
-      // set filter + prefill modal shipment
-      fShipment.value = name.trim();
-      applyFilters();
-      toastShow("Shipment set to: " + name.trim());
-    });
-
-    // Menu
-    btnMenu.addEventListener("click", ()=>{
-      menu.classList.toggle("open");
-    });
-    document.addEventListener("click", (e)=>{
-      if (!menu.contains(e.target) && e.target !== btnMenu) menu.classList.remove("open");
-    });
-
-    btnCopyMichael.addEventListener("click", async ()=>{
-      try{ await navigator.clipboard.writeText(PHONE_MICHAEL); toastShow("Copied Michael #"); }catch{ toastShow("Copy failed"); }
-    });
-    btnCopyQuencie.addEventListener("click", async ()=>{
-      try{ await navigator.clipboard.writeText(PHONE_QUENCIE); toastShow("Copied Quencie #"); }catch{ toastShow("Copy failed"); }
-    });
-
-    // Variations
-    btnAddVar.addEventListener("click", ()=>addVarRow({}));
-    btnClearVars.addEventListener("click", ()=>{
-      renderVarRows([]);
-      toastShow("Variants cleared.");
-    });
-
-    // Keyboard
-    document.addEventListener("keydown", (e)=>{
-      if (e.key === "Escape") closeModal();
-    });
-
-    // Initial boot
-    loadAll();
-  </script>
+  // Boot
+  apiGet();
+</script>
 </body>
 </html>
