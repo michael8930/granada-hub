@@ -1,1240 +1,1634 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Grenada Hub Pro — Inventory • Pricing • Shipments</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Grenada Hub Pro</title>
+  <meta name="theme-color" content="#071018" />
+  <style>
+    :root{
+      color-scheme: dark;
+      --bg:#071018;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.045);
+      --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(255,255,255,.14);
+      --text:#f3f6ff;
+      --muted: rgba(243,246,255,.65);
+      --muted2: rgba(243,246,255,.45);
+      --accent:#11b7ff;
+      --accent2:#0aa0df;
+      --good:#46d36a;
+      --warn:#ffcc66;
+      --bad:#ff5b6a;
+      --shadow: 0 30px 70px rgba(0,0,0,.45);
+      --r18: 18px;
+      --r22: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:
+        radial-gradient(1200px 700px at 30% -10%, rgba(17,183,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 110% 20%, rgba(64,125,255,.18), transparent 55%),
+        radial-gradient(900px 700px at 10% 110%, rgba(9,160,223,.10), transparent 50%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      padding: 28px 18px 60px;
+    }
 
-<style>
-  :root{
-    --bg0:#05080c; --bg1:#071019;
-    --panel:rgba(7,12,18,.55);
-    --stroke:rgba(255,255,255,.10);
-    --stroke2:rgba(255,255,255,.07);
-    --text:rgba(255,255,255,.92);
-    --muted:rgba(255,255,255,.62);
-    --muted2:rgba(255,255,255,.42);
-    --blue:#19b6ff;
-    --shadow:0 30px 80px rgba(0,0,0,.55);
-    --shadow2:0 14px 40px rgba(0,0,0,.45);
-    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:var(--font);
-    color:var(--text);
-    background:
-      radial-gradient(1200px 700px at 30% 0%, rgba(25,182,255,.14), transparent 60%),
-      radial-gradient(900px 600px at 80% 20%, rgba(36,255,200,.10), transparent 55%),
-      radial-gradient(900px 700px at 50% 120%, rgba(25,182,255,.08), transparent 55%),
-      linear-gradient(180deg,#030508,#020408 55%,#010307);
-    padding:24px 16px 32px;
-  }
-  .wrap{max-width:1180px;margin:0 auto}
-  .shell{
-    background:linear-gradient(180deg,rgba(13,28,42,.86),rgba(7,14,22,.86));
-    border:1px solid var(--stroke);
-    border-radius:28px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-  .topbar{
-    padding:18px 18px 14px;
-    background:
-      radial-gradient(1000px 220px at 20% 0%, rgba(25,182,255,.18), transparent 60%),
-      linear-gradient(180deg, rgba(14,30,44,.92), rgba(10,18,27,.92));
-    border-bottom:1px solid var(--stroke);
-  }
-  .toprow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  .brand{display:flex;align-items:center;gap:12px;min-width:260px;position:relative}
-  .pill{
-    border:1px solid var(--stroke);
-    background:rgba(8,14,20,.55);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
-    border-radius:999px;
-    padding:8px 12px;
-    letter-spacing:.08em;
-    font-weight:800;
-    font-size:12px;
-    text-transform:uppercase;
-    display:inline-flex;align-items:center;gap:10px;
-    user-select:none;cursor:pointer;white-space:nowrap;
-  }
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px rgba(25,182,255,.15)}
-  .titleblock{display:flex;flex-direction:column;gap:4px}
-  .title{letter-spacing:.08em;font-weight:900;text-transform:uppercase;font-size:16px;color:rgba(255,255,255,.92);white-space:nowrap}
-  .subtitle{font-size:12px;color:var(--muted)}
-  .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-  .btn{
-    border:1px solid var(--stroke);
-    background:rgba(8,14,20,.55);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
-    border-radius:999px;
-    padding:10px 14px;
-    font-weight:850;
-    font-size:12px;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,.92);
-    cursor:pointer;
-    user-select:none;
-    white-space:nowrap;
-    display:inline-flex;align-items:center;justify-content:center;
-    text-decoration:none;
-  }
-  .btn:hover{border-color:rgba(255,255,255,.16)}
-  .btn.primary{
-    background:linear-gradient(180deg,rgba(25,182,255,.22),rgba(25,182,255,.10));
-    border-color:rgba(25,182,255,.38);
-    color:#dff5ff;
-  }
-  .btn.small{padding:9px 12px;font-size:12px}
-  .btn.danger{border-color:rgba(255,90,106,.35);background:rgba(255,90,106,.10)}
-  .btn.good{border-color:rgba(78,229,138,.30);background:rgba(78,229,138,.10)}
-  .btn:active{transform:translateY(1px)}
+    .shell{
+      max-width: 1260px;
+      margin: 0 auto;
+      border-radius: 28px;
+      padding: 18px 18px 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
 
-  /* Phone popover (logo click) */
-  .pop{
-    position:absolute;
-    top:54px; left:0;
-    background:rgba(8,14,20,.92);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:16px;
-    padding:10px;
-    box-shadow:var(--shadow2);
-    display:none;
-    min-width:240px;
-    z-index:5000;
-  }
-  .pop .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-  .pop .muted{font-size:12px;line-height:1.35;color:rgba(255,255,255,.70)}
+    /* Top header row */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding: 6px 6px 12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 240px;
+    }
+    .brand .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(17,183,255,.14);
+      border:1px solid rgba(17,183,255,.28);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+      cursor:pointer;
+      user-select:none;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(17,183,255,.18);
+    }
+    .brandTitle{
+      font-weight: 800;
+      letter-spacing:.6px;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+    .titleBlock{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .titleLine{
+      font-weight: 800;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      font-size: 18px;
+      line-height:1.1;
+      opacity:.95;
+    }
+    .subLine{
+      font-size: 13px;
+      color: var(--muted);
+    }
 
-  /* Cards */
-  .cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:14px;
-    padding:14px 16px 10px;
-  }
-  @media (max-width:980px){.cards{grid-template-columns:1fr 1fr}}
-  @media (max-width:560px){.cards{grid-template-columns:1fr}}
-  .card{
-    background:var(--panel);
-    border:1px solid var(--stroke2);
-    border-radius:22px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    padding:14px 14px 12px;
-    min-height:104px;
-    overflow:hidden;
-  }
+    .topActions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight: 700;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      font-size: 12px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      transition: transform .08s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .btn:hover{ background: rgba(255,255,255,.09); border-color: var(--stroke2); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(17,183,255,.35), rgba(17,183,255,.18));
+      border-color: rgba(17,183,255,.35);
+    }
+    .btn.primary:hover{
+      background: linear-gradient(180deg, rgba(17,183,255,.42), rgba(17,183,255,.22));
+    }
 
-  /* ✅ FIX: stop header bleed/overlap (no style change, just wrap-safe) */
-  .card h4{
-    margin:0 0 8px 0;
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--muted);
-    font-weight:900;
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .card h4 .rightControls{
-    display:flex;gap:10px;align-items:center;justify-content:flex-end;
-    flex-wrap:wrap;
-    max-width:100%;
-  }
+    /* Summary grid */
+    .summaryGrid{
+      display:grid;
+      grid-template-columns: 1.05fr 1.05fr 1.4fr 1.0fr;
+      gap: 14px;
+      padding: 12px 6px 12px;
+    }
+    .card{
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid var(--stroke);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+      min-height: 140px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(700px 260px at 30% 0%, rgba(17,183,255,.14), transparent 55%);
+      opacity:.75;
+      pointer-events:none;
+    }
+    .card > *{ position:relative; z-index:1; }
 
-  .big{
-    font-size:34px;font-weight:950;letter-spacing:.02em;line-height:1.05;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  }
-  .smallrow{margin-top:6px;color:var(--muted2);font-size:12px}
+    .cardLabel{
+      font-weight: 800;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(243,246,255,.75);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom: 10px;
+      white-space:nowrap;
+    }
+    .bigNumber{
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      line-height: .95;
+      margin: 6px 0 8px;
+      white-space:nowrap;
+    }
+    .bigSub{
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+    .pillMini{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      font-size: 12px;
+      white-space:nowrap;
+      cursor:pointer;
+      user-select:none;
+    }
+    .pillMini.accent{
+      border-color: rgba(17,183,255,.35);
+      background: rgba(17,183,255,.12);
+      color: rgba(243,246,255,.95);
+    }
+    .stack{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .selectMini{
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-weight: 900;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      font-size: 12px;
+      outline:none;
+      max-width: 140px;
+    }
 
-  .chip{
-    display:inline-flex;align-items:center;gap:8px;
-    border:1px solid var(--stroke);
-    background:rgba(0,0,0,.22);
-    border-radius:999px;
-    padding:8px 10px;
-    font-size:12px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;
-    color:rgba(255,255,255,.85);
-    user-select:none;cursor:pointer;white-space:nowrap;
-  }
-  .chip.primary{
-    border-color:rgba(25,182,255,.38);
-    background:rgba(25,182,255,.10);
-    color:#dff5ff;
-  }
+    /* Filters row */
+    .filtersRow{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      padding: 6px;
+      flex-wrap:wrap;
+    }
+    .field{
+      flex: 1 1 220px;
+      min-width: 200px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .input, .select{
+      width:100%;
+      border-radius: 999px;
+      padding: 11px 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+      font-weight: 650;
+      letter-spacing:.2px;
+    }
+    .input::placeholder{ color: rgba(243,246,255,.35); }
 
-  /* Filters + Sections */
-  .filters{
-    display:grid;
-    grid-template-columns:1.2fr 1fr 1fr 1fr 1fr auto;
-    gap:10px;
-    padding:8px 16px 16px;
-    align-items:center;
-  }
-  @media (max-width:980px){.filters{grid-template-columns:1fr 1fr}.filters .wide{grid-column:1/-1}}
-  select,input[type="text"],input[type="number"],textarea{
-    width:100%;
-    border:1px solid var(--stroke2);
-    background:rgba(0,0,0,.25);
-    color:rgba(255,255,255,.92);
-    border-radius:14px;
-    padding:10px 12px;
-    font-size:13px;
-    outline:none;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-  }
-  input::placeholder,textarea::placeholder{color:rgba(255,255,255,.35)}
-  select{cursor:pointer}
+    .filtersActions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex: 0 0 auto;
+    }
 
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 16px 18px}
-  @media (max-width:980px){.grid{grid-template-columns:1fr}}
-  .section{
-    background:var(--panel);
-    border:1px solid var(--stroke2);
-    border-radius:22px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    overflow:hidden;
-  }
-  .sectionHead{padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .sectionTitle{margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.82);font-weight:950}
-  .badge{
-    border:1px solid var(--stroke);
-    background:rgba(0,0,0,.22);
-    border-radius:999px;
-    padding:6px 10px;
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,.72);
-    white-space:nowrap;
-  }
+    /* Main grid */
+    .mainGrid{
+      display:grid;
+      grid-template-columns: 1.45fr .95fr;
+      gap:14px;
+      padding: 8px 6px 6px;
+    }
+    .tableCard{
+      padding: 16px 16px 12px;
+    }
+    .rightCard{
+      padding: 16px 16px 14px;
+    }
+    .sectionTitleRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    .sectionTitle{
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: rgba(243,246,255,.78);
+    }
 
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  thead th{
-    text-align:left;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
-    padding:10px 16px;border-top:1px solid var(--stroke2);border-bottom:1px solid var(--stroke2);
-  }
-  tbody td{padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.90);vertical-align:middle}
-  tbody tr{cursor:pointer}
-  tbody tr:hover{background:rgba(255,255,255,.03)}
-  .right{text-align:right}
-  .nowrap{white-space:nowrap}
+    /* Table: allow horizontal scroll */
+    .tableWrap{
+      width:100%;
+      overflow:auto;               /* <-- horizontal/vertical scroll */
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.12);
+    }
+    table{
+      width:100%;
+      min-width: 980px;            /* <-- forces horizontal scroll on narrow screens */
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+    }
+    thead th{
+      text-align:left;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(243,246,255,.55);
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      position:sticky;
+      top:0;
+      background: rgba(10,16,24,.85);
+      backdrop-filter: blur(10px);
+      z-index:2;
+      white-space:nowrap;
+    }
+    tbody td{
+      padding: 13px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      color: rgba(243,246,255,.92);
+      vertical-align:middle;
+    }
+    tbody tr{
+      cursor:pointer;
+      transition: background .12s ease;
+    }
+    tbody tr:hover{
+      background: rgba(17,183,255,.06);
+    }
+    .muted{ color: rgba(243,246,255,.55); }
+    .money{ font-weight: 900; white-space:nowrap; }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: rgba(243,246,255,.85);
+      font-weight: 900;
+      letter-spacing:.6px;
+      text-transform: uppercase;
+      font-size: 11px;
+      white-space:nowrap;
+    }
+    .tag.good{ border-color: rgba(70,211,106,.25); background: rgba(70,211,106,.10); }
+    .tag.bad{ border-color: rgba(255,91,106,.25); background: rgba(255,91,106,.10); }
+    .tag.warn{ border-color: rgba(255,204,102,.25); background: rgba(255,204,102,.10); }
 
-  /* Modals */
-  .backdrop{
-    position:fixed;inset:0;
-    background:rgba(0,0,0,.78);
-    display:none;
-    align-items:center;justify-content:center;
-    padding:18px;
-    z-index:8000;
-  }
-  .modal{
-    width:min(980px,96vw);
-    max-height:92vh;
-    overflow:auto;
-    background:linear-gradient(180deg,rgba(13,28,42,.96),rgba(7,14,22,.96));
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:26px;
-    box-shadow:var(--shadow);
-    position:relative;
-  }
-  .modalHead{
-    padding:18px 18px 12px;
-    border-bottom:1px solid rgba(255,255,255,.10);
-    display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
-  }
-  .modalHead h3{margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:950;color:rgba(255,255,255,.92)}
-  .x{
-    width:40px;height:40px;border-radius:14px;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(0,0,0,.22);
-    color:rgba(255,255,255,.9);
-    cursor:pointer;font-weight:900;font-size:18px;
-    display:grid;place-items:center;user-select:none;
-  }
-  .modalBody{padding:14px 18px 18px}
-  .formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
-  @media (max-width:860px){.formGrid{grid-template-columns:1fr}}
-  .label{
-    font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:900;
-    margin:4px 0 6px;
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-  }
-  .hint{font-size:12px;color:var(--muted2);margin-top:6px}
-  textarea{resize:vertical}
-  /* ✅ restore larger Note field */
-  #fNote{min-height:140px}
+    .helpList{
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(243,246,255,.75);
+      line-height: 1.55;
+    }
+    .helpList li{ margin: 8px 0; }
+    .helpFooter{
+      margin-top: 12px;
+      color: rgba(243,246,255,.50);
+      font-size: 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
 
-  .rowBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+    /* Phone popover */
+    .popover{
+      position:absolute;
+      top:58px;
+      left:16px;
+      width: 310px;
+      border-radius: 18px;
+      background: rgba(12,18,28,.92);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 30px 80px rgba(0,0,0,.65);
+      backdrop-filter: blur(16px);
+      padding: 12px;
+      display:none;
+      z-index: 50;
+    }
+    .popover.open{ display:block; }
+    .popRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.07);
+      margin: 8px 0;
+    }
+    .popName{ font-weight: 900; letter-spacing:.3px; }
+    .popNum{ color: rgba(243,246,255,.65); font-weight: 800; }
+    .popRow a{
+      color: rgba(243,246,255,.92);
+      text-decoration:none;
+      font-weight: 900;
+      letter-spacing:.4px;
+      text-transform: uppercase;
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(17,183,255,.14);
+      border:1px solid rgba(17,183,255,.28);
+    }
 
-  /* Variants */
-  .variants{margin-top:14px;border-top:1px dashed rgba(255,255,255,.12);padding-top:14px}
-  .variantBox{border:1px dashed rgba(255,255,255,.14);border-radius:18px;padding:12px;background:rgba(0,0,0,.18);margin-top:10px}
-  .variantGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
-  @media (max-width:860px){.variantGrid{grid-template-columns:1fr}}
+    /* Modal */
+    .backdrop{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 22px;
+      z-index: 100;
+    }
+    .backdrop.open{ display:flex; }
+    .modal{
+      width: min(980px, 100%);
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(12,18,28,.92); /* LESS TRANSPARENT (fixes your “fields disappear” issue) */
+      box-shadow: 0 40px 110px rgba(0,0,0,.75);
+      overflow:hidden;
+      position:relative;
+    }
+    .modalHeader{
+      padding: 16px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .modalTitle{
+      font-weight: 1000;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: rgba(243,246,255,.85);
+    }
+    .iconBtn{
+      width: 38px;height:38px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: rgba(243,246,255,.88);
+      cursor:pointer;
+      font-size: 18px;
+      font-weight: 900;
+      display:grid;
+      place-items:center;
+    }
+    .modalBody{
+      padding: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 14px;
+    }
+    .fcol{ display:flex; flex-direction:column; gap:8px; }
+    .lbl{
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: rgba(243,246,255,.70);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .hint{
+      color: rgba(243,246,255,.45);
+      font-size: 12px;
+    }
+    .row2{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .wide{ grid-column: 1 / -1; }
+    .textarea{
+      width:100%;
+      min-height: 90px;            /* keep the larger note field */
+      border-radius: 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline:none;
+      resize: vertical;
+    }
+    .variantBox{
+      border: 1px dashed rgba(255,255,255,.14);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.03);
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .variantRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .modalFooter{
+      padding: 14px 18px 18px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .danger{
+      background: rgba(255,91,106,.12);
+      border-color: rgba(255,91,106,.28);
+    }
 
-  /* Toast */
-  .toast{
-    position:fixed;left:50%;bottom:20px;transform:translateX(-50%);
-    background:rgba(0,0,0,.65);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:999px;
-    padding:10px 14px;
-    color:rgba(255,255,255,.92);
-    font-weight:800;font-size:12px;letter-spacing:.06em;
-    display:none;
-    box-shadow:var(--shadow2);
-    z-index:9999;
-  }
-</style>
+    /* Small screens */
+    @media (max-width: 980px){
+      .summaryGrid{ grid-template-columns: 1fr 1fr; }
+      .mainGrid{ grid-template-columns: 1fr; }
+      .modalBody{ grid-template-columns: 1fr; }
+      .variantRow{ grid-template-columns: 1fr 1fr; }
+      .brand{ min-width: auto; }
+    }
+  </style>
 </head>
-
 <body>
-<div class="wrap">
   <div class="shell">
-
     <div class="topbar">
-      <div class="toprow">
-        <div class="brand">
-          <div id="hubBtn" class="pill" title="Phone menu">
-            <span class="dot"></span><span>Grenada Hub Pro</span>
-          </div>
-          <div class="titleblock">
-            <div class="title">Inventory • Pricing • Shipments</div>
-            <div class="subtitle">One master Inventory sheet • dropdowns from “Lists” • iPhone + Android friendly</div>
-          </div>
-
-          <div id="hubPop" class="pop" aria-hidden="true">
-            <div class="row">
-              <a class="btn small" href="tel:+16107035185">Call Michael</a>
-              <a class="btn small" href="tel:+14845135528">Call Quencie</a>
-            </div>
-            <div class="muted">
-              Michael: (610) 703-5185<br/>Quencie: (484) 513-5528
-            </div>
-          </div>
+      <div class="brand">
+        <div class="pill" id="brandPill" title="Calls">
+          <span class="dot"></span>
+          <span class="brandTitle">Grenada Hub Pro</span>
+        </div>
+        <div class="titleBlock">
+          <div class="titleLine">Inventory · Pricing · Shipments</div>
+          <div class="subLine">One master Inventory sheet · dropdowns from “Lists” · iPhone + Android friendly</div>
         </div>
 
-        <div class="actions">
-          <a class="btn" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
-          <a class="btn" href="https://vinylpressusa.com/grenada-dashboard-mobile/" target="_blank" rel="noopener">Dashboard Mobile</a>
-          <div id="addBtn" class="btn primary">+ Add Product</div>
-          <div id="reloadBtn" class="btn">Reload</div>
+        <div class="popover" id="phonePopover" aria-hidden="true">
+          <div class="popRow">
+            <div>
+              <div class="popName">Michael</div>
+              <div class="popNum" id="michaelNumText">(610) 703-5185</div>
+            </div>
+            <a id="callMichael" href="tel:+16107035185">Call</a>
+          </div>
+          <div class="popRow">
+            <div>
+              <div class="popName">Quencie</div>
+              <div class="popNum" id="quencieNumText">(484) 513-5528</div>
+            </div>
+            <a id="callQuencie" href="tel:+14845135528">Call</a>
+          </div>
         </div>
+      </div>
+
+      <div class="topActions">
+        <button class="btn" id="btnTripHelper">Trip Helper</button>
+        <button class="btn" id="btnDashboardMobile">Dashboard Mobile</button>
+        <button class="btn primary" id="btnAdd">+ Add Product</button>
+        <button class="btn" id="btnReloadTop">Reload</button>
       </div>
     </div>
 
-    <div class="cards">
+    <div class="summaryGrid">
       <div class="card">
-        <h4><span>Total Items</span><span class="rightControls"><span class="chip" id="shipChip">All Shipments</span></span></h4>
-        <div class="big"><span id="totalItems">0</span> <span style="font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.62)">items</span></div>
-        <div class="smallrow muted">Filtered view</div>
+        <div class="cardLabel">
+          <span>Total Items</span>
+          <span class="pillMini" id="pillShipmentLabel">All Shipments</span>
+        </div>
+        <div class="bigNumber" id="kpiItems">0</div>
+        <div class="bigSub">Filtered view</div>
       </div>
 
       <div class="card">
-        <h4><span>Total Cost</span><span class="rightControls"><span class="chip primary" id="currencyChip" title="Tap to toggle USD/XCD"><span id="curLabel">USD</span></span></span></h4>
-        <div class="big" id="totalCost">$0.00</div>
-        <div class="smallrow" id="curSub">USD</div>
+        <div class="cardLabel">
+          <span>Total Cost</span>
+          <div class="stack">
+            <span class="pillMini accent" id="currencyPill">USD</span>
+          </div>
+        </div>
+        <div class="bigNumber" id="kpiCost">$0.00</div>
+        <div class="bigSub" id="kpiCostSub">USD</div>
       </div>
 
       <div class="card">
-        <h4>
+        <div class="cardLabel">
           <span>Expected Revenue</span>
-          <span class="rightControls">
-            <span class="chip" id="markupChip" title="Markup selector"><span id="markupLabel">Markup 100%</span></span>
-            <select id="markupSel" style="max-width:120px">
+          <div class="stack">
+            <span class="pillMini" id="markupLabel">Markup 100%</span>
+            <select class="selectMini" id="markupSelect" title="Markup">
               <option value="0.5">50%</option>
-              <option value="1">100%</option>
+              <option value="1.0" selected>100%</option>
               <option value="1.5">150%</option>
-              <option value="2">200%</option>
+              <option value="2.0">200%</option>
+              <option value="custom">Custom</option>
             </select>
-          </span>
-        </h4>
-        <div class="big" id="expectedRevenue">$0.00</div>
-        <div class="smallrow muted" id="expSub">100%</div>
+          </div>
+        </div>
+        <div class="bigNumber" id="kpiRevenue">$0.00</div>
+        <div class="bigSub" id="kpiRevenueSub">est.</div>
       </div>
 
       <div class="card">
-        <h4>
+        <div class="cardLabel">
           <span>Profit</span>
-          <span class="rightControls">
-            <span class="chip" id="needsPriceChip">Needs Price</span>
-            <span class="chip" id="needsApprovalChip">Needs Approval</span>
-          </span>
-        </h4>
-        <div class="big" id="profit">$0.00</div>
-        <div class="smallrow muted">est.</div>
+          <div class="stack">
+            <span class="pillMini" id="btnNeedsPrice">Needs Price</span>
+            <span class="pillMini" id="btnNeedsApproval">Needs Approval</span>
+          </div>
+        </div>
+        <div class="bigNumber" id="kpiProfit">$0.00</div>
+        <div class="bigSub">est.</div>
       </div>
     </div>
 
-    <div class="filters">
-      <input id="search" class="wide" type="text" placeholder="Search Product Name..." />
-      <select id="shipFilter"></select>
-      <select id="catFilter"></select>
-      <select id="statusFilter"></select>
-      <select id="approvedFilter"></select>
-      <div class="btn" id="manageShipBtn">Manage Shipments</div>
-      <div class="btn" id="manageCatBtn">Manage Categories</div>
-    </div>
-
-    <div class="grid">
-      <div class="section">
-        <div class="sectionHead">
-          <h3 class="sectionTitle">Inventory</h3>
-          <span class="badge" id="countBadge">0 items</span>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th><th>Shipment</th><th>Category</th>
-              <th class="right">Qty</th><th class="right">Cost</th><th class="right">Selling</th>
-              <th>Status</th><th>Approved</th>
-            </tr>
-          </thead>
-          <tbody id="tbody"></tbody>
-        </table>
+    <div class="filtersRow">
+      <div class="field">
+        <input class="input" id="qSearch" placeholder="Search Product Name..." />
       </div>
 
-      <div class="section">
-        <div class="sectionHead">
-          <h3 class="sectionTitle">Quick Help</h3>
-          <span class="badge">FX 1 USD = <span id="fxBadge">2.70</span> XCD</span>
-        </div>
-        <div style="padding:12px 16px 16px;color:rgba(255,255,255,.78);line-height:1.55">
-          <ul style="margin:0;padding-left:18px">
-            <li>Click a row to edit.</li>
-            <li>Cost auto-fills Selling using your Markup selector (you can override).</li>
-            <li>Currency Toggle changes what you SEE (USD or XCD) without mixing both on-screen.</li>
-          </ul>
-          <div class="rowBtns" style="margin-top:14px">
-            <a class="btn small" href="tel:+16107035185">Call Michael</a>
-            <a class="btn small" href="tel:+14845135528">Call Quencie</a>
-          </div>
-          <div style="margin-top:10px;color:rgba(255,255,255,.55);font-size:12px">
-            Michael: (610) 703-5185<br/>Quencie: (484) 513-5528
-          </div>
-          <div style="margin-top:12px;color:rgba(255,255,255,.55);font-size:12px">
-            Easter eggs: 👍 on “Price Approved = Yes”. 💸 rain when Shipping Status becomes “Shipped”.
-          </div>
-          <div id="loadedMsg" style="margin-top:8px;color:rgba(255,255,255,.55);font-size:12px"></div>
-        </div>
+      <div class="field">
+        <select class="select" id="fShipment"></select>
+      </div>
+      <div class="field">
+        <select class="select" id="fCategory"></select>
+      </div>
+      <div class="field">
+        <select class="select" id="fStatus"></select>
+      </div>
+      <div class="field">
+        <select class="select" id="fApproved"></select>
+      </div>
+
+      <div class="filtersActions">
+        <button class="btn" id="btnManageShipments">Manage Shipments</button>
+        <button class="btn" id="btnManageCategories">Manage Categories</button>
+        <button class="btn" id="btnReload">Reload</button>
       </div>
     </div>
 
+    <div class="mainGrid">
+      <div class="card tableCard">
+        <div class="sectionTitleRow">
+          <div class="sectionTitle">Inventory</div>
+          <div class="tag" id="itemsBadge">0 items</div>
+        </div>
+
+        <div class="tableWrap" id="tableWrap">
+          <table id="tbl">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Shipment</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Unit Cost</th>
+                <th>Total Cost</th>
+                <th>Selling</th>
+                <th>Status</th>
+                <th>Approved</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card rightCard">
+        <div class="sectionTitleRow">
+          <div class="sectionTitle">Quick Help</div>
+          <div class="tag" id="fxPill">FX 1 USD = 2.70 XCD</div>
+        </div>
+        <ul class="helpList">
+          <li>Click a row to edit.</li>
+          <li>Totals use <b>Unit Cost × Quantity</b> (not just unit cost).</li>
+          <li>Currency button (USD/XCD) changes what you SEE without mixing both on-screen.</li>
+          <li>Easter egg: 👍 on “Price Approved = Yes” · 💸 rain when Shipping Status becomes “Shipped”.</li>
+        </ul>
+
+        <div class="helpFooter">
+          <div class="row2">
+            <a class="btn" href="tel:+16107035185">Call Michael</a>
+            <a class="btn" href="tel:+14845135528">Call Quencie</a>
+          </div>
+          <div class="muted" id="loadedMsg">Loaded.</div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="toast" id="toast"></div>
+  <!-- Add/Edit Modal -->
+  <div class="backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Add/Edit Product">
+      <div class="modalHeader">
+        <div class="modalTitle" id="modalTitle">Add Product</div>
+        <button class="iconBtn" id="modalClose" aria-label="Close">×</button>
+      </div>
 
-<!-- Add/Edit Modal -->
-<div class="backdrop" id="editBack">
-  <div class="modal">
-    <div class="modalHead">
-      <h3 id="modalTitle">Add Product</h3>
-      <div class="x" id="closeEdit">×</div>
-    </div>
-    <div class="modalBody">
-      <div class="formGrid">
-        <div>
-          <div class="label">Product Name *</div>
-          <input id="fName" type="text" placeholder="e.g., Gain Detergent" />
-        </div>
-        <div>
-          <div class="label">Shipment *</div>
-          <select id="fShipment"></select>
-          <div class="hint"><span class="btn small" id="addShipmentInline">+ Add a new shipment</span></div>
+      <div class="modalBody">
+        <div class="fcol wide">
+          <div class="lbl">Product Name <span class="hint" id="rowIdHint"></span></div>
+          <input class="input" id="mProduct" placeholder="e.g., Gain Detergent" />
         </div>
 
-        <div>
-          <div class="label">Category/Tab</div>
-          <select id="fCategory"></select>
-        </div>
-        <div>
-          <div class="label">Status</div>
-          <select id="fStatus"></select>
-        </div>
-
-        <div>
-          <div class="label">
-            Cost Price (<span id="modalCurLabel1">USD</span>)
-            <span class="chip primary" id="modalCurrencyChip" title="Tap to toggle USD/XCD"><span id="modalCurLabel2">USD</span></span>
+        <div class="fcol">
+          <div class="lbl">Shipment *</div>
+          <select class="select" id="mShipment"></select>
+          <div class="row2">
+            <button class="btn" id="mAddShipment">+ Add a new shipment</button>
           </div>
-          <input id="fCost" type="number" step="0.01" placeholder="0.00"/>
-          <div class="hint" id="storedHint1">Stored in sheet as USD.</div>
         </div>
 
-        <div>
-          <div class="label">Selling Price (<span id="modalCurLabel3">USD</span>)</div>
-          <input id="fSell" type="number" step="0.01" placeholder="0.00"/>
-          <div class="hint">Auto-fills from Cost using Markup (unless you override).</div>
+        <div class="fcol">
+          <div class="lbl">Category/Tab *</div>
+          <select class="select" id="mCategory"></select>
+          <div class="row2">
+            <button class="btn" id="mAddCategory">+ Add category</button>
+            <button class="btn" id="mRemoveCategory">Remove category</button>
+          </div>
         </div>
 
-        <div>
-          <div class="label">Quantity</div>
-          <input id="fQty" type="number" step="1" placeholder="0"/>
-        </div>
-        <div>
-          <div class="label">Price Approved</div>
-          <select id="fApproved"></select>
-        </div>
-
-        <div>
-          <div class="label">Shipping Status</div>
-          <select id="fShipStatus"></select>
-        </div>
-        <div>
-          <div class="label">Ship Date (optional)</div>
-          <input id="fShipDate" type="text" placeholder="YYYY-MM-DD"/>
+        <div class="fcol">
+          <div class="lbl">
+            Cost Price (<span id="mCurLabel1">USD</span>)
+            <span class="pillMini accent" id="mCurToggle" title="Toggle USD/XCD">USD</span>
+          </div>
+          <input class="input" id="mCost" inputmode="decimal" placeholder="0.00" />
+          <div class="hint">Stored in sheet as USD.</div>
         </div>
 
-        <div>
-          <div class="label">Gender</div>
-          <select id="fGender"></select>
-        </div>
-        <div>
-          <div class="label">Size</div>
-          <select id="fSize"></select>
+        <div class="fcol">
+          <div class="lbl">
+            Selling Price (<span id="mCurLabel2">USD</span>)
+            <span class="hint">Auto-fills from Cost using Markup (unless you override).</span>
+          </div>
+          <input class="input" id="mSell" inputmode="decimal" placeholder="0.00" />
+          <div class="hint">You can override the auto-fill.</div>
         </div>
 
-        <div>
-          <div class="label">Shoe Size</div>
-          <select id="fShoe"></select>
+        <div class="fcol">
+          <div class="lbl">Quantity</div>
+          <input class="input" id="mQty" inputmode="numeric" placeholder="1" />
         </div>
-        <div>
-          <div class="label">Online Link</div>
-          <input id="fOnline" type="text" placeholder="https://..."/>
+
+        <div class="fcol">
+          <div class="lbl">Price Approved</div>
+          <select class="select" id="mApproved"></select>
+        </div>
+
+        <div class="fcol">
+          <div class="lbl">Status</div>
+          <select class="select" id="mStatus"></select>
+        </div>
+
+        <div class="fcol">
+          <div class="lbl">Shipping Status</div>
+          <select class="select" id="mShipStatus"></select>
+        </div>
+
+        <div class="fcol">
+          <div class="lbl">Gender</div>
+          <select class="select" id="mGender"></select>
+        </div>
+
+        <div class="fcol">
+          <div class="lbl">Size</div>
+          <select class="select" id="mSize"></select>
+        </div>
+
+        <div class="fcol">
+          <div class="lbl">Shoe Size</div>
+          <select class="select" id="mShoe"></select>
+        </div>
+
+        <div class="fcol">
+          <div class="lbl">Image URL</div>
+          <input class="input" id="mImage" placeholder="https://..." />
           <div class="hint">Saved as a clickable link in the table.</div>
         </div>
 
-        <div>
-          <div class="label">Image URL</div>
-          <input id="fImage" type="text" placeholder="https://..."/>
+        <div class="fcol">
+          <div class="lbl">Online Link</div>
+          <input class="input" id="mLink" placeholder="https://..." />
           <div class="hint">Saved as a clickable link in the table.</div>
         </div>
-        <div>
-          <div class="label">Note</div>
-          <textarea id="fNote" placeholder="Notes, condition, resale ideas, etc."></textarea>
+
+        <div class="fcol wide">
+          <div class="lbl">Note</div>
+          <textarea class="textarea" id="mNote" placeholder="Notes, condition, resale ideas, etc."></textarea>
+        </div>
+
+        <div class="fcol wide">
+          <div class="variantBox">
+            <div class="lbl">Variants (optional) <span class="hint">Stored in “Variations JSON”</span></div>
+            <div id="variants"></div>
+            <div class="row2">
+              <button class="btn" id="btnAddVariant">+ Variant</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="variants">
-        <div class="label" style="margin:0 0 8px 0;justify-content:space-between">
-          <span>Variants (optional)</span>
-          <span class="btn small" id="addVariantBtn">+ Variant</span>
+      <div class="modalFooter">
+        <div class="row2">
+          <button class="btn danger" id="btnDelete">Delete</button>
         </div>
-        <div class="hint">Add color/size/etc. Variants are stored inside “Variations JSON”.</div>
-        <div id="variantsWrap"></div>
-      </div>
-
-      <div class="rowBtns" style="margin-top:14px">
-        <div class="btn primary" id="saveBtn">Save</div>
-        <div class="btn danger" id="deleteBtn">Delete</div>
+        <div class="row2">
+          <button class="btn primary" id="btnSave">Save</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Manage Shipments Modal (two bubbles: Add / Remove) -->
-<div class="backdrop" id="shipBack">
-  <div class="modal" style="max-width:700px">
-    <div class="modalHead">
-      <h3>Manage Shipments</h3>
-      <div class="x" id="closeShip">×</div>
-    </div>
-    <div class="modalBody">
-      <div class="rowBtns" style="margin-top:0">
-        <div class="btn good" id="shipAddMode">+ Add Shipment</div>
-        <div class="btn danger" id="shipRemoveMode">Remove Shipment</div>
+  <!-- Manage Lists Modal (Add + Remove bubbles) -->
+  <div class="backdrop" id="manageBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Manage Lists">
+      <div class="modalHeader">
+        <div class="modalTitle" id="manageTitle">Manage</div>
+        <button class="iconBtn" id="manageClose" aria-label="Close">×</button>
       </div>
-
-      <div id="shipAddPane" style="margin-top:14px">
-        <div class="label">New Shipment Name</div>
-        <input id="shipAddName" type="text" placeholder="e.g., January Shipment 2026-01-05"/>
-        <div class="rowBtns">
-          <div class="btn primary" id="shipAddDo">Add</div>
+      <div class="modalBody" style="grid-template-columns:1fr 1fr;">
+        <div class="fcol">
+          <div class="lbl" id="manageAddLbl">Add</div>
+          <input class="input" id="manageAddInput" placeholder="Type a new name..." />
+          <button class="btn primary" id="manageAddBtn">Add</button>
+          <div class="hint" id="manageAddHint"></div>
+        </div>
+        <div class="fcol">
+          <div class="lbl" id="manageRemoveLbl">Remove</div>
+          <select class="select" id="manageRemoveSelect"></select>
+          <button class="btn danger" id="manageRemoveBtn">Remove</button>
+          <div class="hint" id="manageRemoveHint"></div>
+        </div>
+        <div class="fcol wide">
+          <div class="hint muted">Changes appear after Reload (or automatically if your Apps Script response includes updated meta).</div>
         </div>
       </div>
-
-      <div id="shipRemovePane" style="margin-top:14px;display:none">
-        <div class="label">Select Shipment To Remove</div>
-        <select id="shipRemoveSel"></select>
-        <div class="rowBtns">
-          <div class="btn danger" id="shipRemoveDo">Remove</div>
-        </div>
-        <div class="hint">Double-confirm required.</div>
+      <div class="modalFooter">
+        <button class="btn" id="manageDone">Done</button>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Manage Categories Modal (two bubbles: Add / Remove) -->
-<div class="backdrop" id="catBack">
-  <div class="modal" style="max-width:700px">
-    <div class="modalHead">
-      <h3>Manage Categories</h3>
-      <div class="x" id="closeCat">×</div>
-    </div>
-    <div class="modalBody">
-      <div class="rowBtns" style="margin-top:0">
-        <div class="btn good" id="catAddMode">+ Add Category</div>
-        <div class="btn danger" id="catRemoveMode">Remove Category</div>
-      </div>
+  <script>
+    /******************************************************************
+     * CONFIG — SET THIS ONCE
+     ******************************************************************/
+    const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+    const FX = 2.70;
 
-      <div id="catAddPane" style="margin-top:14px">
-        <div class="label">New Category Name</div>
-        <input id="catAddName" type="text" placeholder="e.g., Makeup"/>
-        <div class="rowBtns">
-          <div class="btn primary" id="catAddDo">Add</div>
-        </div>
-      </div>
+    /******************************************************************
+     * STATE
+     ******************************************************************/
+    let meta = null;
+    let rows = [];
+    let filtered = [];
+    let displayCurrency = "USD";         // dashboard/table view
+    let markup = 1.0;                   // 1.0 = 100%
+    let customMarkup = 1.0;
 
-      <div id="catRemovePane" style="margin-top:14px;display:none">
-        <div class="label">Select Category To Remove</div>
-        <select id="catRemoveSel"></select>
-        <div class="rowBtns">
-          <div class="btn danger" id="catRemoveDo">Remove</div>
-        </div>
-        <div class="hint">Double-confirm required.</div>
-      </div>
-    </div>
-  </div>
-</div>
+    // modal state
+    let editingRowId = null;
+    let modalCurrency = "USD";          // modal view only
+    let modalTouchedSell = false;
+    let modalTouchedCost = false;
 
-<!-- Hidden iframe for POST -->
-<iframe id="postFrame" name="postFrame" style="display:none"></iframe>
-<form id="postForm" method="POST" target="postFrame" style="display:none"></form>
+    // manage modal
+    let manageMode = null;              // "shipments" | "categories"
 
-<script>
-/* ===================== CONFIG ===================== */
-const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
-const FX = 2.70; // display conversion
-document.getElementById("fxBadge").textContent = FX.toFixed(2);
+    /******************************************************************
+     * JSONP helper (avoids CORS; matches your cb(...) screenshots)
+     ******************************************************************/
+    function jsonp(url, params = {}) {
+      return new Promise((resolve, reject) => {
+        const cbName = "cb_" + Math.random().toString(36).slice(2);
+        const script = document.createElement("script");
+        const q = new URLSearchParams({ ...params, callback: cbName });
 
-/* ===================== STATE ===================== */
-let rows = [];
-let meta = {categories:[], statuses:[], shippingStatuses:[], shipments:[]};
-let displayCurrency = "USD"; // page display
-let markup = 1.0;
-let selectedRow = null;
+        window[cbName] = (payload) => {
+          try { resolve(payload); } finally {
+            delete window[cbName];
+            script.remove();
+          }
+        };
 
-let modalCurrency = "USD"; // add/edit modal display currency
-let modalCostUSD = 0;
-let modalSellUSD = 0;
-let userOverrodeSell = false;
+        script.onerror = () => {
+          delete window[cbName];
+          script.remove();
+          reject(new Error("JSONP load failed"));
+        };
 
-let variants = []; // stored as array; saved to Variations JSON
-let approveYesNo = ["Yes","No"];
+        script.src = url + (url.includes("?") ? "&" : "?") + q.toString();
+        document.body.appendChild(script);
+      });
+    }
 
-/* ===================== UTILS ===================== */
-const $ = (id)=>document.getElementById(id);
-function toast(msg){
-  const t=$("toast");
-  t.textContent=msg;
-  t.style.display="block";
-  clearTimeout(toast._t);
-  toast._t=setTimeout(()=>t.style.display="none",1800);
-}
-function money(n, cur){
-  const sym = (cur==="XCD") ? "EC$" : "$";
-  return sym + Number(n||0).toFixed(2);
-}
-function toUSD(n, cur){ n=Number(n||0); return cur==="XCD" ? (n/FX) : n; }
-function fromUSD(n, cur){ n=Number(n||0); return cur==="XCD" ? (n*FX) : n; }
-function normStr(v){ return String(v??"").trim(); }
-function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+    /******************************************************************
+     * API wrappers (expects your Apps Script supports these actions)
+     ******************************************************************/
+    async function apiMeta(){
+      return jsonp(EXEC_URL, { action: "meta" });
+    }
+    async function apiData(){
+      return jsonp(EXEC_URL, { action: "data" });
+    }
+    async function apiUpsert(row){
+      return jsonp(EXEC_URL, { action: "upsert", row: JSON.stringify(row) });
+    }
+    async function apiDelete(rowId){
+      return jsonp(EXEC_URL, { action: "delete", rowId: rowId });
+    }
+    async function apiAddListItem(listName, value){
+      return jsonp(EXEC_URL, { action: "addListItem", list: listName, value: value });
+    }
+    async function apiRemoveListItem(listName, value){
+      return jsonp(EXEC_URL, { action: "removeListItem", list: listName, value: value });
+    }
 
-function addJsonp(url){
-  return new Promise((resolve,reject)=>{
-    const s=document.createElement("script");
-    const cb="cb_"+Math.random().toString(36).slice(2);
-    window[cb]=(payload)=>{ try{ resolve(payload); } finally { delete window[cb]; s.remove(); } };
-    s.onerror=()=>{ delete window[cb]; s.remove(); reject(new Error("Load failed")); };
-    s.src = url + (url.includes("?")?"&":"?") + "callback=" + cb + "&_=" + Date.now();
-    document.head.appendChild(s);
-  });
-}
+    /******************************************************************
+     * DOM
+     ******************************************************************/
+    const $ = (id) => document.getElementById(id);
 
-/* ===================== DATA LOAD ===================== */
-async function loadAll(){
-  $("loadedMsg").textContent = "Loading...";
-  const [m,d] = await Promise.all([
-    addJsonp(EXEC_URL + "?meta=1"),
-    addJsonp(EXEC_URL)
-  ]);
-  if(!m.ok) throw new Error(m.error||"Meta load failed");
-  if(!d.ok) throw new Error(d.error||"Data load failed");
-  meta = m.meta || meta;
-  rows = d.data || [];
-  hydrateFilters();
-  render();
-  $("loadedMsg").textContent = "Loaded.";
-}
+    const brandPill = $("brandPill");
+    const phonePopover = $("phonePopover");
 
-/* ===================== FILTERS ===================== */
-function hydrateFilters(){
-  // shipments
-  const shipSel = $("shipFilter");
-  shipSel.innerHTML = "";
-  shipSel.appendChild(new Option("All Shipments",""));
-  (meta.shipments||[]).forEach(v=>shipSel.appendChild(new Option(v,v)));
+    const kpiItems = $("kpiItems");
+    const kpiCost = $("kpiCost");
+    const kpiCostSub = $("kpiCostSub");
+    const kpiRevenue = $("kpiRevenue");
+    const kpiRevenueSub = $("kpiRevenueSub");
+    const kpiProfit = $("kpiProfit");
 
-  // categories
-  const catSel = $("catFilter");
-  catSel.innerHTML="";
-  catSel.appendChild(new Option("All Categories",""));
-  (meta.categories||[]).forEach(v=>catSel.appendChild(new Option(v,v)));
+    const currencyPill = $("currencyPill");
+    const markupSelect = $("markupSelect");
+    const markupLabel = $("markupLabel");
 
-  // statuses
-  const stSel=$("statusFilter");
-  stSel.innerHTML="";
-  stSel.appendChild(new Option("All Status",""));
-  (meta.statuses||[]).forEach(v=>stSel.appendChild(new Option(v,v)));
+    const qSearch = $("qSearch");
+    const fShipment = $("fShipment");
+    const fCategory = $("fCategory");
+    const fStatus = $("fStatus");
+    const fApproved = $("fApproved");
 
-  // approved
-  const apSel=$("approvedFilter");
-  apSel.innerHTML="";
-  apSel.appendChild(new Option("All Price Approved",""));
-  approveYesNo.forEach(v=>apSel.appendChild(new Option(v,v)));
+    const btnAdd = $("btnAdd");
+    const btnReload = $("btnReload");
+    const btnReloadTop = $("btnReloadTop");
+    const btnTripHelper = $("btnTripHelper");
+    const btnDashboardMobile = $("btnDashboardMobile");
 
-  // modal selects
-  fillSelect($("fShipment"), meta.shipments, true);
-  fillSelect($("fCategory"), meta.categories, true);
-  fillSelect($("fStatus"), meta.statuses, true);
-  fillSelect($("fShipStatus"), meta.shippingStatuses, true);
-  fillSelect($("fApproved"), approveYesNo, true);
-  fillSelect($("fGender"), ["","Male","Female","Unisex"], false);
-  fillSelect($("fSize"), ["","XS","S","M","L","XL","XXL"], false);
+    const btnManageShipments = $("btnManageShipments");
+    const btnManageCategories = $("btnManageCategories");
 
-  const shoe = [""];
-  for(let x=2.5;x<=15;x+=0.5) shoe.push(String(x));
-  fillSelect($("fShoe"), shoe, false);
+    const tbody = $("tbody");
+    const itemsBadge = $("itemsBadge");
+    const loadedMsg = $("loadedMsg");
 
-  // manage removes
-  refillManageLists();
-}
+    // modal
+    const modalBackdrop = $("modalBackdrop");
+    const modalClose = $("modalClose");
+    const modalTitle = $("modalTitle");
+    const rowIdHint = $("rowIdHint");
+    const btnSave = $("btnSave");
+    const btnDelete = $("btnDelete");
+    const mCurToggle = $("mCurToggle");
+    const mCurLabel1 = $("mCurLabel1");
+    const mCurLabel2 = $("mCurLabel2");
 
-function fillSelect(sel, arr, includeBlank){
-  sel.innerHTML="";
-  if(includeBlank) sel.appendChild(new Option("Select...",""));
-  (arr||[]).forEach(v=>{
-    if(!v && v!==0) return;
-    sel.appendChild(new Option(v,v));
-  });
-}
+    const mProduct = $("mProduct");
+    const mShipment = $("mShipment");
+    const mCategory = $("mCategory");
+    const mCost = $("mCost");
+    const mSell = $("mSell");
+    const mQty = $("mQty");
+    const mApproved = $("mApproved");
+    const mStatus = $("mStatus");
+    const mShipStatus = $("mShipStatus");
+    const mGender = $("mGender");
+    const mSize = $("mSize");
+    const mShoe = $("mShoe");
+    const mImage = $("mImage");
+    const mLink = $("mLink");
+    const mNote = $("mNote");
+    const mAddShipment = $("mAddShipment");
+    const mAddCategory = $("mAddCategory");
+    const mRemoveCategory = $("mRemoveCategory");
+    const variants = $("variants");
+    const btnAddVariant = $("btnAddVariant");
 
-function refillManageLists(){
-  // remove shipment/category lists
-  const s = $("shipRemoveSel"); s.innerHTML="";
-  (meta.shipments||[]).forEach(v=>s.appendChild(new Option(v,v)));
-  const c = $("catRemoveSel"); c.innerHTML="";
-  (meta.categories||[]).forEach(v=>c.appendChild(new Option(v,v)));
-}
+    // manage modal
+    const manageBackdrop = $("manageBackdrop");
+    const manageClose = $("manageClose");
+    const manageDone = $("manageDone");
+    const manageTitle = $("manageTitle");
+    const manageAddLbl = $("manageAddLbl");
+    const manageRemoveLbl = $("manageRemoveLbl");
+    const manageAddInput = $("manageAddInput");
+    const manageAddBtn = $("manageAddBtn");
+    const manageRemoveSelect = $("manageRemoveSelect");
+    const manageRemoveBtn = $("manageRemoveBtn");
+    const manageAddHint = $("manageAddHint");
+    const manageRemoveHint = $("manageRemoveHint");
 
-/* ===================== RENDER ===================== */
-function getFiltered(){
-  const q = normStr($("search").value).toLowerCase();
-  const ship = $("shipFilter").value;
-  const cat  = $("catFilter").value;
-  const st   = $("statusFilter").value;
-  const ap   = $("approvedFilter").value;
+    /******************************************************************
+     * Format helpers
+     ******************************************************************/
+    function n(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
+    function money(v, cur){
+      const x = n(v);
+      const sign = (cur === "XCD") ? "EC$" : "$";
+      return sign + x.toFixed(2);
+    }
+    function toXCD(usd){ return n(usd) * FX; }
+    function toUSD(xcd){ return n(xcd) / FX; }
 
-  return rows.filter(r=>{
-    const name = normStr(r["Product Name"]||r["Product"]||"").toLowerCase();
-    const rShip = normStr(r["Shipment"]);
-    const rCat  = normStr(r["Category/Tab"]||r["Category"]);
-    const rSt   = normStr(r["Status"]);
-    const rAp   = normStr(r["Price Approved"]||r["Approved"]);
-    if(q && !name.includes(q)) return false;
-    if(ship && rShip!==ship) return false;
-    if(cat  && rCat!==cat) return false;
-    if(st   && rSt!==st) return false;
-    if(ap   && rAp!==ap) return false;
-    return true;
-  });
-}
+    function displayedUSDToDisplay(usd){
+      return (displayCurrency === "XCD") ? toXCD(usd) : n(usd);
+    }
 
-function render(){
-  const list = getFiltered();
-  $("totalItems").textContent = list.length;
-  $("countBadge").textContent = list.length + " items";
+    /******************************************************************
+     * Render & Filtering
+     ******************************************************************/
+    function buildSelect(selectEl, values, allLabel){
+      selectEl.innerHTML = "";
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = allLabel;
+      selectEl.appendChild(opt0);
+      for (const v of values){
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v;
+        selectEl.appendChild(opt);
+      }
+    }
 
-  // totals based on USD in sheet
-  let totalCostUSD=0;
-  let expectedUSD=0;
-  let needsPrice=0;
-  let needsApproval=0;
+    function getFiltered(){
+      const q = (qSearch.value || "").trim().toLowerCase();
+      const sh = fShipment.value;
+      const cat = fCategory.value;
+      const st = fStatus.value;
+      const ap = fApproved.value;
 
-  list.forEach(r=>{
-    const costUSD = Number(r["Cost Price USD"] ?? r["Cost"] ?? 0) || 0;
-    const qty = Number(r["Quantity"] ?? r["Qty"] ?? 1) || 1;
-    const sellUSD = Number(r["Selling Price USD"] ?? r["Selling"] ?? 0) || 0;
-    const approved = normStr(r["Price Approved"]||r["Approved"]);
-    totalCostUSD += costUSD; // your sheet is per line, already total, not qty-multiplied (keeping your current behavior)
-    const suggested = costUSD * (1+markup); // markup=1.0 => 100% => x2
-    const expectedLine = (sellUSD>0 ? sellUSD : suggested);
-    expectedUSD += expectedLine;
-    if(!sellUSD || sellUSD<=0) needsPrice++;
-    if(approved !== "Yes") needsApproval++;
-  });
+      return rows.filter(r => {
+        const name = (r["Product Name"] || "").toLowerCase();
+        if (q && !name.includes(q)) return false;
+        if (sh && (r["Shipment"] || "") !== sh) return false;
+        if (cat && (r["Category/Tab"] || "") !== cat) return false;
+        if (st && (r["Status"] || "") !== st) return false;
+        if (ap && (r["Price Approved"] || "") !== ap) return false;
+        return true;
+      });
+    }
 
-  const cur = displayCurrency;
-  $("curLabel").textContent = cur;
-  $("curSub").textContent = cur;
+    function calcAggregates(list){
+      // Unit cost is stored USD in sheet. Quantity numeric.
+      // Total cost must be SUM(unitCostUSD * qty)
+      const totalItems = list.length;
 
-  $("totalCost").textContent = money(fromUSD(totalCostUSD, cur), cur);
-  $("expectedRevenue").textContent = money(fromUSD(expectedUSD, cur), cur);
-  $("profit").textContent = money(fromUSD(expectedUSD - totalCostUSD, cur), cur);
+      let costUSD = 0;
+      let revenueUSD = 0;
 
-  $("needsPriceChip").style.opacity = needsPrice ? 1 : .35;
-  $("needsApprovalChip").style.opacity = needsApproval ? 1 : .35;
+      for (const r of list){
+        const qty = Math.max(1, Math.floor(n(r["Quantity"])));
+        const unitCost = n(r["Cost Price USD"]);
+        const unitSellUSD = sellUSDFromRow(r);
 
-  // table
-  const tb = $("tbody");
-  tb.innerHTML="";
-  list.forEach(r=>{
-    const tr=document.createElement("tr");
-    tr.innerHTML = `
-      <td>${esc(r["Product Name"]||r["Product"]||"")}</td>
-      <td>${esc(r["Shipment"]||"")}</td>
-      <td>${esc(r["Category/Tab"]||r["Category"]||"")}</td>
-      <td class="right">${esc(r["Quantity"]||r["Qty"]||"")}</td>
-      <td class="right nowrap">${money(fromUSD(Number(r["Cost Price USD"]??r["Cost"]??0)||0, cur), cur)}</td>
-      <td class="right nowrap">${money(fromUSD(Number(r["Selling Price USD"]??r["Selling"]??0)||0, cur), cur)}</td>
-      <td>${esc(r["Status"]||"")}</td>
-      <td>${esc(r["Price Approved"]||r["Approved"]||"")}</td>
-    `;
-    tr.addEventListener("click",()=>openEdit(r));
-    tb.appendChild(tr);
-  });
-}
+        costUSD += (unitCost * qty);
 
-/* ===================== PHONE POPUP ===================== */
-function toggleHubPop(force){
-  const pop=$("hubPop");
-  const show = (typeof force==="boolean") ? force : (pop.style.display!=="block");
-  pop.style.display = show ? "block" : "none";
-  pop.setAttribute("aria-hidden", show ? "false" : "true");
-}
-document.addEventListener("click",(e)=>{
-  const hub=$("hubBtn"), pop=$("hubPop");
-  if(hub.contains(e.target)){ toggleHubPop(); return; }
-  if(pop.contains(e.target)) return;
-  toggleHubPop(false);
-});
+        // expected revenue = unitSellUSD * qty (you can later adjust to sold-only if you want)
+        revenueUSD += (unitSellUSD * qty);
+      }
 
-/* ===================== MODAL OPEN/CLOSE ===================== */
-function openModal(back){ back.style.display="flex"; }
-function closeModal(back){ back.style.display="none"; }
+      const profitUSD = revenueUSD - costUSD;
+      return { totalItems, costUSD, revenueUSD, profitUSD };
+    }
 
-function resetEditForm(){
-  selectedRow=null;
-  variants=[];
-  $("variantsWrap").innerHTML="";
-  $("modalTitle").textContent="Add Product";
-  $("deleteBtn").style.display="none";
+    function sellUSDFromRow(r){
+      // Sheet stores Selling Price XCD. Convert to USD.
+      // If missing, compute from cost & markup.
+      const sellXCD = n(r["Selling Price XCD"]);
+      if (sellXCD > 0) return toUSD(sellXCD);
 
-  $("fName").value="";
-  $("fShipment").value="";
-  $("fCategory").value="";
-  $("fStatus").value="";
-  $("fCost").value="";
-  $("fSell").value="";
-  $("fQty").value="";
-  $("fApproved").value="";
-  $("fShipStatus").value="";
-  $("fShipDate").value="";
-  $("fGender").value="";
-  $("fSize").value="";
-  $("fShoe").value="";
-  $("fOnline").value="";
-  $("fImage").value="";
-  $("fNote").value="";
+      const costUSD = n(r["Cost Price USD"]);
+      return costUSD * (1 + currentMarkup());
+    }
 
-  modalCurrency="USD";
-  modalCostUSD=0;
-  modalSellUSD=0;
-  userOverrodeSell=false;
-  syncModalCurrencyLabels();
-}
+    function currentMarkup(){
+      const v = markupSelect.value;
+      if (v === "custom") return n(customMarkup);
+      return n(v);
+    }
 
-function openAdd(){
-  resetEditForm();
-  openModal($("editBack"));
-}
+    function render(){
+      filtered = getFiltered();
+      const ag = calcAggregates(filtered);
 
-function parseVariationsJSON(txt){
-  try{
-    if(!txt) return [];
-    const v=JSON.parse(txt);
-    return Array.isArray(v)?v:[];
-  }catch(e){ return []; }
-}
-function openEdit(r){
-  resetEditForm();
-  selectedRow=r;
-  $("modalTitle").textContent="Edit Product";
-  $("deleteBtn").style.display="inline-flex";
+      itemsBadge.textContent = `${ag.totalItems} items`;
+      kpiItems.textContent = ag.totalItems;
 
-  $("fName").value = r["Product Name"]||r["Product"]||"";
-  $("fShipment").value = r["Shipment"]||"";
-  $("fCategory").value = r["Category/Tab"]||r["Category"]||"";
-  $("fStatus").value = r["Status"]||"";
-  $("fQty").value = r["Quantity"]||r["Qty"]||"";
-  $("fApproved").value = r["Price Approved"]||r["Approved"]||"";
-  $("fShipStatus").value = r["Shipping Status"]||"";
-  $("fShipDate").value = r["Ship Date"]||"";
-  $("fGender").value = r["Gender"]||"";
-  $("fSize").value = r["Size"]||"";
-  $("fShoe").value = r["Shoe Size"]||"";
-  $("fOnline").value = r["Online Link"]||"";
-  $("fImage").value = r["Image URL"]||"";
-  $("fNote").value = r["Note"]||"";
+      const costDisp = displayedUSDToDisplay(ag.costUSD);
+      const revDisp  = displayedUSDToDisplay(ag.revenueUSD);
+      const profDisp = displayedUSDToDisplay(ag.profitUSD);
 
-  modalCostUSD = Number(r["Cost Price USD"] ?? r["Cost"] ?? 0) || 0;
-  modalSellUSD = Number(r["Selling Price USD"] ?? r["Selling"] ?? 0) || 0;
+      kpiCost.textContent = money(costDisp, displayCurrency);
+      kpiCostSub.textContent = displayCurrency;
 
-  // show in modal currency (starts USD)
-  modalCurrency="USD";
-  $("fCost").value = fromUSD(modalCostUSD, modalCurrency).toFixed(2);
-  $("fSell").value = fromUSD(modalSellUSD, modalCurrency).toFixed(2);
+      kpiRevenue.textContent = money(revDisp, displayCurrency);
+      kpiRevenueSub.textContent = "est.";
 
-  // variants
-  const vtxt = r["Variations JSON"] || "";
-  variants = parseVariationsJSON(vtxt);
-  renderVariants();
+      kpiProfit.textContent = money(profDisp, displayCurrency);
 
-  openModal($("editBack"));
-}
+      // table
+      tbody.innerHTML = "";
+      for (const r of filtered){
+        const tr = document.createElement("tr");
+        tr.addEventListener("click", () => openEdit(r));
 
-/* ===================== MODAL CURRENCY TOGGLE ===================== */
-function syncModalCurrencyLabels(){
-  $("modalCurLabel1").textContent = modalCurrency;
-  $("modalCurLabel2").textContent = modalCurrency;
-  $("modalCurLabel3").textContent = modalCurrency;
-}
-function toggleModalCurrency(){
-  // read current visible numbers -> convert back to USD state
-  const costNow = Number($("fCost").value||0);
-  const sellNow = Number($("fSell").value||0);
-  modalCostUSD = toUSD(costNow, modalCurrency);
-  modalSellUSD = toUSD(sellNow, modalCurrency);
+        const qty = Math.max(1, Math.floor(n(r["Quantity"])));
+        const unitCostUSD = n(r["Cost Price USD"]);
+        const totalCostUSD = unitCostUSD * qty;
+        const sellUSD = sellUSDFromRow(r);
 
-  modalCurrency = (modalCurrency==="USD") ? "XCD" : "USD";
-  syncModalCurrencyLabels();
+        const unitCostDisp = displayedUSDToDisplay(unitCostUSD);
+        const totalCostDisp = displayedUSDToDisplay(totalCostUSD);
+        const sellDisp = displayedUSDToDisplay(sellUSD);
 
-  $("fCost").value = fromUSD(modalCostUSD, modalCurrency).toFixed(2);
-  $("fSell").value = fromUSD(modalSellUSD, modalCurrency).toFixed(2);
-}
-$("modalCurrencyChip").addEventListener("click", toggleModalCurrency);
+        tr.innerHTML = `
+          <td><b>${escapeHtml(r["Product Name"] || "")}</b></td>
+          <td>${escapeHtml(r["Shipment"] || "")}</td>
+          <td>${escapeHtml(r["Category/Tab"] || "")}</td>
+          <td class="money">${qty}</td>
+          <td class="money">${money(unitCostDisp, displayCurrency)}</td>
+          <td class="money">${money(totalCostDisp, displayCurrency)}</td>
+          <td class="money">${money(sellDisp, displayCurrency)}</td>
+          <td>${escapeHtml(r["Status"] || "")}</td>
+          <td>${escapeHtml(r["Price Approved"] || "")}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
 
-/* Auto-fill selling when cost changes (unless overridden) */
-$("fSell").addEventListener("input", ()=>{ userOverrodeSell=true; });
-$("fCost").addEventListener("input", ()=>{
-  const costVis = Number($("fCost").value||0);
-  const costUSD = toUSD(costVis, modalCurrency);
-  modalCostUSD = costUSD;
-  if(!userOverrodeSell){
-    const suggestedUSD = costUSD * (1+markup);
-    modalSellUSD = suggestedUSD;
-    $("fSell").value = fromUSD(suggestedUSD, modalCurrency).toFixed(2);
-  }
-});
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+      }[m]));
+    }
 
-/* ===================== VARIANTS ===================== */
-function renderVariants(){
-  const wrap=$("variantsWrap");
-  wrap.innerHTML="";
-  variants.forEach((v,idx)=>{
-    const box=document.createElement("div");
-    box.className="variantBox";
-    box.innerHTML=`
-      <div class="variantGrid">
-        <div>
-          <div class="label">Color</div>
-          <input data-k="color" data-i="${idx}" type="text" placeholder="e.g., Blue" value="${esc(v.color||"")}"/>
-        </div>
-        <div>
-          <div class="label">Size</div>
-          <select data-k="size" data-i="${idx}">
-            ${["","XS","S","M","L","XL","XXL"].map(o=>`<option value="${o}" ${o===(v.size||"")?"selected":""}>${o||"(blank)"}</option>`).join("")}
-          </select>
-        </div>
-        <div>
-          <div class="label">Gender</div>
-          <select data-k="gender" data-i="${idx}">
-            ${["","Men","Women","Unisex","Kids"].map(o=>`<option value="${o}" ${o===(v.gender||"")?"selected":""}>${o||"(blank)"}</option>`).join("")}
-          </select>
-        </div>
-        <div>
-          <div class="label">Qty</div>
-          <input data-k="qty" data-i="${idx}" type="number" step="1" placeholder="e.g., 6" value="${esc(v.qty||"")}"/>
-        </div>
-      </div>
-      <div class="rowBtns">
-        <div class="btn danger small" data-remove="${idx}">Remove Variant</div>
-      </div>
-    `;
-    box.addEventListener("input",(e)=>{
-      const el=e.target;
-      const i=Number(el.getAttribute("data-i"));
-      const k=el.getAttribute("data-k");
-      if(Number.isFinite(i) && k){
-        variants[i]=variants[i]||{};
-        variants[i][k]=el.value;
+    /******************************************************************
+     * Modal helpers
+     ******************************************************************/
+    function setModalCurrency(cur){
+      modalCurrency = cur;
+      mCurToggle.textContent = cur;
+      mCurLabel1.textContent = cur;
+      mCurLabel2.textContent = cur;
+    }
+
+    function toggleModalCurrency(){
+      // Convert BOTH fields together and keep them same currency in the UI.
+      const cost = n(mCost.value);
+      const sell = n(mSell.value);
+
+      if (modalCurrency === "USD"){
+        // USD -> XCD
+        mCost.value = (cost * FX).toFixed(2);
+        mSell.value = (sell * FX).toFixed(2);
+        setModalCurrency("XCD");
+      } else {
+        // XCD -> USD
+        mCost.value = (cost / FX).toFixed(2);
+        mSell.value = (sell / FX).toFixed(2);
+        setModalCurrency("USD");
+      }
+    }
+
+    function normalizeModalToUSD(){
+      // Before save: convert displayed modal fields back to USD
+      const cost = n(mCost.value);
+      const sell = n(mSell.value);
+
+      if (modalCurrency === "XCD"){
+        return { costUSD: cost / FX, sellUSD: sell / FX };
+      }
+      return { costUSD: cost, sellUSD: sell };
+    }
+
+    function openAdd(){
+      editingRowId = null;
+      modalTitle.textContent = "Add Product";
+      rowIdHint.textContent = "";
+      btnDelete.style.display = "none";
+      modalTouchedSell = false;
+      modalTouchedCost = false;
+      setModalCurrency("USD");
+
+      mProduct.value = "";
+      mShipment.value = "";
+      mCategory.value = "";
+      mCost.value = "";
+      mSell.value = "";
+      mQty.value = "1";
+      mApproved.value = "";
+      mStatus.value = "";
+      mShipStatus.value = "";
+      mGender.value = "";
+      mSize.value = "";
+      mShoe.value = "";
+      mImage.value = "";
+      mLink.value = "";
+      mNote.value = "";
+      variants.innerHTML = "";
+
+      openModal();
+    }
+
+    function openEdit(r){
+      editingRowId = r.__rowId || r.rowId || r._rowId || null; // supports several shapes
+      modalTitle.textContent = "Edit Product";
+      rowIdHint.textContent = editingRowId ? `Row ${editingRowId}` : "";
+      btnDelete.style.display = "inline-flex";
+      modalTouchedSell = true;
+      modalTouchedCost = true;
+      setModalCurrency("USD");
+
+      mProduct.value = r["Product Name"] || "";
+      mShipment.value = r["Shipment"] || "";
+      mCategory.value = r["Category/Tab"] || "";
+
+      // load stored USD / XCD but show in modal USD by default
+      const costUSD = n(r["Cost Price USD"]);
+      const sellUSD = sellUSDFromRow(r);
+
+      mCost.value = costUSD ? costUSD.toFixed(2) : "";
+      mSell.value = sellUSD ? sellUSD.toFixed(2) : "";
+
+      mQty.value = r["Quantity"] || "1";
+      mApproved.value = r["Price Approved"] || "";
+      mStatus.value = r["Status"] || "";
+      mShipStatus.value = r["Shipping Status"] || "";
+      mGender.value = r["Gender"] || "";
+      mSize.value = r["Size"] || "";
+      mShoe.value = r["Shoe Size"] || "";
+      mImage.value = r["Image URL"] || "";
+      mLink.value = r["Online Link"] || "";
+      mNote.value = r["Note"] || "";
+
+      // Variations JSON
+      variants.innerHTML = "";
+      const vjson = (r["Variations JSON"] || "").trim();
+      if (vjson){
+        try{
+          const arr = JSON.parse(vjson);
+          if (Array.isArray(arr)){
+            for (const v of arr) addVariantRow(v);
+          }
+        }catch(_){}
+      }
+
+      openModal();
+    }
+
+    function openModal(){
+      modalBackdrop.classList.add("open");
+      modalBackdrop.setAttribute("aria-hidden","false");
+    }
+    function closeModal(){
+      modalBackdrop.classList.remove("open");
+      modalBackdrop.setAttribute("aria-hidden","true");
+    }
+
+    function addVariantRow(seed = {}){
+      const wrap = document.createElement("div");
+      wrap.className = "variantRow";
+      wrap.innerHTML = `
+        <input class="input" placeholder="Color" value="${escapeAttr(seed.color||"")}" />
+        <select class="select">
+          ${meta.sizeOptions.map(x => `<option ${x===seed.size?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
+        </select>
+        <select class="select">
+          ${meta.shoeSizeOptions.map(x => `<option ${String(x)===String(seed.shoeSize)?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
+        </select>
+        <select class="select">
+          ${["Men","Women","Unisex","Kids"].map(x => `<option ${x===seed.gender?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
+        </select>
+      `;
+      variants.appendChild(wrap);
+    }
+    function escapeAttr(s){
+      return String(s).replace(/"/g,"&quot;");
+    }
+
+    /******************************************************************
+     * Manage lists modal
+     ******************************************************************/
+    function openManage(mode){
+      manageMode = mode;
+      manageAddInput.value = "";
+      manageAddHint.textContent = "";
+      manageRemoveHint.textContent = "";
+
+      if (mode === "shipments"){
+        manageTitle.textContent = "Manage Shipments";
+        manageAddLbl.textContent = "Add Shipment";
+        manageRemoveLbl.textContent = "Remove Shipment";
+        buildSelect(manageRemoveSelect, meta.shipments || [], "Select...");
+      } else {
+        manageTitle.textContent = "Manage Categories";
+        manageAddLbl.textContent = "Add Category";
+        manageRemoveLbl.textContent = "Remove Category";
+        buildSelect(manageRemoveSelect, meta.categories || [], "Select...");
+      }
+
+      manageBackdrop.classList.add("open");
+      manageBackdrop.setAttribute("aria-hidden","false");
+    }
+    function closeManage(){
+      manageBackdrop.classList.remove("open");
+      manageBackdrop.setAttribute("aria-hidden","true");
+    }
+
+    /******************************************************************
+     * Wiring / Events
+     ******************************************************************/
+    brandPill.addEventListener("click", (e) => {
+      e.stopPropagation();
+      phonePopover.classList.toggle("open");
+      phonePopover.setAttribute("aria-hidden", phonePopover.classList.contains("open") ? "false" : "true");
+    });
+    document.addEventListener("click", () => {
+      phonePopover.classList.remove("open");
+      phonePopover.setAttribute("aria-hidden","true");
+    });
+
+    currencyPill.addEventListener("click", () => {
+      displayCurrency = (displayCurrency === "USD") ? "XCD" : "USD";
+      currencyPill.textContent = displayCurrency;
+      render();
+    });
+
+    markupSelect.addEventListener("change", () => {
+      if (markupSelect.value === "custom"){
+        const v = prompt("Enter custom markup (e.g., 1.25 for 125%):", String(customMarkup));
+        if (v !== null){
+          customMarkup = n(v);
+        }
+      }
+      markupLabel.textContent = `Markup ${Math.round(currentMarkup()*100)}%`;
+      render();
+    });
+
+    qSearch.addEventListener("input", render);
+    fShipment.addEventListener("change", render);
+    fCategory.addEventListener("change", render);
+    fStatus.addEventListener("change", render);
+    fApproved.addEventListener("change", render);
+
+    btnAdd.addEventListener("click", openAdd);
+    btnReload.addEventListener("click", loadAll);
+    btnReloadTop.addEventListener("click", loadAll);
+
+    btnTripHelper.addEventListener("click", () => window.open("/trip-helper", "_blank"));
+    btnDashboardMobile.addEventListener("click", () => window.open("/dashboard-mobile", "_blank"));
+
+    btnManageShipments.addEventListener("click", () => openManage("shipments"));
+    btnManageCategories.addEventListener("click", () => openManage("categories"));
+
+    modalClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
+
+    manageClose.addEventListener("click", closeManage);
+    manageDone.addEventListener("click", closeManage);
+    manageBackdrop.addEventListener("click", (e) => { if (e.target === manageBackdrop) closeManage(); });
+
+    mCurToggle.addEventListener("click", toggleModalCurrency);
+
+    // Auto-fill Selling from Cost using markup unless user has typed in sell
+    mCost.addEventListener("input", () => {
+      modalTouchedCost = true;
+      if (!modalTouchedSell){
+        const cost = n(mCost.value);
+        const sell = cost * (1 + currentMarkup());
+        mSell.value = sell ? sell.toFixed(2) : "";
       }
     });
-    box.addEventListener("click",(e)=>{
-      const rm=e.target.getAttribute("data-remove");
-      if(rm!=null){
-        variants.splice(Number(rm),1);
-        renderVariants();
+    mSell.addEventListener("input", () => { modalTouchedSell = true; });
+
+    btnAddVariant.addEventListener("click", () => addVariantRow({}));
+
+    mAddCategory.addEventListener("click", async () => {
+      const name = prompt("New category name:");
+      if (!name) return;
+      try{
+        await apiAddListItem("categories", name.trim());
+        await loadMetaOnly(true);
+        mCategory.value = name.trim();
+      }catch(err){ alert("Add category failed."); }
+    });
+
+    mRemoveCategory.addEventListener("click", async () => {
+      const name = mCategory.value;
+      if (!name) return;
+      if (!confirm(`Remove category: ${name}?`)) return;
+      try{
+        await apiRemoveListItem("categories", name);
+        await loadMetaOnly(true);
+        mCategory.value = "";
+      }catch(err){ alert("Remove category failed."); }
+    });
+
+    mAddShipment.addEventListener("click", async () => {
+      const name = prompt("New shipment name:");
+      if (!name) return;
+      try{
+        await apiAddListItem("shipments", name.trim());
+        await loadMetaOnly(true);
+        mShipment.value = name.trim();
+      }catch(err){ alert("Add shipment failed."); }
+    });
+
+    manageAddBtn.addEventListener("click", async () => {
+      const v = (manageAddInput.value || "").trim();
+      if (!v) return;
+
+      const listName = (manageMode === "shipments") ? "shipments" : "categories";
+      try{
+        await apiAddListItem(listName, v);
+        manageAddHint.textContent = "Added.";
+        await loadMetaOnly(true);
+        openManage(manageMode);
+      }catch(err){
+        manageAddHint.textContent = "Add failed.";
       }
     });
-    wrap.appendChild(box);
-  });
-}
-$("addVariantBtn").addEventListener("click", ()=>{
-  variants.push({color:"",size:"",gender:"",qty:""});
-  renderVariants();
-});
 
-/* ===================== MANAGE SHIP/CAT (ADD+REMOVE) ===================== */
-function openManageShip(){
-  refillManageLists();
-  $("shipAddPane").style.display="block";
-  $("shipRemovePane").style.display="none";
-  openModal($("shipBack"));
-}
-function openManageCat(){
-  refillManageLists();
-  $("catAddPane").style.display="block";
-  $("catRemovePane").style.display="none";
-  openModal($("catBack"));
-}
-$("manageShipBtn").addEventListener("click", openManageShip);
-$("manageCatBtn").addEventListener("click", openManageCat);
+    manageRemoveBtn.addEventListener("click", async () => {
+      const v = manageRemoveSelect.value;
+      if (!v) return;
 
-$("shipAddMode").addEventListener("click", ()=>{
-  $("shipAddPane").style.display="block"; $("shipRemovePane").style.display="none";
-});
-$("shipRemoveMode").addEventListener("click", ()=>{
-  $("shipAddPane").style.display="none"; $("shipRemovePane").style.display="block";
-});
-$("catAddMode").addEventListener("click", ()=>{
-  $("catAddPane").style.display="block"; $("catRemovePane").style.display="none";
-});
-$("catRemoveMode").addEventListener("click", ()=>{
-  $("catAddPane").style.display="none"; $("catRemovePane").style.display="block";
-});
+      const listName = (manageMode === "shipments") ? "shipments" : "categories";
+      if (!confirm(`Remove ${manageMode.slice(0,-1)}: ${v}?`)) return;
 
-async function postAction(params){
-  // Post via hidden form (no fetch; avoids CORS drama)
-  return new Promise((resolve)=>{
-    const form=$("postForm");
-    form.innerHTML="";
-    form.action=EXEC_URL;
+      try{
+        await apiRemoveListItem(listName, v);
+        manageRemoveHint.textContent = "Removed.";
+        await loadMetaOnly(true);
+        openManage(manageMode);
+      }catch(err){
+        manageRemoveHint.textContent = "Remove failed.";
+      }
+    });
 
-    // _pm=1 makes Apps Script return a parent.postMessage payload
-    const add=(k,v)=>{
-      const i=document.createElement("input");
-      i.type="hidden"; i.name=k; i.value=v;
-      form.appendChild(i);
-    };
-    add("_pm","1");
-    Object.entries(params).forEach(([k,v])=>add(k,v));
+    btnSave.addEventListener("click", async () => {
+      const name = (mProduct.value || "").trim();
+      if (!name){ alert("Product Name required."); return; }
+      if (!mShipment.value){ alert("Shipment required."); return; }
+      if (!mCategory.value){ alert("Category required."); return; }
 
-    const handler=(ev)=>{
-      // accept any origin since GAS uses "*"
-      window.removeEventListener("message", handler);
-      resolve(ev.data);
-    };
-    window.addEventListener("message", handler);
+      // normalize modal money to USD for saving
+      const { costUSD, sellUSD } = normalizeModalToUSD();
 
-    form.submit();
-  });
-}
+      // Variants JSON
+      const vArr = [];
+      const vRows = variants.querySelectorAll(".variantRow");
+      for (const vr of vRows){
+        const inputs = vr.querySelectorAll("input,select");
+        vArr.push({
+          color: inputs[0].value || "",
+          size: inputs[1].value || "",
+          shoeSize: inputs[2].value || "",
+          gender: inputs[3].value || ""
+        });
+      }
+      const vjson = vArr.length ? JSON.stringify(vArr) : "";
 
-$("shipAddDo").addEventListener("click", async ()=>{
-  const name=normStr($("shipAddName").value);
-  if(!name) return toast("Shipment name required.");
-  const resp=await postAction({_action:"meta_add_shipment", value:name});
-  if(resp?.ok){
-    toast("Shipment added.");
-    $("shipAddName").value="";
-    await loadAll();
-  }else toast(resp?.error||"Add shipment failed");
-});
+      // Store selling as XCD in sheet (per your column)
+      const sellXCD = toXCD(sellUSD);
 
-$("shipRemoveDo").addEventListener("click", async ()=>{
-  const v=$("shipRemoveSel").value;
-  if(!v) return toast("Select a shipment.");
-  if(!confirm(`Remove shipment "${v}"?`)) return;
-  if(!confirm("Are you sure? This cannot be undone.")) return;
-  const resp=await postAction({_action:"meta_remove_shipment", value:v});
-  if(resp?.ok){
-    toast("Shipment removed.");
-    await loadAll();
-  }else toast(resp?.error||"Remove shipment failed");
-});
+      const row = {
+        rowId: editingRowId || "",
+        "Product Name": name,
+        "Shipment": mShipment.value,
+        "Category/Tab": mCategory.value,
+        "Image URL": (mImage.value || "").trim(),
+        "Cost Price USD": costUSD ? Number(costUSD.toFixed(2)) : "",
+        "Selling Price XCD": sellXCD ? Number(sellXCD.toFixed(2)) : "",
+        "Quantity": (mQty.value || "1").trim(),
+        "Online Link": (mLink.value || "").trim(),
+        "Note": (mNote.value || "").trim(),
+        "Status": mStatus.value || "",
+        "Price Approved": mApproved.value || "",
+        "Ship Date": "",
+        "Gender": mGender.value || "",
+        "Size": mSize.value || "",
+        "Shoe Size": mShoe.value || "",
+        "Shipping Status": mShipStatus.value || "",
+        "Shipped Date (optional but recommended)": "",
+        "Variations JSON": vjson
+      };
 
-$("catAddDo").addEventListener("click", async ()=>{
-  const name=normStr($("catAddName").value);
-  if(!name) return toast("Category name required.");
-  const resp=await postAction({_action:"meta_add_category", value:name});
-  if(resp?.ok){
-    toast("Category added.");
-    $("catAddName").value="";
-    await loadAll();
-  }else toast(resp?.error||"Add category failed");
-});
+      try{
+        await apiUpsert(row);
+        closeModal();
+        await loadAll();
+      }catch(err){
+        alert("Save failed.");
+      }
+    });
 
-$("catRemoveDo").addEventListener("click", async ()=>{
-  const v=$("catRemoveSel").value;
-  if(!v) return toast("Select a category.");
-  if(!confirm(`Remove category "${v}"?`)) return;
-  if(!confirm("Are you sure? This cannot be undone.")) return;
-  const resp=await postAction({_action:"meta_remove_category", value:v});
-  if(resp?.ok){
-    toast("Category removed.");
-    await loadAll();
-  }else toast(resp?.error||"Remove category failed");
-});
+    btnDelete.addEventListener("click", async () => {
+      if (!editingRowId){ alert("No row id."); return; }
+      if (!confirm("Delete this item?")) return;
+      try{
+        await apiDelete(editingRowId);
+        closeModal();
+        await loadAll();
+      }catch(err){
+        alert("Delete failed.");
+      }
+    });
 
-/* Inline add shipment inside Add Product */
-$("addShipmentInline").addEventListener("click", async ()=>{
-  const name = prompt("New shipment name:");
-  if(!name) return;
-  const resp=await postAction({_action:"meta_add_shipment", value:name});
-  if(resp?.ok){
-    toast("Shipment added.");
-    await loadAll();
-    $("fShipment").value=name;
-  }else toast(resp?.error||"Add shipment failed");
-});
+    /******************************************************************
+     * Load
+     ******************************************************************/
+    async function loadMetaOnly(rebuildSelects){
+      const m = await apiMeta();
+      if (!m || m.ok !== true) throw new Error("meta failed");
+      meta = m.meta || m.data || m;
 
-/* ===================== SAVE/DELETE ===================== */
-function buildPayloadForSave(){
-  // Normalize modal inputs to USD for sheet storage
-  const costUSD = toUSD(Number($("fCost").value||0), modalCurrency);
-  const sellUSD = toUSD(Number($("fSell").value||0), modalCurrency);
+      // Make sure arrays are arrays (strip accidental timestamps/noise)
+      meta.categories = (meta.categories || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
+      meta.shipments = (meta.shipments || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
+      meta.statuses = (meta.statuses || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
+      meta.priceApprovedOptions = (meta.priceApprovedOptions || ["Yes","No"]).filter(x => typeof x === "string" && x.trim().length);
+      meta.genderOptions = (meta.genderOptions || ["Male","Female","Unisex"]).filter(x => typeof x === "string" && x.trim().length);
+      meta.sizeOptions = (meta.sizeOptions || ["XS","S","M","L","XL","XXL"]).filter(x => typeof x === "string" && x.trim().length);
+      meta.shoeSizeOptions = (meta.shoeSizeOptions || ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"]);
 
-  const payload = {
-    "Product Name": normStr($("fName").value),
-    "Shipment": normStr($("fShipment").value),
-    "Category/Tab": normStr($("fCategory").value),
-    "Status": normStr($("fStatus").value),
-    "Cost Price USD": costUSD ? costUSD.toFixed(2) : "",
-    "Selling Price USD": sellUSD ? sellUSD.toFixed(2) : "",
-    "Quantity": normStr($("fQty").value),
-    "Price Approved": normStr($("fApproved").value),
-    "Shipping Status": normStr($("fShipStatus").value),
-    "Ship Date": normStr($("fShipDate").value),
-    "Gender": normStr($("fGender").value),
-    "Size": normStr($("fSize").value),
-    "Shoe Size": normStr($("fShoe").value),
-    "Image URL": normStr($("fImage").value),
-    "Online Link": normStr($("fOnline").value),
-    "Note": normStr($("fNote").value),
-    "Variations JSON": JSON.stringify(variants||[])
-  };
-  return payload;
-}
+      // shipping statuses (your list)
+      meta.shippingStatuses = (meta.shippingStatuses || ["Purchased","Processing","On Island","Shipped","Delivered"]).filter(x => typeof x === "string" && x.trim().length);
 
-function isShippedNow(payload){
-  const s = normStr(payload["Shipping Status"]).toLowerCase();
-  return s === "shipped";
-}
-function moneyRain(){
-  for(let i=0;i<22;i++){
-    const el=document.createElement("div");
-    el.className="money";
-    el.textContent="💸";
-    el.style.left = (Math.random()*100)+"vw";
-    el.style.animationDelay = (Math.random()*0.35)+"s";
-    el.style.opacity = (0.55+Math.random()*0.45);
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),1700);
-  }
-}
+      if (rebuildSelects){
+        buildSelect(fShipment, meta.shipments, "All Shipments");
+        buildSelect(fCategory, meta.categories, "All Categories");
+        buildSelect(fStatus, meta.statuses, "All Status");
+        buildSelect(fApproved, meta.priceApprovedOptions, "All Price Approved");
 
-$("saveBtn").addEventListener("click", async ()=>{
-  const p=buildPayloadForSave();
-  if(!p["Product Name"] || !p["Shipment"]){
-    return toast('Product Name and Shipment are required.');
-  }
-  const resp = await postAction({...p, _action:"update"});
-  if(resp?.ok){
-    toast("Saved.");
-    closeModal($("editBack"));
-    await loadAll();
-    if(isShippedNow(p)) moneyRain();
-  }else toast(resp?.error||"Save failed");
-});
+        // modal dropdowns
+        buildSelect(mShipment, meta.shipments, "Select...");
+        buildSelect(mCategory, meta.categories, "Select...");
+        buildSelect(mStatus, meta.statuses, "(blank)");
+        buildSelect(mApproved, meta.priceApprovedOptions, "(blank)");
 
-$("deleteBtn").addEventListener("click", async ()=>{
-  if(!selectedRow) return;
-  if(!confirm("Delete this item?")) return;
-  if(!confirm("Are you sure? This cannot be undone.")) return;
+        // Gender / Size / Shoe / ShipStatus
+        buildSelect(mGender, meta.genderOptions, "(blank)");
+        buildSelect(mSize, meta.sizeOptions, "(blank)");
+        buildSelect(mShoe, meta.shoeSizeOptions.map(String), "(blank)");
+        buildSelect(mShipStatus, meta.shippingStatuses, "(blank)");
+      }
+    }
 
-  const p={
-    "Product Name": normStr($("fName").value),
-    "Shipment": normStr($("fShipment").value),
-    _action:"delete"
-  };
-  const resp=await postAction(p);
-  if(resp?.ok){
-    toast("Deleted.");
-    closeModal($("editBack"));
-    await loadAll();
-  }else toast(resp?.error||"Delete failed");
-});
+    async function loadAll(){
+      try{
+        loadedMsg.textContent = "Loading...";
+        const m = await apiMeta();
+        meta = m.meta || m.data || m;
 
-/* ===================== PAGE EVENTS ===================== */
-$("addBtn").addEventListener("click", openAdd);
-$("reloadBtn").addEventListener("click", ()=>loadAll().catch(e=>toast(e.message||"Load failed")));
-$("closeEdit").addEventListener("click", ()=>closeModal($("editBack")));
-$("closeShip").addEventListener("click", ()=>closeModal($("shipBack")));
-$("closeCat").addEventListener("click", ()=>closeModal($("catBack")));
+        await loadMetaOnly(true);
 
-["search","shipFilter","catFilter","statusFilter","approvedFilter"].forEach(id=>{
-  $(id).addEventListener("input", render);
-  $(id).addEventListener("change", render);
-});
+        const d = await apiData();
+        if (!d || d.ok !== true) throw new Error("data failed");
+        rows = (d.data || []).map((r, idx) => ({
+          ...r,
+          __rowId: r.rowId || r.__rowId || r._rowId || r.RowId || (idx+2) // fallback
+        }));
 
-$("markupSel").addEventListener("change", ()=>{
-  markup = Number($("markupSel").value)||1;
-  $("expSub").textContent = Math.round(markup*100)+"%";
-  $("markupLabel").textContent = "Markup " + Math.round(markup*100) + "%";
-  // also re-auto-fill if user has not overridden
-  if(!userOverrodeSell && $("editBack").style.display==="flex"){
-    const costUSD = toUSD(Number($("fCost").value||0), modalCurrency);
-    const suggestedUSD = costUSD*(1+markup);
-    $("fSell").value = fromUSD(suggestedUSD, modalCurrency).toFixed(2);
-  }
-  render();
-});
+        loadedMsg.textContent = "Loaded.";
+        render();
+      }catch(err){
+        console.error(err);
+        loadedMsg.textContent = "Load error.";
+        alert("Load error. Check your Apps Script deploy + permissions.");
+      }
+    }
 
-$("currencyChip").addEventListener("click", ()=>{
-  displayCurrency = (displayCurrency==="USD") ? "XCD" : "USD";
-  render();
-});
+    /******************************************************************
+     * Init
+     ******************************************************************/
+    (function init(){
+      // defaults
+      buildSelect(fShipment, [], "All Shipments");
+      buildSelect(fCategory, [], "All Categories");
+      buildSelect(fStatus, [], "All Status");
+      buildSelect(fApproved, [], "All Price Approved");
 
-/* Ensure modal starts USD each time */
-function openEditBack(){ resetEditForm(); openModal($("editBack")); }
+      // modal selects pre
+      buildSelect(mShipment, [], "Select...");
+      buildSelect(mCategory, [], "Select...");
+      buildSelect(mStatus, [], "(blank)");
+      buildSelect(mApproved, [], "(blank)");
+      buildSelect(mGender, ["Male","Female","Unisex"], "(blank)");
+      buildSelect(mSize, ["XS","S","M","L","XL","XXL"], "(blank)");
+      buildSelect(mShoe, ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"], "(blank)");
+      buildSelect(mShipStatus, ["Purchased","Processing","On Island","Shipped","Delivered"], "(blank)");
 
-/* ===================== INIT ===================== */
-loadAll().catch(e=>toast(e.message||"Load failed"));
-</script>
+      loadAll();
+    })();
+  </script>
 </body>
 </html>
