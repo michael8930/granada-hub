@@ -7,1486 +7,1720 @@
 
   <style>
     :root{
-      --bg0:#05080d;
-      --bg1:#09121a;
-      --glass: rgba(12,18,24,.72);
-      --glass2: rgba(12,18,24,.62);
-      --panel: rgba(10,14,18,.62);
-      --panel2: rgba(10,14,18,.50);
-      --stroke: rgba(255,255,255,.08);
-      --stroke2: rgba(255,255,255,.12);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.62);
-      --muted2: rgba(255,255,255,.42);
-      --accent: #00b7ff;
-      --accent2:#2bd3ff;
-      --danger:#ff5b6e;
-      --ok:#42ff9a;
+      --bg0:#05080c;
+      --bg1:#071019;
+      --panel:#0b1621;
+      --panel2:#0d1b28;
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.07);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.62);
+      --muted2:rgba(255,255,255,.42);
+      --blue:#19b6ff;
+      --blue2:#0a7fb8;
+      --good:#4ee58a;
+      --warn:#ffcf4d;
+      --bad:#ff5a6a;
       --shadow: 0 30px 80px rgba(0,0,0,.55);
-      --radius: 22px;
-      --radius2: 16px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --shadow2: 0 14px 40px rgba(0,0,0,.45);
+      --radius:22px;
+      --radius2:16px;
+      --font: -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: var(--font);
-      color: var(--text);
+      font-family:var(--font);
+      color:var(--text);
       background:
-        radial-gradient(1200px 700px at 20% 0%, rgba(0,183,255,.12), transparent 60%),
-        radial-gradient(900px 500px at 85% 10%, rgba(43,211,255,.10), transparent 60%),
-        radial-gradient(800px 650px at 50% 100%, rgba(0,183,255,.08), transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg0));
-      overflow-x:hidden;
+        radial-gradient(1200px 700px at 30% 0%, rgba(25,182,255,.14), transparent 60%),
+        radial-gradient(900px 600px at 80% 20%, rgba(36,255,200,.10), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(25,182,255,.08), transparent 55%),
+        linear-gradient(180deg, #030508, #020408 55%, #010307);
+      padding:24px 16px 32px;
     }
-
-    .wrap{max-width: 1240px; margin: 36px auto; padding: 0 18px;}
+    .wrap{max-width:1180px;margin:0 auto}
     .shell{
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(12,20,28,.78), rgba(8,10,14,.70));
-      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(13,28,42,.86), rgba(7,14,22,.86));
+      border:1px solid var(--stroke);
+      border-radius:28px;
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-
     .topbar{
-      padding: 18px 18px 12px;
+      padding:18px 18px 14px;
       background:
-        radial-gradient(900px 220px at 30% 0%, rgba(0,183,255,.22), transparent 70%),
-        linear-gradient(180deg, rgba(16,26,36,.92), rgba(10,12,16,.78));
-      border-bottom: 1px solid rgba(255,255,255,.06);
+        radial-gradient(1000px 220px at 20% 0%, rgba(25,182,255,.18), transparent 60%),
+        linear-gradient(180deg, rgba(14,30,44,.92), rgba(10,18,27,.92));
+      border-bottom:1px solid var(--stroke);
     }
-
-    .row{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
-    .row.space{justify-content:space-between}
+    .toprow{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    }
     .brand{
-      display:flex; align-items:center; gap:12px; min-width:280px;
+      display:flex;align-items:center;gap:12px;min-width:260px;
     }
-
     .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.20);
-      border: 1px solid rgba(255,255,255,.10);
+      border:1px solid var(--stroke);
+      background: rgba(8,14,20,.55);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-      font-weight: 800;
+      border-radius:999px;
+      padding:8px 12px;
       letter-spacing:.08em;
-      text-transform: uppercase;
-      font-size: 12px;
-      color: rgba(255,255,255,.90);
+      font-weight:800;
+      font-size:12px;
+      text-transform:uppercase;
+      display:inline-flex;align-items:center;gap:10px;
       user-select:none;
-      white-space:nowrap;
-    }
-    .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--accent); box-shadow: 0 0 18px rgba(0,183,255,.8);}
-    .title{
-      display:flex; flex-direction:column; gap:2px;
-    }
-    .title h1{
-      margin:0;
-      font-size: 18px;
-      letter-spacing:.06em;
-      text-transform: uppercase;
-      opacity:.95;
-    }
-    .title small{color: rgba(255,255,255,.55)}
-
-    .navbtns{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .btn{
-      appearance:none; border:0; background: transparent;
-      color: rgba(255,255,255,.86);
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-      font-weight: 800;
-      letter-spacing:.06em;
-      text-transform: uppercase;
-      font-size: 12px;
       cursor:pointer;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 4px rgba(25,182,255,.15)}
+    .titleblock{display:flex;flex-direction:column;gap:4px}
+    .title{
+      letter-spacing:.08em;
+      font-weight:900;
+      text-transform:uppercase;
+      font-size:16px;
+      color:rgba(255,255,255,.92);
+      white-space:nowrap;
+    }
+    .subtitle{font-size:12px;color:var(--muted)}
+    .actions{
+      display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;
+    }
+    .btn{
+      border:1px solid var(--stroke);
+      background: rgba(8,14,20,.55);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:850;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.92);
+      cursor:pointer;
       user-select:none;
       white-space:nowrap;
     }
-    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.06);}
-    .btn:active{transform: translateY(0px);}
+    .btn:hover{border-color:rgba(255,255,255,.16)}
     .btn.primary{
-      background: linear-gradient(180deg, rgba(0,183,255,.95), rgba(0,130,190,.95));
-      border-color: rgba(0,183,255,.55);
-      color: rgba(0,0,0,.9);
+      background: linear-gradient(180deg, rgba(25,182,255,.22), rgba(25,182,255,.10));
+      border-color: rgba(25,182,255,.38);
+      color:#dff5ff;
     }
-    .btn.primary:hover{background: linear-gradient(180deg, rgba(43,211,255,.95), rgba(0,130,190,.95));}
-    .btn.ghost{
-      background: rgba(255,255,255,.04);
+    .btn.ghost{opacity:.92}
+    .btn:active{transform:translateY(1px)}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+      padding:16px 16px 18px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
     }
 
-    .content{padding: 16px 18px 22px;}
-
-    /* Dashboard cards */
     .cards{
       display:grid;
-      grid-template-columns: 1.05fr 1.25fr 1.25fr 1fr;
-      gap: 14px;
-      margin-top: 12px;
+      grid-template-columns: repeat(4, 1fr);
+      gap:14px;
+      padding:14px 16px 10px;
     }
     @media (max-width: 980px){
-      .cards{grid-template-columns: 1fr 1fr; }
+      .cards{grid-template-columns:1fr 1fr}
     }
-    @media (max-width: 620px){
-      .cards{grid-template-columns: 1fr; }
+    @media (max-width: 560px){
+      .cards{grid-template-columns:1fr}
     }
-
     .card{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.12));
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-      padding: 14px 14px 12px;
+      background: rgba(7,12,18,.55);
+      border:1px solid var(--stroke2);
+      border-radius:22px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      padding:14px 14px 12px;
+      min-height:104px;
       position:relative;
       overflow:hidden;
     }
-    .card h3{
-      margin:0;
-      font-size: 11px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.60);
-      font-weight: 900;
+    .card h4{
+      margin:0 0 8px 0;
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:900;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
     }
-    .card .big{
-      margin-top: 10px;
-      font-size: 42px;
-      line-height: 1;
-      font-weight: 900;
-      letter-spacing: .02em;
+    .big{
+      font-size:34px;
+      font-weight:950;
+      letter-spacing:.02em;
+      line-height:1.05;
+      white-space:nowrap;
+      overflow:hidden;text-overflow:ellipsis;
     }
-    .card .sub{
-      margin-top: 6px;
-      color: rgba(255,255,255,.55);
-      font-size: 12px;
-    }
+    .smallrow{margin-top:6px;color:var(--muted2);font-size:12px}
     .chip{
-      position:absolute;
-      right: 12px;
-      top: 12px;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.22);
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      font-weight:850;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.85);
+      user-select:none;
+      cursor:pointer;
     }
-    .chip .btn{padding: 8px 12px; font-size: 11px;}
-    .chip select{
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.20);
-      color: rgba(255,255,255,.86);
-      padding: 8px 10px;
-      font-weight: 800;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      font-size: 11px;
-      outline:none;
+    .chip .mini{opacity:.8;font-weight:900}
+    .chip.primary{
+      border-color:rgba(25,182,255,.38);
+      background: rgba(25,182,255,.10);
+      color:#dff5ff;
     }
 
-    /* Filters */
     .filters{
-      margin-top: 12px;
       display:grid;
-      grid-template-columns: 1.3fr 1fr 1fr 1fr 1.05fr 0.9fr;
-      gap: 10px;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr auto auto;
+      gap:10px;
+      padding:8px 16px 16px;
       align-items:center;
-    }
-    @media (max-width: 1050px){
-      .filters{grid-template-columns: 1fr 1fr 1fr; }
-    }
-    .field, select, input{
-      width:100%;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      color: rgba(255,255,255,.86);
-      padding: 12px 14px;
-      outline:none;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
-      font-size: 13px;
-    }
-    .field::placeholder{color: rgba(255,255,255,.38);}
-    select{
-      padding: 11px 14px;
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-transform: none;
-    }
-    .filters .btn{padding: 12px 14px; justify-content:center;}
-
-    /* Main grid */
-    .grid{
-      margin-top: 14px;
-      display:grid;
-      grid-template-columns: 1.45fr 1fr;
-      gap: 14px;
     }
     @media (max-width: 980px){
-      .grid{grid-template-columns: 1fr;}
+      .filters{grid-template-columns:1fr 1fr;gap:10px}
+      .filters .wide{grid-column:1/-1}
     }
-
-    .panel{
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.12));
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    .field, select, input[type="text"], input[type="number"], textarea{
+      width:100%;
+      border:1px solid var(--stroke2);
+      background: rgba(0,0,0,.25);
+      color:rgba(255,255,255,.92);
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:13px;
+      outline:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    input::placeholder, textarea::placeholder{color:rgba(255,255,255,.35)}
+    select{cursor:pointer}
+    .section{
+      background: rgba(7,12,18,.55);
+      border:1px solid var(--stroke2);
+      border-radius:22px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
       overflow:hidden;
-      position:relative;
     }
-    .panel .head{
-      padding: 14px 14px 10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      border-bottom: 1px solid rgba(255,255,255,.06);
+    .sectionHead{
+      padding:14px 16px 10px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
     }
-    .panel .head h2{
+    .sectionTitle{
       margin:0;
-      font-size: 12px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.75);
-      font-weight: 900;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.82);
+      font-weight:950;
     }
     .badge{
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      font-weight: 900;
-      letter-spacing:.10em;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.82);
+      border:1px solid var(--stroke);
+      background: rgba(0,0,0,.22);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.72);
     }
-
     table{
       width:100%;
-      border-collapse: collapse;
+      border-collapse:collapse;
+      font-size:13px;
     }
     thead th{
       text-align:left;
-      padding: 12px 14px;
-      font-size: 11px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.58);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      font-weight: 900;
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      padding:10px 16px;
+      border-top:1px solid var(--stroke2);
+      border-bottom:1px solid var(--stroke2);
     }
     tbody td{
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      color: rgba(255,255,255,.86);
-      font-weight: 650;
-      vertical-align: top;
+      padding:10px 16px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      color:rgba(255,255,255,.90);
+      vertical-align:middle;
     }
-    tbody tr{
-      cursor:pointer;
-      transition: background .10s ease;
-    }
-    tbody tr:hover{background: rgba(255,255,255,.04);}
-    .muted{color: rgba(255,255,255,.55); font-weight: 600;}
-    .right{text-align:right}
-    .small{font-size: 12px}
-
-    .help{
-      padding: 14px;
-      color: rgba(255,255,255,.70);
-      line-height: 1.5;
-      font-weight: 650;
-    }
-    .help ul{margin:10px 0 0 18px; padding:0}
-    .help li{margin: 6px 0}
-    .help .row{margin-top: 10px}
-    .help .callrow{display:flex; gap:10px; flex-wrap:wrap;}
-    .fxbadge{
-      margin-left:auto;
-      display:inline-flex;
-      align-items:center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      font-weight: 900;
-      letter-spacing:.10em;
-      font-size: 11px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.82);
-    }
-
-    /* Modal (Add/Edit) */
-    .modal-backdrop{
-      position: fixed;
-      inset: 0;
+    tbody tr{cursor:pointer}
+    tbody tr:hover{background: rgba(255,255,255,.03)}
+    .muted{color:var(--muted)}
+    .right{ text-align:right }
+    .nowrap{white-space:nowrap}
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:20px;
+      transform:translateX(-50%);
+      background: rgba(0,0,0,.65);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:10px 14px;
+      color:rgba(255,255,255,.92);
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.06em;
       display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 22px;
-      z-index: 9998;
-
-      /* FIX #1: less transparent backdrop so fields are readable */
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+      z-index:9999;
     }
-    .modal-backdrop.show{display:flex;}
-    .modal-panel{
-      width: min(980px, 100%);
-      border-radius: 26px;
-      border: 1px solid rgba(255,255,255,.10);
+
+    /* POPovers */
+    .pop{
+      position:absolute;
+      top:58px; left:18px;
+      background: rgba(8,14,20,.90);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:16px;
+      padding:10px;
+      box-shadow: var(--shadow2);
+      display:none;
+      min-width:240px;
+      z-index:50;
+    }
+    .pop .row{display:flex;gap:10px;flex-wrap:wrap}
+    .pop a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+
+    /* MODALS */
+    .backdrop{
+      position:fixed;inset:0;
+      background: rgba(0,0,0,.78); /* less transparent (fix) */
+      display:none;
+      align-items:center;justify-content:center;
+      padding:18px;
+      z-index:1000;
+    }
+    .modal{
+      width:min(980px, 96vw);
+      max-height: 92vh;
+      overflow:auto;
+      background: linear-gradient(180deg, rgba(13,28,42,.96), rgba(7,14,22,.96));
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:26px;
       box-shadow: var(--shadow);
-      overflow:hidden;
-
-      /* FIX #1: more opaque panel so the form does not blend into the dashboard */
-      background: rgba(12,18,24,.92);
+      position:relative;
     }
-    .modal-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 14px 14px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      background: linear-gradient(180deg, rgba(16,26,36,.72), rgba(10,12,16,.20));
+    .modalHead{
+      padding:18px 18px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
     }
-    .modal-top h3{
+    .modalHead h3{
       margin:0;
-      font-size: 12px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.80);
-      font-weight: 900;
+      font-size:13px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:950;
+      color:rgba(255,255,255,.92);
     }
-    .xbtn{
-      width: 40px; height: 40px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
+    .x{
+      width:40px;height:40px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color:rgba(255,255,255,.9);
       cursor:pointer;
-      font-weight: 900;
-      font-size: 18px;
+      font-weight:900;
+      font-size:18px;
+      display:grid;place-items:center;
+      user-select:none;
     }
-    .modal-body{padding: 14px;}
-    .formgrid{
+    .modalBody{padding:14px 18px 18px}
+    .formGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap:12px 14px;
     }
-    @media (max-width: 860px){
-      .formgrid{grid-template-columns: 1fr;}
-    }
+    @media (max-width: 860px){ .formGrid{grid-template-columns:1fr} }
     .label{
-      font-size: 11px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.55);
-      font-weight: 900;
-      margin: 6px 0 8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:900;
+      margin:4px 0 6px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
     }
-    .hint{font-size: 12px; color: rgba(255,255,255,.42); letter-spacing:0; text-transform:none; font-weight: 650;}
-    textarea{
-      border-radius: 18px;
-      min-height: 70px;
-      resize: vertical;
-    }
+    .hint{font-size:12px;color:var(--muted2);margin-top:6px}
+    textarea{min-height:86px;resize:vertical}
 
     .variants{
-      margin-top: 12px;
-      border-top: 1px dashed rgba(255,255,255,.12);
-      padding-top: 12px;
+      margin-top:14px;
+      border-top:1px dashed rgba(255,255,255,.12);
+      padding-top:14px;
     }
-    .variantRow{
+    .variantBox{
+      border:1px dashed rgba(255,255,255,.14);
+      border-radius:18px;
+      padding:12px;
+      background: rgba(0,0,0,.18);
+      margin-top:10px;
+    }
+    .variantGrid{
       display:grid;
-      grid-template-columns: 1.1fr 1fr 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.16);
+      grid-template-columns: 1fr 1fr;
+      gap:10px 12px;
     }
-    @media (max-width: 900px){
-      .variantRow{grid-template-columns: 1fr 1fr;}
-    }
-    .variantActions{
-      display:flex;
-      gap:10px;
-      justify-content:space-between;
-      align-items:center;
-      margin-top: 10px;
-    }
+    @media (max-width: 860px){ .variantGrid{grid-template-columns:1fr} }
+    .rowBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+    .btn.small{padding:9px 12px;font-size:12px}
+    .btn.danger{border-color:rgba(255,90,106,.35);background:rgba(255,90,106,.10)}
+    .btn.good{border-color:rgba(78,229,138,.30);background:rgba(78,229,138,.10)}
+    .linkish{color:#bfeaff;text-decoration:none}
+    .linkish:hover{text-decoration:underline}
 
-    .modal-actions{
-      display:flex;
-      gap: 10px;
-      justify-content:flex-start;
-      padding: 14px;
-      border-top: 1px solid rgba(255,255,255,.06);
-      background: rgba(0,0,0,.12);
-    }
-
-    .toast{
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      z-index: 9999;
-      background: rgba(12,18,24,.90);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 14px;
-      padding: 10px 12px;
-      color: rgba(255,255,255,.90);
-      font-weight: 800;
-      letter-spacing:.02em;
-      display:none;
-      box-shadow: var(--shadow);
-      max-width: min(520px, calc(100% - 32px));
-    }
-    .toast.show{display:block;}
-
-    /* Tiny “thumbs up” pop */
-    .pop{
-      position: fixed;
-      left: 50%;
-      top: 22%;
-      transform: translate(-50%,-50%);
-      z-index: 9999;
-      font-size: 44px;
-      filter: drop-shadow(0 18px 26px rgba(0,0,0,.55));
-      animation: pop .85s ease forwards;
+    /* Money rain */
+    .money{
+      position:fixed;
+      top:-30px;
+      font-size:20px;
       pointer-events:none;
+      z-index:2000;
+      animation: fall 1.4s linear forwards;
+      opacity:.95;
     }
-    @keyframes pop{
-      0%{opacity:0; transform: translate(-50%,-50%) scale(.7);}
-      35%{opacity:1; transform: translate(-50%,-50%) scale(1.1);}
-      100%{opacity:0; transform: translate(-50%,-60%) scale(1.0);}
+    @keyframes fall{
+      to{transform:translateY(calc(100vh + 60px)) rotate(240deg); opacity:0.0}
     }
-
-    /* Make links look like your current style */
-    a.link{
-      color: rgba(43,211,255,.95);
-      text-decoration: none;
-      font-weight: 900;
-    }
-    a.link:hover{text-decoration: underline;}
   </style>
 </head>
 
 <body>
   <div class="wrap">
     <div class="shell">
+
       <div class="topbar">
-        <div class="row space">
-          <div class="brand">
-            <span class="pill"><span class="dot"></span> Grenada Hub Pro</span>
-            <div class="title">
-              <h1>Inventory • Pricing • Shipments</h1>
-              <small>One master Inventory sheet • dropdowns from “Lists” • iPhone + Android friendly</small>
+        <div class="toprow">
+          <div class="brand" style="position:relative">
+            <div id="hubBtn" class="pill" title="Open Hub menu">
+              <span class="dot"></span>
+              <span>Grenada Hub Pro</span>
+            </div>
+
+            <div class="titleblock">
+              <div class="title">Inventory • Pricing • Shipments</div>
+              <div class="subtitle">One master Inventory sheet • dropdowns from “Lists” • iPhone + Android friendly</div>
+            </div>
+
+            <div id="hubPop" class="pop" aria-hidden="true">
+              <div class="row" style="margin-bottom:10px">
+                <a class="btn small" href="tel:+16107035185">Call Michael</a>
+                <a class="btn small" href="tel:+14845135528">Call Quencie</a>
+              </div>
+              <div class="muted" style="font-size:12px;line-height:1.35">
+                Michael: (610) 703-5185<br>
+                Quencie: (484) 513-5528
+              </div>
             </div>
           </div>
 
-          <div class="navbtns">
-            <button class="btn ghost" id="btnTripHelper">Trip Helper</button>
-            <button class="btn ghost" id="btnDashboardMobile">Dashboard Mobile</button>
-            <button class="btn primary" id="btnAddProduct">+ Add Product</button>
-            <button class="btn" id="btnReloadTop">Reload</button>
-          </div>
-        </div>
-
-        <div class="cards">
-          <div class="card">
-            <h3>Total Items</h3>
-            <div class="chip">
-              <span class="btn ghost" id="chipShipment">All Shipments</span>
-            </div>
-            <div class="big" id="kpiItems">0</div>
-            <div class="sub"><span class="muted">items</span></div>
-          </div>
-
-          <div class="card">
-            <h3>Total Cost</h3>
-            <div class="chip">
-              <button class="btn ghost" id="btnCurrencyPill">USD</button>
-              <button class="btn" id="btnCurrencyToggle">Toggle</button>
-            </div>
-            <div class="big" id="kpiCost">$0.00</div>
-            <div class="sub"><span class="muted" id="kpiCostCcy">USD</span></div>
-          </div>
-
-          <div class="card">
-            <h3>Expected Revenue</h3>
-            <div class="chip">
-              <span class="btn ghost" id="chipMarkup">Markup 100%</span>
-              <select id="selMarkupTop" aria-label="Markup">
-                <option value="50">50%</option>
-                <option value="100" selected>100%</option>
-                <option value="150">150%</option>
-                <option value="200">200%</option>
-                <option value="custom">Custom</option>
-              </select>
-            </div>
-            <div class="big" id="kpiRevenue">$0.00</div>
-            <div class="sub"><span class="muted" id="kpiRevenuePct">100%</span></div>
-          </div>
-
-          <div class="card">
-            <h3>Profit</h3>
-            <div class="chip">
-              <button class="btn ghost" id="btnNeedsPrice">Needs Price</button>
-              <button class="btn ghost" id="btnNeedsApproval">Needs Approval</button>
-            </div>
-            <div class="big" id="kpiProfit">$0.00</div>
-            <div class="sub"><span class="muted">est.</span></div>
-          </div>
-        </div>
-
-        <div class="filters">
-          <input class="field" id="qSearch" placeholder="Search Product Name..." />
-          <select id="fShipment"></select>
-          <select id="fCategory"></select>
-          <select id="fStatus"></select>
-          <select id="fApproved"></select>
-          <button class="btn" id="btnManageShipments">Manage Shipments</button>
-          <button class="btn" id="btnManageCategories">Manage Categories</button>
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <button class="btn" id="btnReload">Reload</button>
-          <div style="margin-left:auto; display:flex; gap:10px; align-items:center;">
-            <span class="fxbadge" id="fxBadge">FX 1 USD = 2.70 XCD</span>
+          <div class="actions">
+            <a class="btn ghost" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
+            <a class="btn ghost" href="https://vinylpressusa.com/grenada-dashboard-mobile/" target="_blank" rel="noopener">Dashboard Mobile</a>
+            <div id="addBtn" class="btn primary">+ Add Product</div>
+            <div id="reloadBtn" class="btn">Reload</div>
           </div>
         </div>
       </div>
 
-      <div class="content">
-        <div class="grid">
-          <div class="panel">
-            <div class="head">
-              <h2>Inventory</h2>
-              <span class="badge" id="badgeCount">0 items</span>
-            </div>
-            <div style="overflow:auto;">
-              <table>
-                <thead>
-                  <tr>
-                    <th style="width:28%;">Product</th>
-                    <th style="width:18%;">Shipment</th>
-                    <th style="width:18%;">Category</th>
-                    <th class="right" style="width:10%;">Qty</th>
-                    <th class="right" style="width:13%;">Cost</th>
-                    <th class="right" style="width:13%;">Selling</th>
-                    <th style="width:14%;">Status</th>
-                    <th style="width:10%;">Approved</th>
-                  </tr>
-                </thead>
-                <tbody id="tblBody"></tbody>
-              </table>
-            </div>
+      <!-- Dashboard cards -->
+      <div class="cards">
+        <div class="card">
+          <h4>Total Items <span id="shipChip" class="chip" style="cursor:pointer"><span class="mini">All Shipments</span></span></h4>
+          <div class="big"><span id="totalItems">0</span> <span class="muted" style="font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">items</span></div>
+          <div class="smallrow muted">Filtered view</div>
+        </div>
+
+        <div class="card">
+          <h4>Total Cost
+            <span class="chip primary" id="currencyChip" title="Tap to toggle USD/XCD"><span id="curLabel">USD</span></span>
+          </h4>
+          <div class="big" id="totalCost">$0.00</div>
+          <div class="smallrow muted" id="curSub">USD</div>
+        </div>
+
+        <div class="card">
+          <h4>Expected Revenue
+            <span class="chip" title="Markup used for suggested retail">
+              <span class="mini">Markup</span>
+              <span id="markupLabel">100%</span>
+            </span>
+          </h4>
+          <div class="big" id="totalRevenue">$0.00</div>
+          <div class="smallrow muted"><span id="markupSub">100%</span></div>
+        </div>
+
+        <div class="card">
+          <h4>Profit
+            <span style="display:flex;gap:10px;align-items:center">
+              <span id="needsPriceBtn" class="btn small" style="padding:8px 10px">Needs Price</span>
+              <span id="needsApprovalBtn" class="btn small" style="padding:8px 10px">Needs Approval</span>
+            </span>
+          </h4>
+          <div class="big" id="totalProfit">$0.00</div>
+          <div class="smallrow muted">est.</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <input id="search" class="field wide" type="text" placeholder="Search Product Name..." />
+
+        <select id="fShipment" class="field">
+          <option value="">All Shipments</option>
+        </select>
+
+        <select id="fCategory" class="field">
+          <option value="">All Categories</option>
+        </select>
+
+        <select id="fStatus" class="field">
+          <option value="">All Status</option>
+        </select>
+
+        <select id="fApproved" class="field">
+          <option value="">All Price Approved</option>
+        </select>
+
+        <div id="manageShipBtn" class="btn">Manage Shipments</div>
+        <div id="manageCatBtn" class="btn">Manage Categories</div>
+
+        <div id="reloadBtn2" class="btn wide">Reload</div>
+      </div>
+
+      <div class="grid">
+        <!-- Inventory table -->
+        <div class="section">
+          <div class="sectionHead">
+            <div class="sectionTitle">Inventory</div>
+            <div class="badge"><span id="shownCount">0</span> items</div>
           </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Shipment</th>
+                <th>Category</th>
+                <th class="right">Qty</th>
+                <th class="right">Cost</th>
+                <th class="right">Selling</th>
+                <th>Status</th>
+                <th>Approved</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr><td class="muted" colspan="8">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-          <div class="panel">
-            <div class="head">
-              <h2>Quick Help</h2>
-              <span class="fxbadge" id="fxBadge2">FX 1 USD = 2.70 XCD</span>
+        <!-- Quick help -->
+        <div class="section">
+          <div class="sectionHead">
+            <div class="sectionTitle">Quick Help</div>
+            <div class="badge" id="fxBadge">FX 1 USD = 2.70 XCD</div>
+          </div>
+          <div style="padding:6px 16px 16px;color:rgba(255,255,255,.86);line-height:1.55;font-size:13px">
+            <ul style="margin:8px 0 10px 18px;padding:0">
+              <li>Click a row to edit.</li>
+              <li>Cost auto-fills Selling using your Markup selector (you can override).</li>
+              <li>Currency Toggle changes what you SEE (USD or XCD) without mixing both on-screen.</li>
+              <li>Easter eggs: 👍 on “Price Approved = Yes” • 💸 rain when Shipping Status becomes “Shipped”.</li>
+            </ul>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+              <a class="btn small" href="tel:+16107035185" style="text-decoration:none">Call Michael</a>
+              <a class="btn small" href="tel:+14845135528" style="text-decoration:none">Call Quencie</a>
             </div>
-            <div class="help">
-              <ul>
-                <li>Click a row to edit.</li>
-                <li>Cost auto-fills Selling using your Markup selector (you can override).</li>
-                <li>Currency Toggle changes what you SEE (USD or XCD) without mixing both on-screen.</li>
-                <li>Easter eggs: 👍 on “Price Approved = Yes” • 💸 rain when Shipping Status becomes “Shipped”.</li>
-              </ul>
 
-              <div class="row" style="margin-top:14px;">
-                <div class="callrow">
-                  <a class="btn ghost" id="callMichael" href="tel:+16107035185">Call Michael</a>
-                  <a class="btn ghost" id="callQuencie" href="tel:+14845135528">Call Quencie</a>
-                </div>
-              </div>
+            <div class="muted" style="margin-top:10px;font-size:12.5px">
+              Michael: (610) 703-5185<br>
+              Quencie: (484) 513-5528
+            </div>
 
-              <div class="row" style="margin-top:10px;">
-                <div class="small muted">Michael: (610) 703-5185</div>
-              </div>
-              <div class="row" style="margin-top:2px;">
-                <div class="small muted">Quencie: (484) 513-5528</div>
-              </div>
-
-              <div class="row" style="margin-top:10px;">
-                <div class="small muted" id="statusLine">Loaded.</div>
-              </div>
+            <div class="muted" style="margin-top:10px;font-size:12.5px">
+              <span id="loadMsg">Loaded.</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Modal -->
-      <div class="modal-backdrop" id="modal">
-        <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Add/Edit Product">
-          <div class="modal-top">
-            <h3 id="modalTitle">Add Product</h3>
-            <button class="xbtn" id="btnCloseModal" aria-label="Close">×</button>
-          </div>
-          <div class="modal-body">
-            <div class="formgrid">
-              <div>
-                <div class="label">Product Name <span class="hint">*</span></div>
-                <input id="mProduct" placeholder="e.g., Gain Detergent" />
-              </div>
-
-              <div>
-                <div class="label">Shipment <span class="hint">*</span></div>
-                <select id="mShipment"></select>
-                <div style="margin-top:8px;">
-                  <button class="btn ghost" id="btnAddShipmentInline">+ Add a new shipment</button>
-                </div>
-              </div>
-
-              <div>
-                <div class="label">Category/Tab</div>
-                <select id="mCategory"></select>
-              </div>
-
-              <div>
-                <div class="label">Status</div>
-                <select id="mStatus"></select>
-              </div>
-
-              <div>
-                <!-- NOTE: stored in sheet as USD, but display is same currency inside modal via toggle -->
-                <div class="label">
-                  Cost Price (<span id="mCcyLabelCost">USD</span>)
-                  <span class="hint">Stored in sheet as USD.</span>
-                </div>
-                <input id="mCost" inputmode="decimal" placeholder="0.00" />
-              </div>
-
-              <div>
-                <div class="label">
-                  Selling Price (<span id="mCcyLabelSell">USD</span>)
-                  <span class="hint">Auto-fills from Cost using Markup (unless you override).</span>
-                </div>
-                <input id="mSelling" inputmode="decimal" placeholder="0.00" />
-              </div>
-
-              <div>
-                <div class="label">Quantity</div>
-                <input id="mQty" inputmode="numeric" placeholder="1" />
-              </div>
-
-              <div>
-                <div class="label">Price Approved</div>
-                <select id="mApproved"></select>
-              </div>
-
-              <div>
-                <div class="label">Shipping Status</div>
-                <select id="mShipStatus"></select>
-              </div>
-
-              <div>
-                <div class="label">Gender</div>
-                <select id="mGender"></select>
-              </div>
-
-              <div>
-                <div class="label">Size</div>
-                <select id="mSize"></select>
-              </div>
-
-              <div>
-                <div class="label">Shoe Size</div>
-                <select id="mShoe"></select>
-              </div>
-
-              <div>
-                <div class="label">Image URL</div>
-                <input id="mImageUrl" placeholder="https://..." />
-              </div>
-
-              <div>
-                <div class="label">Online Link</div>
-                <input id="mOnlineLink" placeholder="https://..." />
-              </div>
-
-              <div style="grid-column: 1 / -1;">
-                <div class="label">Note</div>
-                <textarea id="mNote" placeholder="Notes, condition, resale ideas, etc."></textarea>
-              </div>
-            </div>
-
-            <div class="variants">
-              <div class="row space">
-                <div>
-                  <div class="label" style="margin:0;">Variants (optional) <span class="hint">Add color/size/etc. Variants are stored inside “Variations JSON”.</span></div>
-                </div>
-                <button class="btn ghost" id="btnAddVariant">+ Variant</button>
-              </div>
-
-              <div id="variantList"></div>
-            </div>
-
-          </div>
-
-          <div class="modal-actions">
-            <!-- Modal currency toggle (does not change your main dashboard toggle) -->
-            <button class="btn ghost" id="btnModalCurrency">USD</button>
-            <button class="btn" id="btnModalCurrencyToggle">Toggle</button>
-
-            <div style="flex:1"></div>
-            <button class="btn primary" id="btnSave">Save</button>
-            <button class="btn" id="btnDelete">Delete</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="toast" id="toast"></div>
     </div>
   </div>
 
-  <script>
-    /**********************
-     * CONFIG (leave as-is)
-     **********************/
-    const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+  <!-- Add/Edit Modal -->
+  <div id="modalBackdrop" class="backdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <div class="modalHead">
+        <div>
+          <h3 id="modalTitle">Add Product</h3>
+          <div class="subtitle" style="margin-top:6px">Auto-fills Selling from Cost using Markup (unless you override).</div>
+        </div>
+        <div id="modalClose" class="x" title="Close">×</div>
+      </div>
 
-    // Keep these as your current two external buttons:
-    const TRIP_HELPER_URL = "https://vinylpressusa.com/grenada-trip-helper";
-    const DASHBOARD_MOBILE_URL = "https://vinylpressusa.com/grenada-dashboard-mobile/";
+      <div class="modalBody">
+        <div class="formGrid">
 
-    // FX
-    const FX_USD_TO_XCD = 2.70;
+          <div>
+            <div class="label">Product Name *</div>
+            <input id="mName" type="text" placeholder="e.g., Gain Detergent" />
+          </div>
 
-    // Currency display state (main page)
-    let showCurrency = "USD"; // "USD" or "XCD"
+          <div>
+            <div class="label">Shipment *</div>
+            <select id="mShipment"></select>
+            <div class="hint"><span class="btn small" id="mAddShipBtn">+ Add a new shipment</span></div>
+          </div>
 
-    // Markup
-    let markupPct = 100; // number
-    let customMarkupPct = 100;
+          <div>
+            <div class="label">Category/Tab</div>
+            <select id="mCategory"></select>
+          </div>
 
-    // Data
-    let inventory = [];
-    let meta = { categories: [], statuses: [], shippingStatuses: [], shipments: [], genders: [], sizes: [], shoeSizes: [], approved: [] };
+          <div>
+            <div class="label">Status</div>
+            <select id="mStatus"></select>
+          </div>
 
-    // Selected row object for edit
-    let selected = null;
+          <div>
+            <div class="label">
+              Cost Price (<span id="mCurLabel1">USD</span>)
+              <span class="chip primary" id="mCurrencyChip" title="Tap to toggle USD/XCD" style="padding:7px 10px;font-size:11px">
+                <span id="mCurChipText">USD</span>
+              </span>
+            </div>
+            <input id="mCost" type="number" step="0.01" placeholder="0.00" />
+            <div class="hint">Stored in sheet as USD.</div>
+          </div>
 
-    // Modal currency display state (does NOT change what gets stored; we normalize to USD on save)
-    let modalCurrency = "USD"; // "USD" or "XCD"
-    let modalCostUSD = 0;
-    let modalSellUSD = 0;
+          <div>
+            <div class="label">Selling Price (<span id="mCurLabel2">USD</span>)</div>
+            <input id="mSell" type="number" step="0.01" placeholder="0.00" />
+            <div class="hint">Stored in sheet as XCD.</div>
+          </div>
 
-    const el = (id)=>document.getElementById(id);
+          <div>
+            <div class="label">Quantity</div>
+            <input id="mQty" type="number" step="1" min="0" placeholder="0" />
+          </div>
 
-    /**********************
-     * JSONP helper
-     **********************/
-    function jsonp(url){
-      return new Promise((resolve,reject)=>{
-        const cb = "cb_" + Math.random().toString(36).slice(2);
-        const s = document.createElement("script");
-        const sep = url.includes("?") ? "&" : "?";
-        s.src = url + sep + "callback=" + cb;
-        let done = false;
+          <div>
+            <div class="label">Price Approved</div>
+            <select id="mApproved"></select>
+          </div>
 
-        window[cb] = (data)=>{
-          done = true;
-          resolve(data);
-          cleanup();
-        };
+          <div>
+            <div class="label">Shipping Status</div>
+            <select id="mShipStatus"></select>
+          </div>
 
-        s.onerror = ()=>{
-          if (!done) reject(new Error("JSONP load failed"));
-          cleanup();
-        };
+          <div>
+            <div class="label">Gender</div>
+            <select id="mGender"></select>
+          </div>
 
-        function cleanup(){
-          try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
-          s.remove();
-        }
+          <div>
+            <div class="label">Size</div>
+            <select id="mSize"></select>
+          </div>
 
-        document.head.appendChild(s);
-      });
+          <div>
+            <div class="label">Shoe Size</div>
+            <select id="mShoe"></select>
+          </div>
+
+          <div>
+            <div class="label">Image URL</div>
+            <input id="mImage" type="text" placeholder="https://..." />
+            <div class="hint">Saved as a clickable link in the table.</div>
+          </div>
+
+          <div>
+            <div class="label">Online Link</div>
+            <input id="mLink" type="text" placeholder="https://..." />
+            <div class="hint">Saved as a clickable link in the table.</div>
+          </div>
+
+          <div style="grid-column:1/-1">
+            <div class="label">Note</div>
+            <textarea id="mNote" placeholder="Notes, condition, resale ideas, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="variants">
+          <div class="label" style="justify-content:space-between">
+            <span>Variants (optional)</span>
+            <span class="btn small" id="addVariantBtn">+ Variant</span>
+          </div>
+          <div class="muted" style="font-size:12px;margin-top:-2px">
+            Add color/size/etc. Variants are stored inside “Variations JSON”.
+          </div>
+
+          <div id="variantsWrap"></div>
+        </div>
+
+        <div class="rowBtns">
+          <div id="saveBtn" class="btn primary good">Save</div>
+          <div id="deleteBtn" class="btn danger" style="display:none">Delete</div>
+          <div class="muted" id="saveMsg" style="margin-left:auto;font-size:12px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Modal -->
+  <div id="manageBackdrop" class="backdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document" style="width:min(760px, 96vw)">
+      <div class="modalHead">
+        <div>
+          <h3 id="manageTitle">Manage</h3>
+          <div class="subtitle" style="margin-top:6px">Add + Remove with double-confirm failsafe.</div>
+        </div>
+        <div id="manageClose" class="x" title="Close">×</div>
+      </div>
+
+      <div class="modalBody">
+        <div class="formGrid">
+          <div>
+            <div class="label" id="manageSelectLabel">Select item</div>
+            <select id="manageSelect"></select>
+          </div>
+          <div>
+            <div class="label">Add new</div>
+            <input id="manageAddInput" type="text" placeholder="Type a new name…" />
+          </div>
+        </div>
+
+        <div class="rowBtns">
+          <div id="manageAddBtn" class="btn primary">Add</div>
+          <div id="manageRemoveBtn" class="btn danger">Remove</div>
+          <div class="muted" id="manageMsg" style="margin-left:auto;font-size:12px"></div>
+        </div>
+
+        <div class="muted" style="margin-top:10px;font-size:12px">
+          Removal requires two confirmations.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+<script>
+/* ===================== CONFIG ===================== */
+const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+const FX = 2.70;
+
+/* Sheet headers (MUST match your Google Sheet header text) */
+const H = {
+  name: "Product Name",
+  shipment: "Shipment",
+  category: "Category/Tab",
+  image: "Image URL",
+  costUSD: "Cost Price USD",
+  sellXCD: "Selling Price XCD",
+  qty: "Quantity",
+  link: "Online Link",
+  note: "Note",
+  status: "Status",
+  approved: "Price Approved",
+  shipStatus: "Shipping Status",
+  gender: "Gender",
+  size: "Size",
+  shoe: "Shoe Size",
+  variations: "Variations JSON",
+};
+
+/* ===================== STATE ===================== */
+let meta = {
+  categories: [],
+  statuses: [],
+  shippingStatuses: [],
+  shipments: [],   // if Apps Script meta is fixed, this will work. If not, we safely fall back.
+};
+let data = [];
+let viewCurrency = "USD"; // USD or XCD (single control)
+let markupPct = 100;      // 50/100/150/200/custom
+let customMarkupPct = 100;
+
+let currentRow = null;    // object for edit
+let modalCurrency = "USD"; // USD/XCD for Add/Edit modal only
+let sellingOverridden = false;
+
+/* ===================== DOM ===================== */
+const $ = (id)=>document.getElementById(id);
+
+const tbody = $("tbody");
+const shownCount = $("shownCount");
+const totalItemsEl = $("totalItems");
+const totalCostEl = $("totalCost");
+const totalRevenueEl = $("totalRevenue");
+const totalProfitEl = $("totalProfit");
+const curLabel = $("curLabel");
+const curSub = $("curSub");
+const currencyChip = $("currencyChip");
+const markupLabel = $("markupLabel");
+const markupSub = $("markupSub");
+const fxBadge = $("fxBadge");
+const loadMsg = $("loadMsg");
+
+const fShipment = $("fShipment");
+const fCategory = $("fCategory");
+const fStatus = $("fStatus");
+const fApproved = $("fApproved");
+const search = $("search");
+
+const addBtn = $("addBtn");
+const reloadBtn = $("reloadBtn");
+const reloadBtn2 = $("reloadBtn2");
+
+const hubBtn = $("hubBtn");
+const hubPop = $("hubPop");
+
+const modalBackdrop = $("modalBackdrop");
+const modalClose = $("modalClose");
+const modalTitle = $("modalTitle");
+const saveBtn = $("saveBtn");
+const deleteBtn = $("deleteBtn");
+const saveMsg = $("saveMsg");
+
+const mCurrencyChip = $("mCurrencyChip");
+const mCurChipText = $("mCurChipText");
+const mCurLabel1 = $("mCurLabel1");
+const mCurLabel2 = $("mCurLabel2");
+
+const mName = $("mName");
+const mShipment = $("mShipment");
+const mCategory = $("mCategory");
+const mStatus = $("mStatus");
+const mCost = $("mCost");
+const mSell = $("mSell");
+const mQty = $("mQty");
+const mApproved = $("mApproved");
+const mShipStatus = $("mShipStatus");
+const mGender = $("mGender");
+const mSize = $("mSize");
+const mShoe = $("mShoe");
+const mImage = $("mImage");
+const mLink = $("mLink");
+const mNote = $("mNote");
+const mAddShipBtn = $("mAddShipBtn");
+
+const addVariantBtn = $("addVariantBtn");
+const variantsWrap = $("variantsWrap");
+
+const manageShipBtn = $("manageShipBtn");
+const manageCatBtn = $("manageCatBtn");
+const manageBackdrop = $("manageBackdrop");
+const manageClose = $("manageClose");
+const manageTitle = $("manageTitle");
+const manageSelectLabel = $("manageSelectLabel");
+const manageSelect = $("manageSelect");
+const manageAddInput = $("manageAddInput");
+const manageAddBtn = $("manageAddBtn");
+const manageRemoveBtn = $("manageRemoveBtn");
+const manageMsg = $("manageMsg");
+
+const needsPriceBtn = $("needsPriceBtn");
+const needsApprovalBtn = $("needsApprovalBtn");
+
+const toast = $("toast");
+
+/* ===================== UTIL ===================== */
+function showToast(msg){
+  toast.textContent = msg;
+  toast.style.display = "block";
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>toast.style.display="none", 2200);
+}
+
+function moneyRain(){
+  // short burst
+  for(let i=0;i<20;i++){
+    const el = document.createElement("div");
+    el.className = "money";
+    el.textContent = "💸";
+    el.style.left = (Math.random()*100) + "vw";
+    el.style.animationDelay = (Math.random()*0.2) + "s";
+    el.style.fontSize = (16 + Math.random()*18) + "px";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 1700);
+  }
+}
+
+function thumbsUp(){
+  showToast("👍 Price Approved!");
+}
+
+/* JSONP GET (works from GitHub Pages with Apps Script) */
+function jsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const s = document.createElement("script");
+    const sep = url.includes("?") ? "&" : "?";
+    s.src = url + sep + "callback=" + cb;
+    let done = false;
+
+    window[cb] = (payload)=>{
+      done = true;
+      cleanup();
+      resolve(payload);
+    };
+
+    function cleanup(){
+      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
+      s.remove();
     }
 
-    function toast(msg){
-      const t = el("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      setTimeout(()=>t.classList.remove("show"), 2200);
+    s.onerror = ()=>{
+      if(done) return;
+      cleanup();
+      reject(new Error("JSONP load failed"));
+    };
+
+    document.head.appendChild(s);
+    setTimeout(()=>{
+      if(done) return;
+      cleanup();
+      reject(new Error("JSONP timeout"));
+    }, 12000);
+  });
+}
+
+/* POST via hidden iframe + postMessage (matches your Apps Script _pm=1 response) */
+function postForm(params){
+  return new Promise((resolve,reject)=>{
+    const iframe = document.createElement("iframe");
+    iframe.name = "pm_iframe_" + Math.random().toString(36).slice(2);
+    iframe.style.display = "none";
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = EXEC_URL;
+    form.target = iframe.name;
+
+    Object.entries(params).forEach(([k,v])=>{
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = k;
+      input.value = v == null ? "" : String(v);
+      form.appendChild(input);
+    });
+
+    // force parent messaging response
+    const pm = document.createElement("input");
+    pm.type = "hidden";
+    pm.name = "_pm";
+    pm.value = "1";
+    form.appendChild(pm);
+
+    const timeout = setTimeout(()=>{
+      cleanup();
+      reject(new Error("POST timeout"));
+    }, 14000);
+
+    function onMsg(ev){
+      // Accept only objects with ok field
+      const d = ev.data;
+      if(!d || typeof d !== "object" || !("ok" in d)) return;
+      cleanup();
+      resolve(d);
     }
 
-    function setStatusLine(msg){
-      el("statusLine").textContent = msg;
+    function cleanup(){
+      clearTimeout(timeout);
+      window.removeEventListener("message", onMsg);
+      form.remove();
+      iframe.remove();
     }
 
-    /**********************
-     * Format helpers
-     **********************/
-    function n(v){ const x = parseFloat(String(v).replace(/[^0-9.\-]/g,"")); return isFinite(x)?x:0; }
-    function money(v, ccy){
-      const sym = (ccy==="XCD") ? "EC$" : "$";
-      return sym + (Math.round((v + Number.EPSILON)*100)/100).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
+    window.addEventListener("message", onMsg);
+    document.body.appendChild(iframe);
+    document.body.appendChild(form);
+    form.submit();
+  });
+}
+
+function asNum(v){
+  const n = Number(String(v||"").replace(/[^0-9.\-]/g,""));
+  return Number.isFinite(n) ? n : 0;
+}
+function fmtMoney(n, cur){
+  const s = (cur==="XCD" ? "EC$" : "$");
+  return s + (Number(n)||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function normYesNo(v){
+  const t = String(v||"").trim().toLowerCase();
+  if(t==="yes") return "Yes";
+  if(t==="no") return "No";
+  return "";
+}
+
+function getMarkup(){
+  return markupPct === "custom" ? customMarkupPct : markupPct;
+}
+
+/* ===================== META + DROPDOWNS ===================== */
+function uniq(arr){
+  const out=[]; const seen=new Set();
+  for(const x of arr){
+    const t=String(x||"").trim();
+    if(!t) continue;
+    const k=t.toLowerCase();
+    if(seen.has(k)) continue;
+    seen.add(k); out.push(t);
+  }
+  return out;
+}
+
+/* Shipments: prefer meta.shipments if it's sane; otherwise fall back to unique shipments found in Inventory data */
+function computeShipmentsFallback(){
+  return uniq(data.map(r=>r[H.shipment]));
+}
+function computeCategoriesFallback(){
+  return uniq(data.map(r=>r[H.category]));
+}
+
+function setSelectOptions(sel, list, firstLabel){
+  const v = sel.value;
+  sel.innerHTML = "";
+  if(firstLabel != null){
+    const o = document.createElement("option");
+    o.value = "";
+    o.textContent = firstLabel;
+    sel.appendChild(o);
+  }
+  list.forEach(x=>{
+    const o = document.createElement("option");
+    o.value = x;
+    o.textContent = x;
+    sel.appendChild(o);
+  });
+  // preserve if still exists
+  const exists = [...sel.options].some(o=>o.value===v);
+  if(exists) sel.value = v;
+}
+
+/* ===================== FILTER + RENDER ===================== */
+function passesFilter(row){
+  const q = search.value.trim().toLowerCase();
+  const sh = fShipment.value;
+  const cat = fCategory.value;
+  const st = fStatus.value;
+  const ap = fApproved.value;
+
+  if(q){
+    const name = String(row[H.name]||"").toLowerCase();
+    if(!name.includes(q)) return false;
+  }
+  if(sh && String(row[H.shipment]||"") !== sh) return false;
+  if(cat && String(row[H.category]||"") !== cat) return false;
+  if(st && String(row[H.status]||"") !== st) return false;
+
+  if(ap){
+    const a = normYesNo(row[H.approved]);
+    if(ap==="Needs Approval"){
+      if(a==="Yes") return false;
+    }else{
+      if(a !== ap) return false;
     }
+  }
+  return true;
+}
 
-    function computeSellingUSD(costUSD){
-      // selling = cost * (1 + markupPct/100)
-      const pct = (markupPct==="custom") ? customMarkupPct : markupPct;
-      return costUSD * (1 + (Number(pct)||0)/100);
+function getRowMoney(row){
+  const costUSD = asNum(row[H.costUSD]);
+  const sellXCD = asNum(row[H.sellXCD]);
+
+  const cost = viewCurrency==="USD" ? costUSD : costUSD * FX;
+  const sell = viewCurrency==="USD" ? (sellXCD / FX) : sellXCD;
+
+  const qty = Math.max(0, asNum(row[H.qty]) || 0);
+  return {
+    qty,
+    costEach: cost,
+    sellEach: sell,
+    costTotal: cost * qty,
+    sellTotal: sell * qty
+  };
+}
+
+function render(){
+  const rows = data.filter(passesFilter);
+
+  // counts
+  shownCount.textContent = rows.length;
+  totalItemsEl.textContent = rows.reduce((a,r)=>a + Math.max(0,asNum(r[H.qty])||0), 0) || rows.length;
+
+  // totals
+  let costSum=0, revSum=0;
+  for(const r of rows){
+    const m = getRowMoney(r);
+    costSum += m.costTotal || 0;
+    revSum += m.sellTotal || 0;
+  }
+  const profitSum = revSum - costSum;
+
+  totalCostEl.textContent = fmtMoney(costSum, viewCurrency);
+  totalRevenueEl.textContent = fmtMoney(revSum, viewCurrency);
+  totalProfitEl.textContent = fmtMoney(profitSum, viewCurrency);
+
+  // currency chip
+  curLabel.textContent = viewCurrency;
+  curSub.textContent = viewCurrency;
+
+  // table
+  if(!rows.length){
+    tbody.innerHTML = `<tr><td class="muted" colspan="8">No results.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = "";
+  rows.forEach((r)=>{
+    const tr = document.createElement("tr");
+
+    const name = String(r[H.name]||"");
+    const sh = String(r[H.shipment]||"");
+    const cat = String(r[H.category]||"");
+    const qty = Math.max(0, asNum(r[H.qty])||0);
+    const st = String(r[H.status]||"");
+    const ap = normYesNo(r[H.approved]) || "";
+
+    const costUSD = asNum(r[H.costUSD]);
+    const sellXCD = asNum(r[H.sellXCD]);
+
+    const cost = viewCurrency==="USD" ? costUSD : costUSD*FX;
+    const sell = viewCurrency==="USD" ? (sellXCD/FX) : sellXCD;
+
+    tr.innerHTML = `
+      <td>${escapeHtml(name)}</td>
+      <td>${escapeHtml(sh)}</td>
+      <td>${escapeHtml(cat)}</td>
+      <td class="right nowrap">${qty || ""}</td>
+      <td class="right nowrap">${costUSD ? fmtMoney(cost, viewCurrency) : ""}</td>
+      <td class="right nowrap">${sellXCD ? fmtMoney(sell, viewCurrency) : ""}</td>
+      <td>${escapeHtml(st)}</td>
+      <td>${ap ? (ap==="Yes" ? "Yes 👍" : ap) : ""}</td>
+    `;
+
+    tr.addEventListener("click", ()=>openEdit(r));
+    tbody.appendChild(tr);
+  });
+}
+
+function escapeHtml(s){
+  return String(s||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ===================== LOAD ===================== */
+async function loadAll(){
+  loadMsg.textContent = "Loading…";
+  try{
+    // meta (may not include shipments correctly if Apps Script still points shipments to Lists col D)
+    const m = await jsonp(EXEC_URL + "?meta=1");
+    if(m && m.ok && m.meta){
+      meta = {
+        categories: Array.isArray(m.meta.categories)?m.meta.categories:[],
+        statuses: Array.isArray(m.meta.statuses)?m.meta.statuses:[],
+        shippingStatuses: Array.isArray(m.meta.shippingStatuses)?m.meta.shippingStatuses:[],
+        shipments: Array.isArray(m.meta.shipments)?m.meta.shipments:[],
+      };
     }
+  }catch(e){
+    // meta failure is non-fatal
+  }
 
-    /**********************
-     * KPI + render
-     **********************/
-    function filteredInventory(){
-      const q = el("qSearch").value.trim().toLowerCase();
-      const s = el("fShipment").value;
-      const c = el("fCategory").value;
-      const st = el("fStatus").value;
-      const ap = el("fApproved").value;
+  try{
+    const res = await jsonp(EXEC_URL);
+    if(!res || !res.ok) throw new Error(res?.error || "Load failed");
+    data = Array.isArray(res.data) ? res.data : [];
+  }catch(e){
+    tbody.innerHTML = `<tr><td class="muted" colspan="8">Load failed: ${escapeHtml(e.message||String(e))}</td></tr>`;
+    loadMsg.textContent = "Load failed.";
+    return;
+  }
 
-      return inventory.filter(it=>{
-        const name = String(it["Product Name"]||"").toLowerCase();
-        if (q && !name.includes(q)) return false;
+  // Build dropdowns
+  const cats = meta.categories.length ? meta.categories : computeCategoriesFallback();
+  const sts  = meta.statuses.length ? meta.statuses : uniq(data.map(r=>r[H.status]));
+  const shipSts = meta.shippingStatuses.length ? meta.shippingStatuses : uniq(data.map(r=>r[H.shipStatus]));
 
-        if (s && s!=="__all__" && String(it["Shipment"]||"") !== s) return false;
-        if (c && c!=="__all__" && String(it["Category/Tab"]||"") !== c) return false;
-        if (st && st!=="__all__" && String(it["Status"]||"") !== st) return false;
+  // IMPORTANT: shipments list
+  let ships = meta.shipments || [];
+  // If shipments meta contains obvious wrong values (Yes/No), prefer fallback unique from inventory
+  const bad = ships.length && ships.every(x=>["yes","no"].includes(String(x).trim().toLowerCase()));
+  if(!ships.length || bad) ships = computeShipmentsFallback();
 
-        const approved = String(it["Price Approved"]||"").trim();
-        if (ap==="__yes__" && approved.toLowerCase()!=="yes") return false;
-        if (ap==="__no__" && approved.toLowerCase()==="yes") return false;
-        if (ap==="__all__") return true;
+  setSelectOptions(fCategory, cats, "All Categories");
+  setSelectOptions(fStatus, sts, "All Status");
 
-        return true;
-      });
+  // Approved filter: Yes / No / Needs Approval
+  fApproved.innerHTML = `
+    <option value="">All Price Approved</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+    <option value="Needs Approval">Needs Approval</option>
+  `;
+
+  setSelectOptions(fShipment, ships, "All Shipments");
+
+  // Modal selects
+  setSelectOptions(mCategory, cats, null);
+  setSelectOptions(mStatus, sts, null);
+
+  // Price approved: Yes/No only (no blank/no needs)
+  mApproved.innerHTML = `
+    <option value="">(blank)</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  `;
+
+  setSelectOptions(mShipStatus, shipSts, null);
+
+  // Gender / Size / Shoe size from Lists if present (your Lists screenshot shows columns E/F/G)
+  // If meta doesn't include these, provide sane defaults (doesn't change styling)
+  setSelectOptions(mGender, uniq(["", "Male", "Female", "Unisex"]), null);
+  setSelectOptions(mSize,   uniq(["", "XS","S","M","L","XL","XXL"]), null);
+  setSelectOptions(mShoe,   uniq(["","2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"]), null);
+
+  // Shipment select inside modal (plus "Select..." + "Add new shipment" handled separately)
+  fillModalShipmentSelect(ships);
+
+  // Dashboard markup selector (same look: just update text and use built-in dropdown already visible in screenshot)
+  markupLabel.textContent = getMarkup() + "%";
+  markupSub.textContent = getMarkup() + "%";
+
+  fxBadge.textContent = `FX 1 USD = ${FX.toFixed(2)} XCD`;
+
+  render();
+  loadMsg.textContent = "Loaded.";
+}
+
+function fillModalShipmentSelect(ships){
+  mShipment.innerHTML = "";
+  const opt0 = document.createElement("option");
+  opt0.value = "";
+  opt0.textContent = "Select…";
+  mShipment.appendChild(opt0);
+
+  ships.forEach(s=>{
+    const o = document.createElement("option");
+    o.value = s;
+    o.textContent = s;
+    mShipment.appendChild(o);
+  });
+}
+
+/* ===================== CURRENCY TOGGLES ===================== */
+function toggleCurrency(){
+  viewCurrency = (viewCurrency==="USD") ? "XCD" : "USD";
+  render();
+}
+
+function resetModalCurrencyToUSD(){
+  modalCurrency = "USD";
+  mCurChipText.textContent = "USD";
+  mCurLabel1.textContent = "USD";
+  mCurLabel2.textContent = "USD";
+}
+
+function toggleModalCurrency(){
+  // Convert BOTH visible cost + selling fields together (what you asked)
+  const cost = asNum(mCost.value);
+  const sell = asNum(mSell.value);
+
+  if(modalCurrency==="USD"){
+    // switch to XCD (display)
+    modalCurrency="XCD";
+    mCost.value = cost ? (cost*FX).toFixed(2) : "";
+    mSell.value = sell ? (sell*FX).toFixed(2) : "";
+  }else{
+    // switch back to USD (display)
+    modalCurrency="USD";
+    mCost.value = cost ? (cost/FX).toFixed(2) : "";
+    mSell.value = sell ? (sell/FX).toFixed(2) : "";
+  }
+  mCurChipText.textContent = modalCurrency;
+  mCurLabel1.textContent = modalCurrency;
+  mCurLabel2.textContent = modalCurrency;
+}
+
+function normalizeModalMoneyToUSDForSave(){
+  // Always store cost in USD in sheet; always store selling in XCD in sheet
+  const costDisp = asNum(mCost.value);
+  const sellDisp = asNum(mSell.value);
+
+  // Convert displayed cost -> USD
+  const costUSD = modalCurrency==="USD" ? costDisp : (costDisp/FX);
+
+  // Convert displayed selling -> XCD
+  const sellXCD = modalCurrency==="USD" ? (sellDisp*FX) : sellDisp;
+
+  return { costUSD, sellXCD };
+}
+
+/* ===================== MODAL OPEN/CLOSE ===================== */
+function openAdd(){
+  currentRow = null;
+  sellingOverridden = false;
+  modalTitle.textContent = "Add Product";
+  deleteBtn.style.display = "none";
+  saveMsg.textContent = "";
+
+  // clear
+  mName.value = "";
+  mShipment.value = "";
+  mCategory.value = "";
+  mStatus.value = "";
+  mCost.value = "";
+  mSell.value = "";
+  mQty.value = "";
+  mApproved.value = "";
+  mShipStatus.value = "";
+  mGender.value = "";
+  mSize.value = "";
+  mShoe.value = "";
+  mImage.value = "";
+  mLink.value = "";
+  mNote.value = "";
+  variantsWrap.innerHTML = "";
+
+  resetModalCurrencyToUSD(); // IMPORTANT
+  modalBackdrop.style.display = "flex";
+  setTimeout(()=>mName.focus(), 60);
+}
+
+function openEdit(row){
+  currentRow = row;
+  sellingOverridden = true; // existing rows already have selling
+  modalTitle.textContent = "Edit Product";
+  deleteBtn.style.display = "inline-flex";
+  saveMsg.textContent = "";
+
+  resetModalCurrencyToUSD(); // IMPORTANT (modal always opens in USD)
+
+  mName.value = String(row[H.name]||"");
+  mShipment.value = String(row[H.shipment]||"");
+  mCategory.value = String(row[H.category]||"");
+  mStatus.value = String(row[H.status]||"");
+  mQty.value = String(row[H.qty]||"");
+  mApproved.value = normYesNo(row[H.approved]) || "";
+  mShipStatus.value = String(row[H.shipStatus]||"");
+  mGender.value = String(row[H.gender]||"");
+  mSize.value = String(row[H.size]||"");
+  mShoe.value = String(row[H.shoe]||"");
+  mImage.value = String(row[H.image]||"");
+  mLink.value = String(row[H.link]||"");
+  mNote.value = String(row[H.note]||"");
+
+  // show USD in modal: costUSD from sheet; sellingUSD computed from sellXCD/FX
+  const costUSD = asNum(row[H.costUSD]);
+  const sellXCD = asNum(row[H.sellXCD]);
+  mCost.value = costUSD ? costUSD.toFixed(2) : "";
+  mSell.value = sellXCD ? (sellXCD/FX).toFixed(2) : "";
+
+  // variants
+  variantsWrap.innerHTML = "";
+  try{
+    const vtxt = row[H.variations];
+    if(vtxt){
+      const arr = JSON.parse(vtxt);
+      if(Array.isArray(arr)) arr.forEach(addVariantRow);
     }
+  }catch(e){/* ignore */}
 
-    function render(){
-      const list = filteredInventory();
-      el("badgeCount").textContent = `${list.length} items`;
-      el("kpiItems").textContent = String(list.length);
-      el("btnCurrencyPill").textContent = showCurrency;
+  modalBackdrop.style.display = "flex";
+}
 
-      const pct = (markupPct==="custom") ? customMarkupPct : markupPct;
-      el("chipMarkup").textContent = `Markup ${pct}%`;
-      el("kpiRevenuePct").textContent = `${pct}%`;
+function closeModal(){
+  modalBackdrop.style.display = "none";
+}
 
-      // totals are computed from sheet USD values; then displayed in showCurrency
-      let totalCostUSD = 0;
-      let totalRevenueUSD = 0;
+function closeManage(){
+  manageBackdrop.style.display = "none";
+}
 
-      for (const it of list){
-        const qty = n(it["Quantity"]||1) || 1;
-        const costUSD = n(it["Cost Price USD"]||0);
-        // if Selling Price XCD exists in sheet, we DO NOT trust it for KPI;
-        // KPI uses computed markup from cost so it matches your markup selector.
-        const sellUSD = computeSellingUSD(costUSD);
+/* ===================== AUTO SELL CALC ===================== */
+function calcSuggestedSellUSD(costUSD){
+  const m = getMarkup()/100;
+  return costUSD * (1+m);
+}
 
-        totalCostUSD += costUSD * qty;
-        totalRevenueUSD += sellUSD * qty;
-      }
+function onCostChanged(){
+  if(sellingOverridden) return;
 
-      const profitUSD = totalRevenueUSD - totalCostUSD;
+  // interpret entered cost in modalCurrency
+  const costDisp = asNum(mCost.value);
+  const costUSD = modalCurrency==="USD" ? costDisp : (costDisp/FX);
 
-      const fx = (showCurrency==="XCD") ? FX_USD_TO_XCD : 1;
-      const ccy = showCurrency;
+  if(!costUSD){
+    mSell.value = "";
+    return;
+  }
+  const sellUSD = calcSuggestedSellUSD(costUSD);
+  // show in current modal currency
+  if(modalCurrency==="USD"){
+    mSell.value = sellUSD.toFixed(2);
+  }else{
+    mSell.value = (sellUSD*FX).toFixed(2);
+  }
+}
 
-      el("kpiCost").textContent = money(totalCostUSD*fx, ccy);
-      el("kpiCostCcy").textContent = ccy;
-      el("kpiRevenue").textContent = money(totalRevenueUSD*fx, ccy);
-      el("kpiProfit").textContent = money(profitUSD*fx, ccy);
+mCost.addEventListener("input", ()=>{
+  sellingOverridden = false;
+  onCostChanged();
+});
+mSell.addEventListener("input", ()=>{
+  sellingOverridden = true;
+});
 
-      // table
-      const body = el("tblBody");
-      body.innerHTML = "";
-      for (const it of list){
-        const tr = document.createElement("tr");
-        tr.addEventListener("click", ()=> openModal("edit", it));
+/* ===================== VARIANTS ===================== */
+function addVariantRow(v){
+  const box = document.createElement("div");
+  box.className = "variantBox";
 
-        const qty = n(it["Quantity"]||1) || 1;
-        const costUSD = n(it["Cost Price USD"]||0);
-        const sellUSD = computeSellingUSD(costUSD);
-        const fxRow = (showCurrency==="XCD") ? FX_USD_TO_XCD : 1;
+  box.innerHTML = `
+    <div class="variantGrid">
+      <div>
+        <div class="label">Color</div>
+        <input type="text" class="vColor" placeholder="e.g., Blue" value="${escapeHtml(v?.color||"")}">
+      </div>
+      <div>
+        <div class="label">Size</div>
+        <input type="text" class="vSize" placeholder="e.g., L / EU 42" value="${escapeHtml(v?.size||"")}">
+      </div>
+      <div>
+        <div class="label">Gender</div>
+        <select class="vGender">
+          <option value="">(blank)</option>
+          <option>Men</option>
+          <option>Women</option>
+          <option>Unisex</option>
+          <option>Kids</option>
+        </select>
+      </div>
+      <div>
+        <div class="label">Qty</div>
+        <input type="number" class="vQty" step="1" min="0" placeholder="e.g., 6" value="${escapeHtml(v?.qty||"")}">
+      </div>
+    </div>
+    <div class="rowBtns">
+      <div class="btn small danger vRemove">Remove Variant</div>
+    </div>
+  `;
 
-        tr.innerHTML = `
-          <td>${escapeHtml(it["Product Name"]||"")}</td>
-          <td class="muted">${escapeHtml(it["Shipment"]||"")}</td>
-          <td class="muted">${escapeHtml(it["Category/Tab"]||"")}</td>
-          <td class="right">${qty}</td>
-          <td class="right">${money(costUSD*fxRow, showCurrency)}</td>
-          <td class="right">${money(sellUSD*fxRow, showCurrency)}</td>
-          <td>${escapeHtml(it["Status"]||"")}</td>
-          <td>${escapeHtml(it["Price Approved"]||"")}</td>
-        `;
-        body.appendChild(tr);
-      }
-    }
+  const sel = box.querySelector(".vGender");
+  sel.value = v?.gender || "";
 
-    function escapeHtml(s){
-      return String(s||"").replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-    }
+  box.querySelector(".vRemove").addEventListener("click", ()=>{
+    box.remove();
+  });
 
-    /**********************
-     * Dropdowns
-     **********************/
-    function fillSelect(sel, items, {allLabel=null, allValue="__all__", placeholder=null}={}){
-      sel.innerHTML = "";
-      if (placeholder){
-        const o = document.createElement("option");
-        o.value = "";
-        o.textContent = placeholder;
-        sel.appendChild(o);
-      }
-      if (allLabel){
-        const o = document.createElement("option");
-        o.value = allValue;
-        o.textContent = allLabel;
-        sel.appendChild(o);
-      }
-      for (const v of items){
-        const o = document.createElement("option");
-        o.value = v;
-        o.textContent = v;
-        sel.appendChild(o);
-      }
-    }
+  variantsWrap.appendChild(box);
+}
 
-    function refreshFilterDropdowns(){
-      // Shipment filter must be driven by META shipments list (not inferred from inventory).
-      fillSelect(el("fShipment"), meta.shipments || [], {allLabel:"All Shipments", allValue:"__all__"});
-      fillSelect(el("fCategory"), meta.categories || [], {allLabel:"All Categories", allValue:"__all__"});
-      fillSelect(el("fStatus"), meta.statuses || [], {allLabel:"All Status", allValue:"__all__"});
-      el("fApproved").innerHTML = `
-        <option value="__all__">All Price Approved</option>
-        <option value="__yes__">Yes</option>
-        <option value="__no__">No</option>
+function collectVariants(){
+  const boxes = [...variantsWrap.querySelectorAll(".variantBox")];
+  const out = [];
+  boxes.forEach(b=>{
+    const color = b.querySelector(".vColor").value.trim();
+    const size = b.querySelector(".vSize").value.trim();
+    const gender = b.querySelector(".vGender").value.trim();
+    const qty = b.querySelector(".vQty").value.trim();
+    const obj = {};
+    if(color) obj.color = color;
+    if(size) obj.size = size;
+    if(gender) obj.gender = gender;
+    if(qty) obj.qty = qty;
+    if(Object.keys(obj).length) out.push(obj);
+  });
+  return out.length ? JSON.stringify(out) : "";
+}
+
+/* ===================== SAVE / DELETE ===================== */
+async function saveRow(){
+  saveMsg.textContent = "Saving…";
+
+  // validate
+  if(!mName.value.trim() || !mShipment.value.trim()){
+    saveMsg.textContent = "Product Name + Shipment are required.";
+    return;
+  }
+
+  const money = normalizeModalMoneyToUSDForSave(); // IMPORTANT (no mixed currencies stored)
+
+  const payload = {
+    _action: currentRow ? "update" : "create",
+    [H.name]: mName.value.trim(),
+    [H.shipment]: mShipment.value.trim(),
+    [H.category]: mCategory.value || "",
+    [H.status]: mStatus.value || "",
+    [H.costUSD]: money.costUSD ? money.costUSD.toFixed(2) : "",
+    [H.sellXCD]: money.sellXCD ? money.sellXCD.toFixed(2) : "",
+    [H.qty]: mQty.value || "",
+    [H.approved]: mApproved.value || "",
+    [H.shipStatus]: mShipStatus.value || "",
+    [H.gender]: mGender.value || "",
+    [H.size]: mSize.value || "",
+    [H.shoe]: mShoe.value || "",
+    [H.image]: mImage.value || "",
+    [H.link]: mLink.value || "",
+    [H.note]: mNote.value || "",
+    [H.variations]: collectVariants(),
+  };
+
+  try{
+    const res = await postForm(payload);
+    if(!res.ok) throw new Error(res.error||"Save failed");
+    saveMsg.textContent = "Saved.";
+    closeModal(); // auto close on save (what you wanted)
+    await loadAll();
+
+    // Easter eggs
+    if((payload[H.approved]||"").toLowerCase()==="yes") thumbsUp();
+    if((payload[H.shipStatus]||"").toLowerCase()==="shipped") moneyRain();
+
+  }catch(e){
+    saveMsg.textContent = "Save failed: " + (e.message||String(e));
+  }
+}
+
+async function deleteRow(){
+  if(!currentRow) return;
+  const ok = confirm("Delete this item? This cannot be undone.");
+  if(!ok) return;
+
+  saveMsg.textContent = "Deleting…";
+  try{
+    const res = await postForm({
+      _action:"delete",
+      [H.name]: String(currentRow[H.name]||""),
+      [H.shipment]: String(currentRow[H.shipment]||""),
+    });
+    if(!res.ok) throw new Error(res.error||"Delete failed");
+    saveMsg.textContent = "Deleted.";
+    closeModal();
+    await loadAll();
+  }catch(e){
+    saveMsg.textContent = "Delete failed: " + (e.message||String(e));
+  }
+}
+
+/* ===================== MANAGE (CATEGORIES / SHIPMENTS) ===================== */
+let manageMode = null; // "categories" | "shipments"
+function openManage(mode){
+  manageMode = mode;
+  manageMsg.textContent = "";
+  manageAddInput.value = "";
+
+  const isCat = mode==="categories";
+  manageTitle.textContent = isCat ? "Manage Categories" : "Manage Shipments";
+  manageSelectLabel.textContent = isCat ? "Select category to remove" : "Select shipment to remove";
+
+  const list = isCat
+    ? (meta.categories.length ? meta.categories : computeCategoriesFallback())
+    : (meta.shipments && meta.shipments.length ? meta.shipments : computeShipmentsFallback());
+
+  manageSelect.innerHTML = "";
+  list.forEach(x=>{
+    const o = document.createElement("option");
+    o.value = x;
+    o.textContent = x;
+    manageSelect.appendChild(o);
+  });
+
+  manageBackdrop.style.display = "flex";
+}
+
+async function manageAdd(){
+  const v = manageAddInput.value.trim();
+  if(!v){ manageMsg.textContent = "Type a name first."; return; }
+
+  manageMsg.textContent = "Adding…";
+
+  try{
+    const action = (manageMode==="categories") ? "meta_add_category" : "meta_add_shipment";
+    const res = await postForm({_action: action, value: v});
+    if(!res.ok) throw new Error(res.error||"Add failed");
+    manageMsg.textContent = "Added.";
+    await loadAll();
+    openManage(manageMode); // refresh list
+  }catch(e){
+    manageMsg.textContent = "Add failed: " + (e.message||String(e));
+  }
+}
+
+async function manageRemove(){
+  const v = manageSelect.value;
+  if(!v){ manageMsg.textContent = "Select something first."; return; }
+
+  // double-confirm failsafe
+  const ok1 = confirm(`Remove "${v}"?`);
+  if(!ok1) return;
+  const ok2 = confirm(`Last chance: permanently remove "${v}" from the list?`);
+  if(!ok2) return;
+
+  manageMsg.textContent = "Removing…";
+
+  try{
+    const action = (manageMode==="categories") ? "meta_remove_category" : "meta_remove_shipment";
+    const res = await postForm({_action: action, value: v});
+    if(!res.ok) throw new Error(res.error||"Remove failed");
+    manageMsg.textContent = "Removed.";
+    await loadAll();
+    openManage(manageMode);
+  }catch(e){
+    manageMsg.textContent = "Remove failed: " + (e.message||String(e));
+  }
+}
+
+/* ===================== NEEDS FILTER BUTTONS ===================== */
+needsPriceBtn.addEventListener("click", ()=>{
+  // show items with missing selling price
+  search.value = "";
+  fApproved.value = "";
+  fCategory.value = "";
+  fShipment.value = "";
+  fStatus.value = "";
+  // temporary: filter via search by rerendering custom
+  const rows = data.filter(r => asNum(r[H.sellXCD]) <= 0);
+  tbody.innerHTML = rows.length ? "" : `<tr><td class="muted" colspan="8">No items missing price.</td></tr>`;
+  if(rows.length){
+    rows.forEach(r=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(r[H.name]||"")}</td>
+        <td>${escapeHtml(r[H.shipment]||"")}</td>
+        <td>${escapeHtml(r[H.category]||"")}</td>
+        <td class="right nowrap">${Math.max(0, asNum(r[H.qty])||0) || ""}</td>
+        <td class="right nowrap">${asNum(r[H.costUSD]) ? fmtMoney(viewCurrency==="USD"?asNum(r[H.costUSD]):asNum(r[H.costUSD])*FX, viewCurrency) : ""}</td>
+        <td class="right nowrap"></td>
+        <td>${escapeHtml(r[H.status]||"")}</td>
+        <td>${normYesNo(r[H.approved])||""}</td>
       `;
-      el("fShipment").value = "__all__";
-      el("fCategory").value = "__all__";
-      el("fStatus").value = "__all__";
-      el("fApproved").value = "__all__";
-    }
-
-    function refreshModalDropdowns(){
-      fillSelect(el("mShipment"), meta.shipments || [], {placeholder:"Select..."});
-      fillSelect(el("mCategory"), meta.categories || [], {placeholder:"Select..."});
-      fillSelect(el("mStatus"), meta.statuses || [], {placeholder:"(blank)"});
-      fillSelect(el("mShipStatus"), meta.shippingStatuses || [], {placeholder:"(blank)"});
-
-      // These may not exist in your Apps Script meta; we populate safe defaults.
-      fillSelect(el("mApproved"), ["Yes","No"], {placeholder:"(blank)"});
-      fillSelect(el("mGender"), (meta.genders && meta.genders.length ? meta.genders : ["Male","Female","Unisex"]), {placeholder:"(blank)"});
-      fillSelect(el("mSize"), (meta.sizes && meta.sizes.length ? meta.sizes : ["XS","S","M","L","XL","XXL"]), {placeholder:"(blank)"});
-
-      // Shoe sizes 2.5..15 by .5 if meta not present
-      const shoes = (meta.shoeSizes && meta.shoeSizes.length) ? meta.shoeSizes : (()=>{
-        const a=[]; for (let x=2.5; x<=15.001; x+=0.5) a.push(String(x)); return a;
-      })();
-      fillSelect(el("mShoe"), shoes, {placeholder:"(blank)"});
-    }
-
-    /**********************
-     * Modal open/close + currency inside modal
-     **********************/
-    function openModal(mode, item){
-      selected = item || null;
-      el("modalTitle").textContent = mode==="edit" ? "Edit Product" : "Add Product";
-      el("btnDelete").style.display = mode==="edit" ? "inline-flex" : "none";
-
-      // Always reset modal currency to USD on open (keeps consistent storage)
-      modalCurrency = "USD";
-      el("btnModalCurrency").textContent = "USD";
-      el("mCcyLabelCost").textContent = "USD";
-      el("mCcyLabelSell").textContent = "USD";
-
-      refreshModalDropdowns();
-
-      // Clear + load values
-      el("mProduct").value = item ? (item["Product Name"]||"") : "";
-      el("mShipment").value = item ? (item["Shipment"]||"") : "";
-      el("mCategory").value = item ? (item["Category/Tab"]||"") : "";
-      el("mStatus").value = item ? (item["Status"]||"") : "";
-      el("mQty").value = item ? (item["Quantity"]||"") : "1";
-      el("mApproved").value = item ? (item["Price Approved"]||"") : "";
-      el("mShipStatus").value = item ? (item["Shipping Status"]||"") : "";
-      el("mGender").value = item ? (item["Gender"]||"") : "";
-      el("mSize").value = item ? (item["Size"]||"") : "";
-      el("mShoe").value = item ? (item["Shoe Size"]||"") : "";
-      el("mImageUrl").value = item ? (item["Image URL"]||"") : "";
-      el("mOnlineLink").value = item ? (item["Online Link"]||"") : "";
-      el("mNote").value = item ? (item["Note"]||"") : "";
-
-      // Monetary: read from sheet USD + compute selling USD
-      modalCostUSD = item ? n(item["Cost Price USD"]||0) : 0;
-      modalSellUSD = item ? computeSellingUSD(modalCostUSD) : 0;
-
-      el("mCost").value = modalCostUSD ? (Math.round(modalCostUSD*100)/100).toFixed(2) : "";
-      el("mSelling").value = modalSellUSD ? (Math.round(modalSellUSD*100)/100).toFixed(2) : "";
-
-      // Variations JSON -> rows
-      el("variantList").innerHTML = "";
-      const vjson = item ? (item["Variations JSON"]||"") : "";
-      if (vjson) {
-        try{
-          const arr = JSON.parse(vjson);
-          if (Array.isArray(arr)){
-            for (const v of arr) addVariantRow(v);
-          }
-        }catch(e){}
-      }
-
-      el("modal").classList.add("show");
-    }
-
-    function closeModal(){
-      el("modal").classList.remove("show");
-    }
-
-    function syncModalMoneyFromInputs(){
-      // Convert what user typed (in modal currency) back into USD baseline vars
-      const costShown = n(el("mCost").value||0);
-      const sellShown = n(el("mSelling").value||0);
-      if (modalCurrency==="USD"){
-        modalCostUSD = costShown;
-        modalSellUSD = sellShown;
-      } else {
-        modalCostUSD = costShown / FX_USD_TO_XCD;
-        modalSellUSD = sellShown / FX_USD_TO_XCD;
-      }
-    }
-
-    function paintModalMoney(){
-      // Render baseline USD vars into current modal currency
-      const fx = (modalCurrency==="XCD") ? FX_USD_TO_XCD : 1;
-      const cost = modalCostUSD * fx;
-      const sell = modalSellUSD * fx;
-      el("mCost").value = cost ? (Math.round(cost*100)/100).toFixed(2) : "";
-      el("mSelling").value = sell ? (Math.round(sell*100)/100).toFixed(2) : "";
-      el("mCcyLabelCost").textContent = modalCurrency;
-      el("mCcyLabelSell").textContent = modalCurrency;
-      el("btnModalCurrency").textContent = modalCurrency;
-    }
-
-    function toggleModalCurrency(){
-      // Preserve values by syncing then repainting
-      syncModalMoneyFromInputs();
-      modalCurrency = (modalCurrency==="USD") ? "XCD" : "USD";
-      paintModalMoney();
-    }
-
-    /**********************
-     * Variants -> Variations JSON
-     **********************/
-    function addVariantRow(prefill={}){
-      const row = document.createElement("div");
-      row.className = "variantRow";
-      row.innerHTML = `
-        <div>
-          <div class="label">Color</div>
-          <input class="vColor" placeholder="e.g., Blue" value="${escapeHtml(prefill.color||"")}" />
-        </div>
-        <div>
-          <div class="label">Size</div>
-          <select class="vSize"></select>
-        </div>
-        <div>
-          <div class="label">Gender</div>
-          <select class="vGender"></select>
-        </div>
-        <div>
-          <div class="label">Qty</div>
-          <input class="vQty" inputmode="numeric" placeholder="e.g., 6" value="${escapeHtml(prefill.qty||"")}" />
-        </div>
-      `;
-      el("variantList").appendChild(row);
-
-      // populate selects using same lists as main size/gender
-      const vSize = row.querySelector(".vSize");
-      const vGender = row.querySelector(".vGender");
-
-      const sizes = (meta.sizes && meta.sizes.length ? meta.sizes : ["XS","S","M","L","XL","XXL"]);
-      const genders = (meta.genders && meta.genders.length ? meta.genders : ["Male","Female","Unisex"]);
-
-      vSize.innerHTML = `<option value="">(blank)</option>` + sizes.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
-      vGender.innerHTML = `<option value="">(blank)</option>` + genders.map(g=>`<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join("");
-
-      vSize.value = prefill.size || "";
-      vGender.value = prefill.gender || "";
-    }
-
-    function buildVariationsJSON(){
-      const rows = Array.from(el("variantList").querySelectorAll(".variantRow"));
-      const out = [];
-      for (const r of rows){
-        const color = r.querySelector(".vColor").value.trim();
-        const size = r.querySelector(".vSize").value.trim();
-        const gender = r.querySelector(".vGender").value.trim();
-        const qty = r.querySelector(".vQty").value.trim();
-        if (!color && !size && !gender && !qty) continue;
-        out.push({ color, size, gender, qty });
-      }
-      return out.length ? JSON.stringify(out) : "";
-    }
-
-    /**********************
-     * Easter eggs
-     **********************/
-    function thumbsUpPop_(){
-      const d = document.createElement("div");
-      d.className = "pop";
-      d.textContent = "👍";
-      document.body.appendChild(d);
-      setTimeout(()=>d.remove(), 900);
-    }
-
-    // FIX #2: money rain when Shipping Status becomes "Shipped"
-    function moneyRain_(){
-      const layer = document.createElement('div');
-      layer.style.position = 'fixed';
-      layer.style.left = '0';
-      layer.style.top = '0';
-      layer.style.width = '100%';
-      layer.style.height = '100%';
-      layer.style.pointerEvents = 'none';
-      layer.style.zIndex = '9999';
-      document.body.appendChild(layer);
-
-      const glyphs = ['💵','💸'];
-      const count = 28;
-
-      for (let i = 0; i < count; i++){
-        const s = document.createElement('div');
-        s.textContent = glyphs[Math.random() < 0.5 ? 0 : 1];
-        s.style.position = 'absolute';
-        s.style.left = (Math.random()*100) + 'vw';
-        s.style.top = (-10 - Math.random()*20) + 'vh';
-        s.style.fontSize = (18 + Math.random()*16) + 'px';
-        s.style.opacity = '0.92';
-        s.style.transform = `rotate(${(Math.random()*40)-20}deg)`;
-        const dur = 1200 + Math.random()*900;
-        s.animate(
-          [
-            { transform: s.style.transform + ' translateY(0)', opacity: 0.95 },
-            { transform: s.style.transform + ` translateY(${110 + Math.random()*30}vh)`, opacity: 0.0 }
-          ],
-          { duration: dur, easing: 'cubic-bezier(.2,.6,.2,1)', fill: 'forwards' }
-        );
-        layer.appendChild(s);
-      }
-
-      setTimeout(()=>layer.remove(), 2200);
-    }
-
-    function maybeTriggerShippedEasterEgg_(shipStatusValue){
-      const v = String(shipStatusValue||"").trim().toLowerCase();
-      if (v === "shipped") moneyRain_();
-    }
-
-    /**********************
-     * Load data (inventory + meta)
-     **********************/
-    async function loadAll(){
-      setStatusLine("Loading…");
-      try{
-        // meta
-        const metaResp = await jsonp(`${EXEC_URL}?meta=1`);
-        if (!metaResp || !metaResp.ok) throw new Error(metaResp?.error || "Meta load failed");
-        meta = metaResp.meta || meta;
-
-        // inventory
-        const invResp = await jsonp(`${EXEC_URL}`);
-        if (!invResp || !invResp.ok) throw new Error(invResp?.error || "Inventory load failed");
-        inventory = invResp.data || [];
-
-        refreshFilterDropdowns();
-        render();
-        setStatusLine("Loaded.");
-      }catch(e){
-        setStatusLine("Load failed: " + String(e.message||e));
-        toast("Load failed. Check Apps Script deployment permissions.");
-      }
-    }
-
-    /**********************
-     * Save / Delete (POST via form + postMessage HTML fallback)
-     **********************/
-    function postForm(params){
-      return new Promise((resolve,reject)=>{
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        document.body.appendChild(iframe);
-
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = EXEC_URL;
-        form.target = iframe.name = "pm_" + Math.random().toString(36).slice(2);
-
-        // request postMessage html response
-        params._pm = "1";
-
-        for (const [k,v] of Object.entries(params)){
-          const inp = document.createElement("input");
-          inp.type = "hidden";
-          inp.name = k;
-          inp.value = String(v ?? "");
-          form.appendChild(inp);
-        }
-        document.body.appendChild(form);
-
-        const timer = setTimeout(()=>{
-          cleanup();
-          reject(new Error("Save timed out"));
-        }, 12000);
-
-        function onMsg(ev){
-          // Apps Script returns parent.postMessage({ok:true,...}, "*");
-          const data = ev.data;
-          if (!data || (data.ok !== true && data.ok !== false)) return;
-          window.removeEventListener("message", onMsg);
-          clearTimeout(timer);
-          cleanup();
-          resolve(data);
-        }
-
-        function cleanup(){
-          form.remove();
-          iframe.remove();
-        }
-
-        window.addEventListener("message", onMsg);
-        form.submit();
-      });
-    }
-
-    async function saveCurrent(){
-      try{
-        // Sync modal numbers into USD baseline first
-        syncModalMoneyFromInputs();
-
-        const productName = el("mProduct").value.trim();
-        const shipment = el("mShipment").value.trim();
-        if (!productName || !shipment){
-          toast('Product Name and Shipment are required.');
-          return;
-        }
-
-        // If user types cost, compute default selling if selling blank
-        const costUSD = modalCostUSD;
-        const sellingUSD = modalSellUSD || computeSellingUSD(costUSD);
-
-        // If user changed cost, recompute selling unless they explicitly entered selling
-        const sellingTyped = el("mSelling").value.trim() !== "";
-        if (!sellingTyped){
-          modalSellUSD = computeSellingUSD(costUSD);
-        } else {
-          modalSellUSD = sellingUSD;
-        }
-
-        const variationsJSON = buildVariationsJSON();
-
-        const payload = {
-          _action: selected ? "update" : "create",
-
-          "Product Name": productName,
-          "Shipment": shipment,
-          "Category/Tab": el("mCategory").value,
-          "Image URL": el("mImageUrl").value.trim(),
-          "Cost Price USD": (Math.round(costUSD*100)/100).toFixed(2),
-          // Your sheet has a Selling Price XCD column; we still store USD-only baseline in Cost,
-          // and store computed SELLING in XCD for your sheet compatibility.
-          "Selling Price XCD": (Math.round((computeSellingUSD(costUSD)*FX_USD_TO_XCD)*100)/100).toFixed(2),
-          "Quantity": el("mQty").value.trim() || "1",
-          "Online Link": el("mOnlineLink").value.trim(),
-          "Note": el("mNote").value.trim(),
-          "Status": el("mStatus").value,
-          "Price Approved": el("mApproved").value,
-          "Ship Date": "", // keep stable; sheet may have it
-          "Gender": el("mGender").value,
-          "Size": el("mSize").value,
-          "Shoe Size": el("mShoe").value,
-          "Shipping Status": el("mShipStatus").value,
-          "Shipped Date (optional but recommended)": "",
-          "Variations JSON": variationsJSON
-        };
-
-        const resp = await postForm(payload);
-        if (!resp.ok) throw new Error(resp.error || "Save failed");
-
-        // Easter eggs
-        if (String(payload["Price Approved"]||"").trim().toLowerCase() === "yes") thumbsUpPop_();
-        maybeTriggerShippedEasterEgg_(payload["Shipping Status"]);
-
-        toast(resp.action === "created" ? "Saved (created)." : "Saved (updated).");
-
-        // reload + close modal
-        await loadAll();
-        closeModal();
-
-      }catch(e){
-        toast("Save failed: " + String(e.message||e));
-      }
-    }
-
-    async function deleteCurrent(){
-      if (!selected) return;
-      try{
-        const payload = {
-          _action: "delete",
-          "Product Name": selected["Product Name"] || "",
-          "Shipment": selected["Shipment"] || ""
-        };
-        const resp = await postForm(payload);
-        if (!resp.ok) throw new Error(resp.error || "Delete failed");
-        toast("Deleted.");
-        await loadAll();
-        closeModal();
-      }catch(e){
-        toast("Delete failed: " + String(e.message||e));
-      }
-    }
-
-    /**********************
-     * Manage Lists (Shipments/Categories) — uses Apps Script meta_add / meta_remove
-     **********************/
-    async function addMeta(kind){
-      const label = (kind==="shipment") ? "shipment" : "category";
-      const name = prompt(`Add new ${label} name:`);
-      if (!name) return;
-
-      const action = (kind==="shipment") ? "meta_add_shipment" : "meta_add_category";
-      try{
-        const resp = await postForm({_action: action, value: name});
-        if (!resp.ok) throw new Error(resp.error || "Failed");
-        toast(`${label} added.`);
-        await loadAll();
-      }catch(e){
-        toast(`${label} add failed: ${String(e.message||e)}`);
-      }
-    }
-
-    /**********************
-     * Events
-     **********************/
-    function wire(){
-      // top buttons
-      el("btnTripHelper").addEventListener("click", ()=> window.open(TRIP_HELPER_URL, "_blank"));
-      el("btnDashboardMobile").addEventListener("click", ()=> window.open(DASHBOARD_MOBILE_URL, "_blank"));
-      el("btnAddProduct").addEventListener("click", ()=> openModal("add", null));
-      el("btnReloadTop").addEventListener("click", loadAll);
-      el("btnReload").addEventListener("click", loadAll);
-
-      // currency
-      el("btnCurrencyToggle").addEventListener("click", ()=>{
-        showCurrency = (showCurrency==="USD") ? "XCD" : "USD";
-        el("btnCurrencyPill").textContent = showCurrency;
-        render();
-      });
-      el("btnCurrencyPill").addEventListener("click", ()=>{
-        showCurrency = (showCurrency==="USD") ? "XCD" : "USD";
-        el("btnCurrencyPill").textContent = showCurrency;
-        render();
-      });
-
-      // markup
-      el("selMarkupTop").addEventListener("change", ()=>{
-        const v = el("selMarkupTop").value;
-        if (v==="custom"){
-          const x = prompt("Custom markup %:", String(customMarkupPct||100));
-          const num = n(x||customMarkupPct||100);
-          customMarkupPct = Math.max(0, num);
-          markupPct = "custom";
-        } else {
-          markupPct = Number(v);
-        }
-        render();
-      });
-
-      // filters
-      ["qSearch","fShipment","fCategory","fStatus","fApproved"].forEach(id=>{
-        el(id).addEventListener("input", render);
-        el(id).addEventListener("change", render);
-      });
-
-      // needs buttons (simple filter shortcuts)
-      el("btnNeedsPrice").addEventListener("click", ()=>{
-        // show items where Selling Price XCD blank/0
-        const list = inventory.filter(it=> n(it["Selling Price XCD"]||0) <= 0);
-        toast(`${list.length} item(s) missing selling price.`);
-      });
-      el("btnNeedsApproval").addEventListener("click", ()=>{
-        const list = inventory.filter(it=> String(it["Price Approved"]||"").trim().toLowerCase() !== "yes");
-        toast(`${list.length} item(s) not approved.`);
-      });
-
-      // manage
-      el("btnManageShipments").addEventListener("click", ()=> addMeta("shipment"));
-      el("btnManageCategories").addEventListener("click", ()=> addMeta("category"));
-
-      // modal
-      el("btnCloseModal").addEventListener("click", closeModal);
-      el("modal").addEventListener("click", (e)=>{
-        if (e.target === el("modal")) closeModal();
-      });
-      el("btnSave").addEventListener("click", saveCurrent);
-      el("btnDelete").addEventListener("click", deleteCurrent);
-
-      // inline add shipment
-      el("btnAddShipmentInline").addEventListener("click", ()=> addMeta("shipment"));
-
-      // variants
-      el("btnAddVariant").addEventListener("click", ()=> addVariantRow({}));
-
-      // modal currency toggle
-      el("btnModalCurrency").addEventListener("click", toggleModalCurrency);
-      el("btnModalCurrencyToggle").addEventListener("click", toggleModalCurrency);
-
-      // auto-fill selling when cost changes (unless user already typed selling)
-      el("mCost").addEventListener("input", ()=>{
-        syncModalMoneyFromInputs();
-        // recompute selling USD and repaint in current modal currency ONLY if selling input is empty
-        if (el("mSelling").value.trim()===""){
-          modalSellUSD = computeSellingUSD(modalCostUSD);
-          paintModalMoney();
-          // preserve caret in cost field as best effort
-          el("mCost").focus();
-        }
-      });
-    }
-
-    /**********************
-     * Init
-     **********************/
-    (function init(){
-      // Hook external buttons + tel links (these MUST dial when clicked)
-      el("btnTripHelper").textContent = "Trip Helper";
-      el("btnDashboardMobile").textContent = "Dashboard Mobile";
-
-      // Make sure tel links actually do something on click (some environments need explicit)
-      el("callMichael").addEventListener("click", (e)=>{
-        // allow default tel: behavior
-      });
-      el("callQuencie").addEventListener("click", (e)=>{
-        // allow default tel: behavior
-      });
-
-      // FX badges
-      el("fxBadge").textContent = `FX 1 USD = ${FX_USD_TO_XCD.toFixed(2)} XCD`;
-      el("fxBadge2").textContent = `FX 1 USD = ${FX_USD_TO_XCD.toFixed(2)} XCD`;
-
-      wire();
-      loadAll();
-    })();
-  </script>
+      tr.addEventListener("click", ()=>openEdit(r));
+      tbody.appendChild(tr);
+    });
+  }
+  shownCount.textContent = rows.length;
+  totalItemsEl.textContent = rows.reduce((a,r)=>a + Math.max(0,asNum(r[H.qty])||0),0) || rows.length;
+  showToast("Showing: Needs Price");
+});
+
+needsApprovalBtn.addEventListener("click", ()=>{
+  search.value = "";
+  fApproved.value = "Needs Approval";
+  render();
+  showToast("Showing: Needs Approval");
+});
+
+/* ===================== EVENTS ===================== */
+currencyChip.addEventListener("click", toggleCurrency);
+
+hubBtn.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  const show = hubPop.style.display !== "block";
+  hubPop.style.display = show ? "block" : "none";
+});
+document.addEventListener("click", ()=>hubPop.style.display="none");
+
+addBtn.addEventListener("click", openAdd);
+reloadBtn.addEventListener("click", loadAll);
+reloadBtn2.addEventListener("click", loadAll);
+
+search.addEventListener("input", render);
+fShipment.addEventListener("change", render);
+fCategory.addEventListener("change", render);
+fStatus.addEventListener("change", render);
+fApproved.addEventListener("change", render);
+
+modalClose.addEventListener("click", closeModal);
+modalBackdrop.addEventListener("click", (e)=>{ if(e.target===modalBackdrop) closeModal(); });
+
+mCurrencyChip.addEventListener("click", toggleModalCurrency);
+
+saveBtn.addEventListener("click", saveRow);
+deleteBtn.addEventListener("click", deleteRow);
+
+addVariantBtn.addEventListener("click", ()=>addVariantRow({}));
+
+mAddShipBtn.addEventListener("click", async ()=>{
+  const v = prompt("Add a new shipment name:");
+  if(!v) return;
+  // Uses Apps Script meta_add_shipment. NOTE: if your Apps Script is still writing shipments to Lists column D,
+  // you must patch it to column H for your sheet layout.
+  try{
+    const res = await postForm({_action:"meta_add_shipment", value:v});
+    if(!res.ok) throw new Error(res.error||"Add shipment failed");
+    showToast("Shipment added.");
+    await loadAll();
+    mShipment.value = v.trim();
+  }catch(e){
+    showToast("Add shipment failed.");
+  }
+});
+
+manageShipBtn.addEventListener("click", ()=>openManage("shipments"));
+manageCatBtn.addEventListener("click", ()=>openManage("categories"));
+manageClose.addEventListener("click", closeManage);
+manageBackdrop.addEventListener("click", (e)=>{ if(e.target===manageBackdrop) closeManage(); });
+manageAddBtn.addEventListener("click", manageAdd);
+manageRemoveBtn.addEventListener("click", manageRemove);
+
+// ESC closes modals
+document.addEventListener("keydown", (e)=>{
+  if(e.key==="Escape"){
+    closeModal();
+    closeManage();
+    hubPop.style.display="none";
+  }
+});
+
+// Initial: markup label only (keep your UI)
+markupLabel.textContent = getMarkup()+"%";
+markupSub.textContent = getMarkup()+"%";
+
+// Auto-calc selling when cost changes
+mCost.addEventListener("change", onCostChanged);
+
+// Load
+loadAll();
+</script>
+
+<!--
+IMPORTANT NOTE (this explains ONLY the shipments problem, nothing cosmetic):
+
+Your current Apps Script meta is reading/writing shipments from Lists column D.
+But your Lists screenshot shows "Shipment Options" in column H.
+
+If Shipments still act wrong after this HTML:
+Open your Apps Script and change ONLY TWO places:
+
+1) In getMeta_(): shipments: readListCol_(8)   // not 4
+2) In meta_add_shipment/meta_remove_shipment: use appendToListCol_(8, ...) and removeFromListCol_(8, ...)
+
+That is the ONLY way to make Shipments truly come from Lists!H like your sheet is structured.
+-->
 </body>
 </html>
