@@ -414,3 +414,108 @@
 
 </body>
 </html>
+<script>
+/* ========= JSONP DATA LOADER ========= */
+const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+
+let inventoryData = [];
+let metaData = {};
+let currency = "USD";
+const EC_RATE = 2.7169;
+
+/* --- JSONP helper --- */
+function loadJSONP(url, callbackName) {
+  return new Promise((resolve, reject) => {
+    window[callbackName] = (data) => {
+      resolve(data);
+      delete window[callbackName];
+      script.remove();
+    };
+    const script = document.createElement("script");
+    script.src = url + (url.includes("?") ? "&" : "?") + "callback=" + callbackName;
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+/* --- Load meta (categories, shipments, status) --- */
+async function loadMeta() {
+  const res = await loadJSONP(EXEC_URL + "?meta=1", "cbMeta");
+  if (!res.ok) return;
+  metaData = res.meta;
+
+  const shipmentSel = document.getElementById("shipmentFilter");
+  const categorySel = document.getElementById("categoryFilter");
+  const statusSel = document.getElementById("statusFilter");
+
+  metaData.shipments.forEach(v => shipmentSel.innerHTML += `<option>${v}</option>`);
+  metaData.categories.forEach(v => categorySel.innerHTML += `<option>${v}</option>`);
+  metaData.statuses.forEach(v => statusSel.innerHTML += `<option>${v}</option>`);
+}
+
+/* --- Load inventory --- */
+async function loadInventory() {
+  const res = await loadJSONP(EXEC_URL, "cbInv");
+  if (!res.ok) return;
+
+  inventoryData = res.data;
+  renderInventory();
+  renderStats();
+}
+
+/* --- Render table --- */
+function renderInventory() {
+  const tbody = document.getElementById("inventoryBody");
+  tbody.innerHTML = "";
+
+  inventoryData.forEach(item => {
+    const sell = currency === "USD"
+      ? (Number(item["Selling Price XCD"] || 0) / EC_RATE)
+      : Number(item["Selling Price XCD"] || 0);
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${item["Product Name"]}</td>
+      <td>${item["Shipment"]}</td>
+      <td>${item["Category/Tab"]}</td>
+      <td>${item["Quantity"]}</td>
+      <td>${currency === "USD" ? "$" : "EC$"}${sell.toFixed(2)}</td>
+      <td>${item["Status"]}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+/* --- Stats --- */
+function renderStats() {
+  document.getElementById("statItems").textContent = inventoryData.length;
+
+  let cost = 0, revenue = 0, needsApproval = 0;
+
+  inventoryData.forEach(i => {
+    cost += Number(i["Cost Price USD"] || 0) * Number(i["Quantity"] || 1);
+    revenue += Number(i["Selling Price XCD"] || 0) * Number(i["Quantity"] || 1);
+    if (String(i["Price Approved"]).toLowerCase() !== "yes") needsApproval++;
+  });
+
+  document.getElementById("statCost").textContent =
+    currency === "USD" ? `$${cost.toFixed(2)}` : `EC$${(cost * EC_RATE).toFixed(2)}`;
+
+  document.getElementById("statRevenue").textContent =
+    currency === "USD" ? `$${(revenue / EC_RATE).toFixed(2)}` : `EC$${revenue.toFixed(2)}`;
+
+  document.getElementById("statNeedsApproval").textContent = needsApproval;
+}
+
+/* --- Currency toggle --- */
+document.getElementById("currencyToggle").onclick = () => {
+  currency = currency === "USD" ? "XCD" : "USD";
+  document.getElementById("currencyToggle").textContent = currency;
+  renderInventory();
+  renderStats();
+};
+
+/* --- Boot --- */
+loadMeta();
+loadInventory();
+</script>
