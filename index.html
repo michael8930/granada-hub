@@ -4,144 +4,507 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Grenada Hub Pro</title>
+  <meta name="color-scheme" content="dark" />
   <style>
-    :root{color-scheme:dark}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#071018;color:#e8f2ff}
-    a{color:inherit}
-    .wrap{max-width:1200px;margin:0 auto;padding:18px}
-    .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 30px 90px rgba(0,0,0,.45);overflow:hidden}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:linear-gradient(180deg,rgba(0,174,239,.14),rgba(255,255,255,0));border-bottom:1px solid rgba(255,255,255,.08)}
-    header .left{display:flex;align-items:center;gap:12px;min-width:0}
-    .brandBtn{appearance:none;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#e8f2ff;border-radius:14px;padding:10px 12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
-    .brandSub{font-size:12px;opacity:.72;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .topActions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .btn{appearance:none;border:0;border-radius:999px;padding:10px 14px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-    .btn.primary{background:#00AEEF;color:#001018}
-    .btn.ghost{background:rgba(255,255,255,.08);color:#e8f2ff;border:1px solid rgba(255,255,255,.12)}
-    .btn:disabled{opacity:.55;cursor:not-allowed}
-
-    .toolbar{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
-    .toolbar input,.toolbar select{background:rgba(0,0,0,.35);color:#e8f2ff;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;outline:none}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
-
-    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
-    @media (max-width:980px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    .metric{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:10px 12px}
-    .metric .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
-    .metric .v{font-size:18px;font-weight:900;margin-top:6px}
-
-    .grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;padding:14px}
-    @media (max-width:980px){.grid{grid-template-columns:1fr}}
-
-    .panel{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}
-    .panel h2{margin:0;padding:12px 14px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;border-bottom:1px solid rgba(255,255,255,.08)}
-    .panel .body{padding:12px 14px}
-
-    table{width:100%;border-collapse:collapse;font-size:13px}
-    th,td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;vertical-align:top}
-    th{font-size:11px;opacity:.7;letter-spacing:.14em;text-transform:uppercase}
-    tr:hover td{background:rgba(0,174,239,.06);cursor:pointer}
-
-    .statusBar{padding:10px 14px;font-size:12px;border-top:1px solid rgba(255,255,255,.08);opacity:.85}
-    .statusBar.error{color:#ffb3b3}
-    .statusBar.ok{color:#b6ffcf}
-    .muted{opacity:.75;font-size:12px;line-height:1.45}
+    :root{
+      --bg:#071018;
+      --card:rgba(255,255,255,.04);
+      --card2:rgba(0,0,0,.22);
+      --b:rgba(255,255,255,.10);
+      --b2:rgba(255,255,255,.08);
+      --txt:#e8f2ff;
+      --mut:rgba(232,242,255,.68);
+      --blue:#00AEEF;
+      --blue2:rgba(0,174,239,.18);
+      --green:#20e3a2;
+      --red:#ff6b6b;
+      --shadow:0 30px 90px rgba(0,0,0,.55);
+      --r:18px;
+      --r2:14px;
+      --pad:18px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: radial-gradient(1200px 600px at 50% 0%, rgba(0,174,239,.16), transparent 60%),
+                  radial-gradient(1000px 600px at 10% 10%, rgba(255,255,255,.06), transparent 55%),
+                  var(--bg);
+      color:var(--txt);
+    }
+    a{ color:inherit; }
+    .wrap{ max-width:1200px; margin:0 auto; padding:22px; }
+    .shell{
+      background:var(--card);
+      border:1px solid var(--b2);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .top{
+      padding:16px 18px;
+      background: linear-gradient(180deg, rgba(0,174,239,.14), rgba(255,255,255,0));
+      border-bottom:1px solid var(--b2);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; align-items:flex-start; gap:14px;
+      min-width:260px;
+    }
+    .brandMark{
+      width:38px; height:38px; border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, rgba(0,174,239,.9), rgba(0,174,239,.18) 60%, rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 18px 38px rgba(0,0,0,.45);
+    }
+    .brandTxt{ display:flex; flex-direction:column; gap:4px; }
+    .brandTxt h1{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      line-height:1.1;
+      cursor:pointer;
+      user-select:none;
+    }
+    .brandTxt .sub{ font-size:12px; color:var(--mut); }
+    .navPills{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .pillBtn{
+      appearance:none; border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:transform .06s ease, background .15s ease;
+      white-space:nowrap;
+    }
+    .pillBtn:hover{ background:rgba(255,255,255,.09); }
+    .pillBtn:active{ transform:translateY(1px); }
+    .pillBtn.primary{
+      background:var(--blue);
+      color:#001018;
+      border:0;
+    }
+    .rightBtns{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .mini{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.20);
+      color:var(--txt);
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .mini.primary{ background:var(--blue); color:#001018; border:0; }
+    .mini:disabled{ opacity:.55; cursor:not-allowed; }
+    .rowDash{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:12px;
+      padding:14px;
+      border-bottom:1px solid var(--b2);
+    }
+    @media (max-width:1100px){
+      .rowDash{ grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:560px){
+      .rowDash{ grid-template-columns:1fr; }
+    }
+    .stat{
+      background:var(--card2);
+      border:1px solid var(--b2);
+      border-radius:16px;
+      padding:14px;
+      min-height:86px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .statTop{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+    .stat .label{
+      font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--mut);
+    }
+    .stat .val{
+      font-size:26px; font-weight:900; letter-spacing:.02em;
+    }
+    .chip{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:var(--txt);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+    .chip select{
+      background:transparent; border:0; color:inherit;
+      outline:none; font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      cursor:pointer;
+      appearance:auto;
+    }
+    .controls{
+      padding:14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      border-bottom:1px solid var(--b2);
+    }
+    .controls input, .controls select{
+      background:rgba(0,0,0,.30);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--txt);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+    .controls input{ min-width:240px; flex:1; }
+    .controls .spacer{ flex:1; }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:14px;
+      padding:14px;
+    }
+    @media (max-width:980px){ .grid{ grid-template-columns:1fr; } }
+    .panel{
+      background:var(--card2);
+      border:1px solid var(--b2);
+      border-radius:16px;
+      overflow:hidden;
+      min-height:280px;
+    }
+    .panel h2{
+      margin:0;
+      padding:12px 14px;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(232,242,255,.78);
+      border-bottom:1px solid var(--b2);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .panel .body{ padding:12px 14px; }
+    table{ width:100%; border-collapse:collapse; font-size:13px; }
+    th,td{ padding:10px 10px; border-bottom:1px solid rgba(255,255,255,.06); text-align:left; vertical-align:top; }
+    th{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; opacity:.75; }
+    tr:hover td{ background:rgba(0,174,239,.06); cursor:pointer; }
+    .mut{ color:var(--mut); }
+    .statusLine{
+      padding:10px 14px;
+      border-top:1px solid var(--b2);
+      font-size:12px;
+      color:var(--mut);
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .ok{ color:#b6ffcf; }
+    .err{ color:#ffb3b3; }
+    .helpBox{
+      display:flex; flex-direction:column; gap:12px;
+      font-size:13px; color:var(--mut);
+      line-height:1.45;
+    }
+    .helpBtns{ display:flex; gap:10px; flex-wrap:wrap; }
+    .callBtn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+    .callBtn:hover{ background:rgba(255,255,255,.09); }
 
     /* Modal */
-    .modalBack{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:14px;z-index:9999}
-    .modal{width:min(920px,96vw);max-height:92vh;overflow:auto;background:#0a1621;border:1px solid rgba(255,255,255,.12);border-radius:18px;box-shadow:0 40px 120px rgba(0,0,0,.55)}
-    .modalHead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.10)}
-    .modalHead .t{font-weight:950;letter-spacing:.08em;text-transform:uppercase}
-    .xbtn{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#e8f2ff;border-radius:12px;padding:8px 10px;cursor:pointer}
+    .modalOverlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .modalOverlay.show{ display:flex; }
+    .modal{
+      width:min(920px, 96vw);
+      background:rgba(7,16,24,.92);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px;
+      box-shadow:0 30px 90px rgba(0,0,0,.65);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px 14px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      background:linear-gradient(180deg, rgba(0,174,239,.10), transparent);
+    }
+    .modalHead .t{
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(232,242,255,.86);
+    }
+    .x{
+      width:38px; height:38px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      cursor:pointer;
+      color:var(--txt);
+      font-weight:900;
+    }
+    .modalBody{ padding:14px; }
+    form .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    @media (max-width:780px){ form .row{ grid-template-columns:1fr; } }
+    label{
+      display:block;
+      font-size:11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(232,242,255,.72);
+      margin:0 0 6px;
+    }
+    input,select,textarea{
+      width:100%;
+      background:rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--txt);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+    textarea{ min-height:90px; resize:vertical; }
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px;
+    }
+    .noteSmall{ font-size:12px; color:var(--mut); }
 
-    form .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-    @media (max-width:720px){form .row{grid-template-columns:1fr}}
-    label{font-size:11px;opacity:.75;letter-spacing:.14em;text-transform:uppercase;display:block;margin:0 0 6px}
-    input,textarea,select{width:100%;box-sizing:border-box;background:rgba(0,0,0,.35);color:#e8f2ff;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;outline:none}
-    textarea{min-height:86px;resize:vertical}
-    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
-    .note{font-size:12px;opacity:.75;line-height:1.45}
+    /* Variants */
+    .variantsHead{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      margin-top:8px;
+    }
+    .vList{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+    .vItem{
+      border:1px dashed rgba(255,255,255,.16);
+      border-radius:14px;
+      padding:10px;
+      background:rgba(255,255,255,.03);
+    }
+    .vItem .row{ margin-bottom:0; }
+    .vItem .removeV{
+      margin-top:8px;
+      width:auto;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      cursor:pointer;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
 
-    /* Simple “easter egg” overlays */
-    .fx{position:fixed;inset:0;pointer-events:none;display:none;z-index:10000}
-    .fx.show{display:block}
-    .thumb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:82px;filter:drop-shadow(0 12px 40px rgba(0,0,0,.55))}
-    .money{position:absolute;inset:0;overflow:hidden}
-    .bill{position:absolute;top:-10%;font-size:26px;opacity:.9;animation:fall 1.2s linear forwards}
-    @keyframes fall{to{transform:translateY(120vh) rotate(180deg);opacity:.9}}
+    /* Easter eggs */
+    .toast{
+      position:fixed;
+      left:50%;
+      top:18px;
+      transform:translateX(-50%);
+      background:rgba(7,16,24,.92);
+      border:1px solid rgba(255,255,255,.16);
+      padding:10px 14px;
+      border-radius:999px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:none;
+      z-index:10000;
+      white-space:nowrap;
+    }
+    .toast.show{ display:block; }
+    .moneyRain{
+      pointer-events:none;
+      position:fixed; inset:0;
+      overflow:hidden;
+      z-index:9998;
+      display:none;
+    }
+    .moneyRain.show{ display:block; }
+    .bill{
+      position:absolute;
+      top:-40px;
+      font-size:22px;
+      opacity:.95;
+      animation: fall linear forwards;
+      text-shadow:0 12px 24px rgba(0,0,0,.5);
+    }
+    @keyframes fall{
+      to{ transform: translateY(110vh) rotate(180deg); opacity:.9; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="left" style="min-width:0;">
-          <div style="display:flex;flex-direction:column;min-width:0;">
-            <button id="brandMenu" class="brandBtn">Grenada Hub Pro</button>
-            <div class="brandSub">Inventory • Pricing • Shipments</div>
+    <div class="shell">
+      <div class="top">
+        <div class="brand">
+          <div class="brandMark" aria-hidden="true"></div>
+          <div class="brandTxt">
+            <!-- Click this title to open Call chooser (as requested) -->
+            <h1 id="brandCall">Grenada Hub Pro</h1>
+            <div class="sub">Inventory • Pricing • Shipments</div>
           </div>
         </div>
 
-        <div class="topActions">
-          <a class="btn ghost" href="https://vinylpressusa.com/grenada-dashboard-mobile" target="_blank" rel="noopener">Dashboard Mobile</a>
-          <a class="btn ghost" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">Trip Helper</a>
-          <button id="btnAddTop" class="btn primary">+ Add Product</button>
+        <!-- Keep these pills at top (Trip Helper + Dashboard Mobile) -->
+        <div class="navPills">
+          <button class="pillBtn" id="btnTrip">Trip Helper</button>
+          <button class="pillBtn" id="btnDash">Dashboard Mobile</button>
         </div>
-      </header>
 
-      <div class="metrics">
-        <div class="metric">
-          <div class="k">Total Items</div>
-          <div id="mItems" class="v">0</div>
-        </div>
-        <div class="metric">
-          <div class="k">Total Cost</div>
-          <div id="mCost" class="v">0</div>
-        </div>
-        <div class="metric">
-          <div class="k">Expected Revenue</div>
-          <div id="mRev" class="v">0</div>
-        </div>
-        <div class="metric">
-          <div class="k">Profit</div>
-          <div id="mProfit" class="v">0</div>
+        <div class="rightBtns">
+          <!-- Currency toggle (single currency visible at a time) -->
+          <button class="mini" id="btnCurrency" title="Toggle USD / XCD">USD</button>
+
+          <!-- Markup selector (50/100/150/200/custom) -->
+          <span class="chip" title="Default markup used to auto-fill Selling when you enter Cost">
+            Markup
+            <select id="markupSel">
+              <option value="0.5">50%</option>
+              <option value="1.0" selected>100%</option>
+              <option value="1.5">150%</option>
+              <option value="2.0">200%</option>
+              <option value="custom">Custom</option>
+            </select>
+          </span>
+
+          <button class="mini primary" id="btnAddTop">+ Add Product</button>
+          <button class="mini" id="btnReload">Reload</button>
         </div>
       </div>
 
-      <div class="toolbar">
+      <!-- Dashboard (restore: totals + shipment dropdown + expected revenue + profit) -->
+      <div class="rowDash">
+        <div class="stat">
+          <div class="statTop">
+            <div class="label">Total Items</div>
+            <span class="chip">
+              <select id="dashShipSel" title="Filter dashboard totals by shipment">
+                <option value="">All Shipments</option>
+              </select>
+            </span>
+          </div>
+          <div class="val" id="totalItems">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="statTop">
+            <div class="label">Total Cost</div>
+            <span class="chip" id="costCurChip">USD</span>
+          </div>
+          <div class="val" id="totalCost">$0.00</div>
+          <div class="mut" style="font-size:12px;">Cost = sum(Cost Price USD × Qty)</div>
+        </div>
+
+        <div class="stat">
+          <div class="statTop">
+            <div class="label">Expected Revenue</div>
+            <span class="chip" id="revCurChip">USD</span>
+          </div>
+          <div class="val" id="totalRev">$0.00</div>
+          <div class="mut" style="font-size:12px;">Revenue = sum(Selling Price × Qty)</div>
+        </div>
+
+        <div class="stat">
+          <div class="statTop">
+            <div class="label">Profit</div>
+            <span class="chip" id="profCurChip">USD</span>
+          </div>
+          <div class="val" id="totalProfit">$0.00</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="mini" id="btnNeedsPrice" title="Show items missing Selling Price">Needs Price</button>
+            <button class="mini" id="btnNeedsApproval" title="Show items where Price Approved is No/blank">Needs Approval</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="controls">
         <input id="q" type="search" placeholder="Search product name..." />
-        <select id="shipFilter"></select>
-        <select id="catFilter"></select>
-        <select id="statusFilter"></select>
+
+        <select id="shipFilter">
+          <option value="">All Shipments</option>
+        </select>
+
+        <select id="catFilter">
+          <option value="">All Categories</option>
+        </select>
+
+        <select id="statusFilter">
+          <option value="">All Status</option>
+        </select>
+
         <select id="approvedFilter">
-          <option value="">All Price Approved</option>
-          <option value="Yes">Approved</option>
-          <option value="No">Not Approved</option>
-          <option value="Blank">Blank</option>
+          <option value="">Price Approved (All)</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
         </select>
 
-        <select id="currencyToggle">
-          <option value="USD">USD ($)</option>
-          <option value="XCD">XCD (EC$)</option>
-        </select>
+        <span class="chip"><span id="count">0</span>&nbsp;items</span>
 
-        <select id="markupSelect" title="Default markup for auto-sell calc">
-          <option value="0.50">50% markup</option>
-          <option value="1.00">100% markup</option>
-          <option value="1.50" selected>150% markup</option>
-          <option value="2.00">200% markup</option>
-          <option value="custom">Custom…</option>
-        </select>
+        <div class="spacer"></div>
 
-        <span id="count" class="pill">0 items</span>
+        <button class="mini" id="btnManageCats">Manage Categories</button>
+        <button class="mini" id="btnManageShips">Manage Shipments</button>
       </div>
 
       <div class="grid">
         <div class="panel">
-          <h2>Inventory</h2>
+          <h2>
+            <span>Inventory</span>
+            <span class="chip" id="viewLabel">All</span>
+          </h2>
           <div class="body" style="padding:0;">
-            <div style="overflow:auto;max-height:64vh;">
-              <table id="tbl">
+            <div style="overflow:auto; max-height: 62vh;">
+              <table>
                 <thead>
                   <tr>
                     <th>Product</th>
@@ -152,60 +515,52 @@
                     <th>Selling</th>
                     <th>Status</th>
                     <th>Approved</th>
+                    <th>Link</th>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody id="tblBody"></tbody>
               </table>
             </div>
-            <div id="loadMsg" class="statusBar">Loading…</div>
+            <div class="statusLine">
+              <span id="loadMsg" class="mut">Loading…</span>
+              <span class="mut">Tip: click a row to edit.</span>
+            </div>
           </div>
         </div>
 
         <div class="panel">
           <h2>Quick Help</h2>
           <div class="body">
-            <div class="muted">
-              • Use filters to isolate a shipment, category, or approval status.<br/>
-              • Click a row to edit.<br/>
-              • Currency toggle switches all visible currency.<br/>
-              • Markup selector pre-fills Selling from Cost (you can override).
+            <div class="helpBox">
+              <div>
+                • Enter <b>Cost</b> → Selling auto-fills using <b>Markup</b> (you can override).<br/>
+                • Currency button toggles what you <b>see</b> (USD or XCD) without mixing on-screen.<br/>
+                • Use filters to isolate shipments/categories/status.
+              </div>
+              <div class="helpBtns">
+                <a class="callBtn" href="tel:+16107035185">Call Michael</a>
+                <a class="callBtn" href="tel:+14845135528">Call Quencie</a>
+              </div>
+              <div class="mut" style="font-size:12px;">
+                Exchange rate display: <b>1 USD = 2.70 XCD</b><br/>
+                Easter eggs: 👍 when Price Approved becomes Yes • 💸 rain when Shipping Status becomes “Shipped”.
+              </div>
             </div>
           </div>
-          <div class="statusBar muted">
-            No phone numbers shown here on purpose. Use the top-left menu.
-          </div>
         </div>
       </div>
+
     </div>
   </div>
 
-  <!-- Brand menu modal -->
-  <div id="brandBack" class="modalBack" role="dialog" aria-modal="true">
+  <!-- Add/Edit Modal -->
+  <div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Add or Edit Product">
     <div class="modal">
       <div class="modalHead">
-        <div class="t">Grenada Hub Pro</div>
-        <button class="xbtn" data-close="brandBack">Close</button>
+        <div class="t" id="modalTitle">Add Product</div>
+        <button class="x" id="btnCloseModal" aria-label="Close">✕</button>
       </div>
-      <div style="padding:12px 14px;">
-        <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <a class="btn primary" href="tel:+16107035185">Call Michael</a>
-          <a class="btn primary" href="tel:+14845135528">Call Quencie</a>
-        </div>
-        <div class="muted" style="margin-top:10px;">
-          This menu is the only place phone call actions exist.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add/Edit modal -->
-  <div id="editBack" class="modalBack" role="dialog" aria-modal="true">
-    <div class="modal">
-      <div class="modalHead">
-        <div id="editTitle" class="t">Add / Edit Product</div>
-        <button class="xbtn" data-close="editBack">Close</button>
-      </div>
-      <div style="padding:12px 14px;">
+      <div class="modalBody">
         <form id="frm">
           <div class="row">
             <div>
@@ -214,10 +569,12 @@
             </div>
             <div>
               <label>Shipment *</label>
-              <select name="Shipment" id="shipSelect" required></select>
-              <div class="actions" style="margin-top:8px;">
-                <button id="btnAddShipment" type="button" class="btn ghost">+ Add Shipment</button>
-                <button id="btnRemoveShipment" type="button" class="btn ghost">Remove Shipment</button>
+              <select name="Shipment" id="shipSel" required>
+                <option value="">Select…</option>
+              </select>
+              <div style="margin-top:8px;">
+                <button type="button" class="mini" id="btnAddShipInline">+ Add new shipment</button>
+                <button type="button" class="mini" id="btnRemoveShipInline">Remove shipment</button>
               </div>
             </div>
           </div>
@@ -225,40 +582,46 @@
           <div class="row">
             <div>
               <label>Category/Tab *</label>
-              <select name="Category/Tab" id="catSelect" required></select>
-              <div class="actions" style="margin-top:8px;">
-                <button id="btnAddCategory" type="button" class="btn ghost">+ Add Category</button>
-                <button id="btnRemoveCategory" type="button" class="btn ghost">Remove Category</button>
+              <select name="Category/Tab" id="catSel" required>
+                <option value="">Select…</option>
+              </select>
+              <div style="margin-top:8px;">
+                <button type="button" class="mini" id="btnAddCatInline">+ Add category</button>
+                <button type="button" class="mini" id="btnRemoveCatInline">Remove category</button>
               </div>
             </div>
             <div>
               <label>Status</label>
-              <select name="Status" id="statusSelect"></select>
+              <select name="Status" id="statusSel">
+                <option value="">(blank)</option>
+              </select>
             </div>
           </div>
 
           <div class="row">
             <div>
               <label>Cost Price USD</label>
-              <input name="Cost Price USD" id="costUsd" inputmode="decimal" placeholder="" />
+              <input name="Cost Price USD" id="costInp" inputmode="decimal" placeholder="0.00" />
+              <div class="noteSmall" id="autoHint">Auto-fills Selling using Markup (unless you override).</div>
             </div>
             <div>
               <label>Selling Price XCD</label>
-              <input name="Selling Price XCD" id="sellXcd" inputmode="decimal" placeholder="" />
+              <input name="Selling Price XCD" id="sellInp" inputmode="decimal" placeholder="0.00" />
+              <div class="noteSmall">You can override the auto-fill.</div>
             </div>
           </div>
 
           <div class="row">
             <div>
               <label>Quantity</label>
-              <input name="Quantity" id="qty" inputmode="numeric" placeholder="" />
+              <input name="Quantity" id="qtyInp" inputmode="numeric" placeholder="1" />
             </div>
             <div>
               <label>Price Approved</label>
-              <select name="Price Approved" id="approvedSelect">
-                <option value=""></option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
+              <select name="Price Approved" id="approvedSel">
+                <option value="">(blank)</option>
+                <option>Yes</option>
+                <option>No</option>
               </select>
             </div>
           </div>
@@ -266,12 +629,14 @@
           <div class="row">
             <div>
               <label>Shipping Status</label>
-              <select name="Shipping Status" id="shipStatusSelect"></select>
+              <select name="Shipping Status" id="shipStatusSel">
+                <option value="">(blank)</option>
+              </select>
             </div>
             <div>
               <label>Gender</label>
-              <select name="Gender" id="genderSelect">
-                <option value=""></option>
+              <select name="Gender" id="genderSel">
+                <option value="">(blank)</option>
                 <option>Men</option>
                 <option>Women</option>
                 <option>Unisex</option>
@@ -283,508 +648,812 @@
           <div class="row">
             <div>
               <label>Size</label>
-              <input name="Size" />
+              <select name="Size" id="sizeSel">
+                <option value="">(blank)</option>
+                <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option>
+              </select>
             </div>
             <div>
               <label>Shoe Size</label>
-              <select name="Shoe Size" id="shoeSelect"></select>
+              <select name="Shoe Size" id="shoeSel">
+                <option value="">(blank)</option>
+              </select>
             </div>
           </div>
 
           <div class="row">
             <div>
               <label>Image URL</label>
-              <input name="Image URL" />
+              <input name="Image URL" placeholder="https://…" />
             </div>
             <div>
               <label>Online Link</label>
-              <input name="Online Link" />
+              <input name="Online Link" placeholder="https://…" />
             </div>
           </div>
 
-          <div>
+          <div style="margin-top:10px;">
             <label>Note</label>
-            <textarea name="Note"></textarea>
+            <textarea name="Note" placeholder="Notes, condition, resale ideas, etc."></textarea>
           </div>
+
+          <!-- Variants (works without needing new rows) -->
+          <div class="variantsHead">
+            <div>
+              <div class="label" style="margin:0;">Variants (optional)</div>
+              <div class="noteSmall">Add color/size/etc. Variants are stored inside “Variations JSON”.</div>
+            </div>
+            <button type="button" class="mini" id="btnAddVariant">+ Variant</button>
+          </div>
+          <div class="vList" id="vList"></div>
+
+          <!-- Hidden storage field only (NOT shown as scary text) -->
+          <input type="hidden" name="Variations JSON" id="variantsJson" />
 
           <div class="actions">
-            <button id="btnSave" type="submit" class="btn primary">Save</button>
-            <button id="btnDelete" type="button" class="btn ghost">Delete</button>
-            <span id="formMsg" class="note"></span>
+            <button type="submit" class="mini primary" id="btnSave">Save</button>
+            <button type="button" class="mini" id="btnDelete">Delete</button>
+            <span class="noteSmall" id="formMsg"></span>
           </div>
-
-          <!-- Hidden: Variations JSON stored, but not exposed to user -->
-          <input type="hidden" name="Variations JSON" id="varJson" value="[]" />
         </form>
       </div>
     </div>
   </div>
 
-  <div id="fxThumb" class="fx"><div class="thumb">👍</div></div>
-  <div id="fxMoney" class="fx"><div class="money" id="moneyBox"></div></div>
+  <!-- Call chooser modal (opens when you tap title) -->
+  <div class="modalOverlay" id="callOverlay" role="dialog" aria-modal="true" aria-label="Call options">
+    <div class="modal" style="width:min(520px, 96vw);">
+      <div class="modalHead">
+        <div class="t">Call</div>
+        <button class="x" id="btnCloseCall" aria-label="Close">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="helpBtns" style="justify-content:flex-start;">
+          <a class="callBtn" href="tel:+16107035185">Call Michael</a>
+          <a class="callBtn" href="tel:+14845135528">Call Quencie</a>
+        </div>
+        <div class="mut" style="margin-top:10px; font-size:12px;">
+          Michael: (610) 703-5185<br/>Quencie: (484) 513-5528
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="moneyRain" id="moneyRain"></div>
 
 <script>
-  // === CONFIG ===
-  const API = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
-  const USD_TO_XCD = 2.70;
+/* ======================
+   CONFIG (ONLY EDIT THIS)
+====================== */
+const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
 
-  // === DOM ===
-  const $ = (s) => document.querySelector(s);
-  const tblBody = $("#tbl tbody");
-  const loadMsg = $("#loadMsg");
-  const q = $("#q");
-  const shipFilter = $("#shipFilter");
-  const catFilter = $("#catFilter");
-  const statusFilter = $("#statusFilter");
-  const approvedFilter = $("#approvedFilter");
-  const currencyToggle = $("#currencyToggle");
-  const markupSelect = $("#markupSelect");
-  const countEl = $("#count");
+/* ======================
+   NOTES:
+   - GET uses JSONP to avoid CORS issues on GitHub Pages / WordPress.
+   - POST uses a hidden form+iframe and your Apps Script returns a tiny HTML
+     that parent.postMessage(...) back. (_pm=1)
+====================== */
 
-  const mItems = $("#mItems");
-  const mCost = $("#mCost");
-  const mRev = $("#mRev");
-  const mProfit = $("#mProfit");
+/* ===== DOM ===== */
+const $ = (s) => document.querySelector(s);
+const tblBody = $("#tblBody");
+const loadMsg = $("#loadMsg");
+const countEl = $("#count");
+const q = $("#q");
 
-  const brandBack = $("#brandBack");
-  const editBack = $("#editBack");
+const shipFilter = $("#shipFilter");
+const catFilter = $("#catFilter");
+const statusFilter = $("#statusFilter");
+const approvedFilter = $("#approvedFilter");
 
-  const btnAddTop = $("#btnAddTop");
-  const brandMenu = $("#brandMenu");
+const btnTrip = $("#btnTrip");
+const btnDash = $("#btnDash");
+const btnReload = $("#btnReload");
+const btnAddTop = $("#btnAddTop");
 
-  const frm = $("#frm");
-  const formMsg = $("#formMsg");
-  const btnDelete = $("#btnDelete");
+const btnCurrency = $("#btnCurrency");
+const markupSel = $("#markupSel");
 
-  const shipSelect = $("#shipSelect");
-  const catSelect = $("#catSelect");
-  const statusSelect = $("#statusSelect");
-  const approvedSelect = $("#approvedSelect");
-  const shipStatusSelect = $("#shipStatusSelect");
-  const genderSelect = $("#genderSelect");
-  const shoeSelect = $("#shoeSelect");
+const dashShipSel = $("#dashShipSel");
+const totalItems = $("#totalItems");
+const totalCost = $("#totalCost");
+const totalRev = $("#totalRev");
+const totalProfit = $("#totalProfit");
+const btnNeedsPrice = $("#btnNeedsPrice");
+const btnNeedsApproval = $("#btnNeedsApproval");
 
-  const costUsd = $("#costUsd");
-  const sellXcd = $("#sellXcd");
+const modalOverlay = $("#modalOverlay");
+const btnCloseModal = $("#btnCloseModal");
+const frm = $("#frm");
+const formMsg = $("#formMsg");
+const modalTitle = $("#modalTitle");
 
-  const btnAddShipment = $("#btnAddShipment");
-  const btnRemoveShipment = $("#btnRemoveShipment");
-  const btnAddCategory = $("#btnAddCategory");
-  const btnRemoveCategory = $("#btnRemoveCategory");
+const shipSel = $("#shipSel");
+const catSel = $("#catSel");
+const statusSel = $("#statusSel");
+const approvedSel = $("#approvedSel");
+const shipStatusSel = $("#shipStatusSel");
+const genderSel = $("#genderSel");
+const sizeSel = $("#sizeSel");
+const shoeSel = $("#shoeSel");
+const costInp = $("#costInp");
+const sellInp = $("#sellInp");
+const qtyInp = $("#qtyInp");
+const variantsJson = $("#variantsJson");
+const vList = $("#vList");
 
-  // === State ===
-  let meta = { categories:[], statuses:[], shippingStatuses:[], shipments:[] };
-  let rows = [];
-  let selectedKey = null;
-  let customMarkup = 1.50;
+const btnDelete = $("#btnDelete");
 
-  // === Helpers ===
-  function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-  function setLoad(text,type=""){loadMsg.textContent=text;loadMsg.className="statusBar"+(type?(" "+type):"");}
+const btnManageCats = $("#btnManageCats");
+const btnManageShips = $("#btnManageShips");
+const btnAddCatInline = $("#btnAddCatInline");
+const btnRemoveCatInline = $("#btnRemoveCatInline");
+const btnAddShipInline = $("#btnAddShipInline");
+const btnRemoveShipInline = $("#btnRemoveShipInline");
 
-  function keyOf(r){
-    return (String(r["Product Name"]||"").trim()+"||"+String(r["Shipment"]||"").trim()).toLowerCase();
-  }
+const brandCall = $("#brandCall");
+const callOverlay = $("#callOverlay");
+const btnCloseCall = $("#btnCloseCall");
 
-  function parseNum(x){
-    const n = Number(String(x||"").replace(/[^0-9.\-]/g,""));
-    return Number.isFinite(n) ? n : 0;
-  }
+const toast = $("#toast");
+const moneyRain = $("#moneyRain");
 
-  function fmtCurrency(n, cur){
-    if(!Number.isFinite(n)) n = 0;
-    const opts = { style:"currency", currency: (cur==="XCD"?"XCD":"USD"), maximumFractionDigits:2 };
-    try { return new Intl.NumberFormat(undefined, opts).format(n); }
-    catch { return (cur==="XCD"?"EC$":"$")+n.toFixed(2); }
-  }
+/* ===== State ===== */
+let meta = { categories:[], statuses:[], shippingStatuses:[], shipments:[] };
+let rows = [];
+let mode = "all"; // all | needsPrice | needsApproval
+let selectedKey = null;
+let currency = "USD"; // USD | XCD
+const FX = 2.70;
 
-  function listToOptions(sel, items, allLabel){
-    const cur = sel.value;
-    sel.innerHTML = (allLabel ? `<option value="">${esc(allLabel)}</option>` : "") +
-      items.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
-    sel.value = cur || "";
-  }
+let sellingOverridden = false;
 
-  function buildShoes(){
-    const sizes = [];
-    for (let s=1; s<=16; s+=0.5) sizes.push(String(s));
-    shoeSelect.innerHTML = `<option value=""></option>` + sizes.map(s=>`<option>${s}</option>`).join("");
-  }
+/* ===== Utils ===== */
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function norm(s){ return String(s ?? "").trim(); }
+function asNum(v){
+  const n = Number(String(v ?? "").replace(/[^0-9.\-]/g,""));
+  return isFinite(n) ? n : 0;
+}
+function fmtMoneyUSD(n){ return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(n); }
+function fmtMoneyXCD(n){ return new Intl.NumberFormat("en-US",{style:"currency",currency:"XCD"}).format(n); }
+function fmtMoney(n){
+  return currency === "USD" ? fmtMoneyUSD(n) : fmtMoneyXCD(n);
+}
+function toDisplayUSD(usd){
+  return currency === "USD" ? usd : (usd * FX);
+}
+function fromDisplayToUSD(displayVal){
+  // input fields are in USD (Cost) and XCD (Selling) per your sheet headers.
+  return displayVal;
+}
+function keyOf(r){
+  // Unique key for edits: Product Name + Shipment (per your Apps Script)
+  return (norm(r["Product Name"]) + "||" + norm(r["Shipment"])).toLowerCase();
+}
 
-  function openModal(backEl){ backEl.style.display="flex"; }
-  function closeModal(backEl){ backEl.style.display="none"; }
+/* ===== JSONP GET ===== */
+function jsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const s = document.createElement("script");
+    const timer = setTimeout(()=>{ cleanup(); reject(new Error("JSONP timeout")); }, 15000);
 
-  document.addEventListener("click",(e)=>{
-    const t = e.target;
-    if(t && t.dataset && t.dataset.close){
-      closeModal(document.getElementById(t.dataset.close));
+    function cleanup(){
+      clearTimeout(timer);
+      delete window[cb];
+      s.remove();
     }
-    if(t===brandBack) closeModal(brandBack);
-    if(t===editBack) closeModal(editBack);
+
+    window[cb] = (data)=>{ cleanup(); resolve(data); };
+
+    const sep = url.includes("?") ? "&" : "?";
+    s.src = url + sep + "callback=" + cb;
+    s.onerror = ()=>{ cleanup(); reject(new Error("JSONP load failed")); };
+    document.body.appendChild(s);
+  });
+}
+
+async function loadMeta(){
+  const out = await jsonp(EXEC_URL + "?meta=1");
+  if(!out || out.ok !== true) throw new Error(out?.error || "Meta load failed");
+  meta = out.meta || meta;
+
+  // Shipments MUST come from Lists col D. If your dropdown shows Yes/No,
+  // this prevents it from leaking into UI by only using meta.shipments here.
+  fillSelect(shipFilter, ["", ...meta.shipments], "All Shipments");
+  fillSelect(dashShipSel, ["", ...meta.shipments], "All Shipments");
+  fillSelect(shipSel, ["", ...meta.shipments], "Select…");
+
+  fillSelect(catFilter, ["", ...meta.categories], "All Categories");
+  fillSelect(catSel, ["", ...meta.categories], "Select…");
+
+  fillSelect(statusFilter, ["", ...meta.statuses], "All Status");
+  fillSelect(statusSel, ["", ...meta.statuses], "(blank)");
+
+  fillSelect(shipStatusSel, ["", ...meta.shippingStatuses], "(blank)");
+
+  // Price Approved filter is fixed Yes/No only; no "Needs" option.
+}
+
+async function loadInventory(){
+  const out = await jsonp(EXEC_URL);
+  if(!out || out.ok !== true) throw new Error(out?.error || "Inventory load failed");
+  rows = Array.isArray(out.data) ? out.data : [];
+}
+
+/* ===== POST via form+iframe (Apps Script returns postMessage HTML) ===== */
+function postToScript(params){
+  return new Promise((resolve,reject)=>{
+    const frame = document.createElement("iframe");
+    frame.name = "pm_" + Math.random().toString(36).slice(2);
+    frame.style.display = "none";
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = EXEC_URL;
+    form.target = frame.name;
+
+    params._pm = "1"; // request postMessage response
+
+    for (const [k,v] of Object.entries(params)){
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = k;
+      input.value = String(v ?? "");
+      form.appendChild(input);
+    }
+
+    const timer = setTimeout(()=>{
+      cleanup();
+      reject(new Error("Save timed out"));
+    }, 20000);
+
+    function onMsg(ev){
+      // Apps Script posts message to parent with {ok:true,...}
+      if(!ev || !ev.data) return;
+      if(typeof ev.data !== "object") return;
+      if(!("ok" in ev.data)) return;
+      cleanup();
+      resolve(ev.data);
+    }
+
+    function cleanup(){
+      clearTimeout(timer);
+      window.removeEventListener("message", onMsg);
+      form.remove();
+      frame.remove();
+    }
+
+    window.addEventListener("message", onMsg);
+    document.body.appendChild(frame);
+    document.body.appendChild(form);
+    form.submit();
+  });
+}
+
+/* ===== UI helpers ===== */
+function fillSelect(sel, items, firstLabel){
+  // items is array; if first element is "" we use firstLabel for that
+  sel.innerHTML = "";
+  items.forEach((v,i)=>{
+    const opt = document.createElement("option");
+    opt.value = v;
+    if(v === "" && firstLabel) opt.textContent = firstLabel;
+    else opt.textContent = v;
+    sel.appendChild(opt);
+  });
+}
+
+function setLoad(text, type="mut"){
+  loadMsg.textContent = text;
+  loadMsg.className = type === "ok" ? "ok" : type === "err" ? "err" : "mut";
+}
+
+function showToast(text){
+  toast.textContent = text;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 1200);
+}
+
+function moneyRainBurst(){
+  moneyRain.innerHTML = "";
+  moneyRain.classList.add("show");
+  const count = 26;
+  for(let i=0;i<count;i++){
+    const d = document.createElement("div");
+    d.className = "bill";
+    d.textContent = "💵";
+    d.style.left = Math.random()*100 + "vw";
+    d.style.animationDuration = (1.2 + Math.random()*1.2) + "s";
+    d.style.animationDelay = (Math.random()*0.2) + "s";
+    moneyRain.appendChild(d);
+  }
+  setTimeout(()=>moneyRain.classList.remove("show"), 1900);
+}
+
+function openModal(title){
+  modalTitle.textContent = title;
+  modalOverlay.classList.add("show");
+}
+function closeModal(){
+  modalOverlay.classList.remove("show");
+}
+function openCall(){
+  callOverlay.classList.add("show");
+}
+function closeCall(){
+  callOverlay.classList.remove("show");
+}
+
+/* ===== Filters / Rendering ===== */
+function applyFilters(list){
+  const needle = q.value.trim().toLowerCase();
+  const ship = shipFilter.value.trim();
+  const cat = catFilter.value.trim();
+  const st = statusFilter.value.trim();
+  const ap = approvedFilter.value.trim();
+
+  return list.filter(r=>{
+    const name = String(r["Product Name"]||"").toLowerCase();
+    if(needle && !name.includes(needle)) return false;
+
+    if(ship && norm(r["Shipment"]) !== ship) return false;
+    if(cat && norm(r["Category/Tab"]) !== cat) return false;
+    if(st && norm(r["Status"]) !== st) return false;
+
+    if(ap){
+      const v = norm(r["Price Approved"]);
+      if(v !== ap) return false;
+    }
+
+    if(mode === "needsPrice"){
+      const sell = asNum(r["Selling Price XCD"]);
+      if(sell > 0) return false;
+    }
+    if(mode === "needsApproval"){
+      const v = norm(r["Price Approved"]);
+      if(v === "Yes") return false;
+    }
+    return true;
+  });
+}
+
+function render(){
+  const filtered = applyFilters(rows);
+  countEl.textContent = String(filtered.length);
+  $("#viewLabel").textContent =
+    mode === "needsPrice" ? "Needs Price" :
+    mode === "needsApproval" ? "Needs Approval" : "All";
+
+  tblBody.innerHTML = filtered.map(r=>{
+    const k = keyOf(r);
+
+    const qty = asNum(r["Quantity"] || 0);
+    const costUSD = asNum(r["Cost Price USD"]);
+    const sellXCD = asNum(r["Selling Price XCD"]);
+    const link = norm(r["Online Link"]);
+    const ship = norm(r["Shipment"]);
+    const cat = norm(r["Category/Tab"]);
+    const st = norm(r["Status"]);
+    const ap = norm(r["Price Approved"]);
+
+    // Display values: if USD view, cost shown in USD and selling shown converted to USD-equivalent (optional).
+    // You asked: do not mix currencies on screen. So we show BOTH cost and selling in the selected view currency.
+    const costDisp = currency === "USD" ? costUSD : costUSD * FX;
+    const sellDisp = currency === "USD" ? (sellXCD / FX) : sellXCD;
+
+    const costTxt = fmtMoney(costDisp);
+    const sellTxt = fmtMoney(sellDisp);
+
+    const linkCell = link ? `<a href="${esc(link)}" target="_blank" rel="noopener">Open</a>` : `<span class="mut">—</span>`;
+
+    return `<tr data-k="${esc(k)}">
+      <td>${esc(r["Product Name"]||"")}</td>
+      <td>${esc(ship)}</td>
+      <td>${esc(cat)}</td>
+      <td>${esc(qty ? qty : "")}</td>
+      <td>${esc(costTxt)}</td>
+      <td>${esc(sellTxt)}</td>
+      <td>${esc(st)}</td>
+      <td>${esc(ap)}</td>
+      <td>${linkCell}</td>
+    </tr>`;
+  }).join("");
+
+  tblBody.querySelectorAll("tr").forEach(tr=>{
+    tr.addEventListener("click", ()=>{
+      const k = tr.getAttribute("data-k");
+      const r = rows.find(x=>keyOf(x)===k);
+      if(r) loadIntoForm(r);
+    });
   });
 
-  // === JSONP loader ===
-  function jsonp(url){
-    return new Promise((resolve,reject)=>{
-      const cb = "cb_"+Math.random().toString(36).slice(2);
-      const s = document.createElement("script");
-      const timeout = setTimeout(()=>{ cleanup(); reject(new Error("JSONP timeout")); }, 12000);
+  renderDashboard();
+}
 
-      function cleanup(){
-        clearTimeout(timeout);
-        delete window[cb];
-        s.remove();
+function renderDashboard(){
+  const ship = dashShipSel.value.trim();
+  const list = ship ? rows.filter(r=>norm(r["Shipment"])===ship) : rows.slice();
+
+  let items = 0, costUSD = 0, sellXCD = 0;
+  for(const r of list){
+    const qty = asNum(r["Quantity"] || 0) || 0;
+    items += qty > 0 ? qty : 0;
+
+    const c = asNum(r["Cost Price USD"]);
+    costUSD += (c * (qty || 1));
+
+    const s = asNum(r["Selling Price XCD"]);
+    sellXCD += (s * (qty || 1));
+  }
+
+  const revUSD = sellXCD / FX;
+  const profUSD = revUSD - costUSD;
+
+  totalItems.textContent = String(items);
+
+  const costDisp = currency === "USD" ? costUSD : costUSD * FX;
+  const revDisp  = currency === "USD" ? revUSD  : sellXCD;
+  const profDisp = currency === "USD" ? profUSD : (profUSD * FX);
+
+  totalCost.textContent = fmtMoney(costDisp);
+  totalRev.textContent  = fmtMoney(revDisp);
+  totalProfit.textContent = fmtMoney(profDisp);
+
+  $("#costCurChip").textContent = currency;
+  $("#revCurChip").textContent = currency;
+  $("#profCurChip").textContent = currency;
+}
+
+/* ===== Form / Modal ===== */
+function resetForm(){
+  frm.reset();
+  selectedKey = null;
+  formMsg.textContent = "";
+  vList.innerHTML = "";
+  variantsJson.value = "";
+  sellingOverridden = false;
+  $("#autoHint").textContent = "Auto-fills Selling using Markup (unless you override).";
+}
+
+function loadIntoForm(r){
+  resetForm();
+  selectedKey = keyOf(r);
+  modalTitle.textContent = "Edit Product";
+
+  for(const el of frm.elements){
+    if(!el.name) continue;
+    el.value = r[el.name] ?? "";
+  }
+
+  // Load variants JSON if present
+  try{
+    const raw = r["Variations JSON"] || "";
+    if(raw){
+      const arr = JSON.parse(raw);
+      if(Array.isArray(arr)){
+        arr.forEach(v=>addVariantRow(v));
+        variantsJson.value = raw;
       }
-      window[cb] = (data)=>{ cleanup(); resolve(data); };
+    }
+  }catch(e){ /* ignore */ }
 
-      s.src = url + (url.includes("?")?"&":"?") + "callback=" + cb;
-      s.onerror = ()=>{ cleanup(); reject(new Error("JSONP load failed")); };
-      document.head.appendChild(s);
+  openModal("Edit Product");
+}
+
+function buildShoeSizes(){
+  // fuller list (you complained it was incomplete)
+  const sizes = [];
+  for(let i=1;i<=13;i++) sizes.push(String(i));
+  for(let i=1;i<=13;i++) sizes.push(i + ".5");
+  const eu = ["35","36","37","38","39","40","41","42","43","44","45","46","47"];
+  const kids = ["C10","C11","C12","C13","1Y","2Y","3Y","4Y","5Y","6Y"];
+  const all = ["", ...sizes, ...eu.map(x=>"EU "+x), ...kids.map(x=>"Kids "+x)];
+  fillSelect(shoeSel, all, "(blank)");
+}
+
+function ensureVariantsJson(){
+  const items = [];
+  vList.querySelectorAll(".vItem").forEach(node=>{
+    const v = {};
+    node.querySelectorAll("[data-v]").forEach(inp=>{
+      v[inp.getAttribute("data-v")] = inp.value || "";
     });
-  }
-
-  async function apiMeta(){
-    return await jsonp(API + "?meta=1");
-  }
-
-  async function apiData(){
-    return await jsonp(API);
-  }
-
-  async function apiPost(params){
-    const body = new URLSearchParams(params);
-    const res = await fetch(API, { method:"POST", body });
-    const out = await res.json().catch(()=>null);
-    if(!out || out.ok !== true) throw new Error(out?.error || "Save failed");
-    return out;
-  }
-
-  // === UI builders ===
-  function rebuildFilters(){
-    // IMPORTANT: Shipments dropdown MUST use meta.shipments (NOT shippingStatuses)
-    listToOptions(shipFilter, meta.shipments || [], "All Shipments");
-    listToOptions(catFilter, meta.categories || [], "All Categories");
-    listToOptions(statusFilter, meta.statuses || [], "All Status");
-  }
-
-  function rebuildFormSelects(){
-    shipSelect.innerHTML = `<option value=""></option>` + (meta.shipments||[]).map(v=>`<option>${esc(v)}</option>`).join("");
-    catSelect.innerHTML = `<option value=""></option>` + (meta.categories||[]).map(v=>`<option>${esc(v)}</option>`).join("");
-    statusSelect.innerHTML = `<option value=""></option>` + (meta.statuses||[]).map(v=>`<option>${esc(v)}</option>`).join("");
-    shipStatusSelect.innerHTML = `<option value=""></option>` + (meta.shippingStatuses||[]).map(v=>`<option>${esc(v)}</option>`).join("");
-  }
-
-  function applyFilters(list){
-    const needle = q.value.trim().toLowerCase();
-    const ship = shipFilter.value.trim();
-    const cat = catFilter.value.trim();
-    const st = statusFilter.value.trim();
-    const ap = approvedFilter.value;
-
-    return list.filter(r=>{
-      const name = String(r["Product Name"]||"").toLowerCase();
-      const rShip = String(r["Shipment"]||"").trim();
-      const rCat = String(r["Category/Tab"]||"").trim();
-      const rSt  = String(r["Status"]||"").trim();
-      const rAp  = String(r["Price Approved"]||"").trim();
-
-      const okName = !needle || name.includes(needle);
-      const okShip = !ship || rShip === ship;
-      const okCat  = !cat  || rCat === cat;
-      const okSt   = !st   || rSt === st;
-
-      let okAp = true;
-      if(ap === "Yes") okAp = rAp === "Yes";
-      else if(ap === "No") okAp = rAp === "No";
-      else if(ap === "Blank") okAp = !rAp;
-
-      return okName && okShip && okCat && okSt && okAp;
-    });
-  }
-
-  function render(){
-    const cur = currencyToggle.value;
-    const filtered = applyFilters(rows);
-    countEl.textContent = `${filtered.length} items`;
-
-    tblBody.innerHTML = filtered.map(r=>{
-      const k = keyOf(r);
-      const qty = r["Quantity"] ?? "";
-      const costUSD = parseNum(r["Cost Price USD"]);
-      const sellXCD = parseNum(r["Selling Price XCD"]);
-
-      const costDisplay = (cur==="USD") ? fmtCurrency(costUSD,"USD") : fmtCurrency(costUSD*USD_TO_XCD,"XCD");
-      const sellDisplay = (cur==="USD") ? fmtCurrency(sellXCD/USD_TO_XCD,"USD") : fmtCurrency(sellXCD,"XCD");
-
-      return `<tr data-k="${esc(k)}">
-        <td>${esc(r["Product Name"]||"")}</td>
-        <td>${esc(r["Shipment"]||"")}</td>
-        <td>${esc(r["Category/Tab"]||"")}</td>
-        <td>${esc(qty)}</td>
-        <td>${esc(costDisplay)}</td>
-        <td>${esc(sellDisplay)}</td>
-        <td>${esc(r["Status"]||"")}</td>
-        <td>${esc(r["Price Approved"]||"")}</td>
-      </tr>`;
-    }).join("");
-
-    tblBody.querySelectorAll("tr").forEach(tr=>{
-      tr.addEventListener("click", ()=>{
-        const k = tr.getAttribute("data-k");
-        const r = rows.find(x=>keyOf(x)===k);
-        if(r) loadIntoForm(r);
-        openModal(editBack);
-      });
-    });
-
-    renderMetrics();
-  }
-
-  function renderMetrics(){
-    const cur = currencyToggle.value;
-    const filtered = applyFilters(rows);
-
-    const totalItems = filtered.reduce((a,r)=>a + (parseNum(r["Quantity"])||0), 0);
-    const totalCostUSD = filtered.reduce((a,r)=>a + parseNum(r["Cost Price USD"])*(parseNum(r["Quantity"])||1), 0);
-    const totalRevXCD = filtered.reduce((a,r)=>a + parseNum(r["Selling Price XCD"])*(parseNum(r["Quantity"])||1), 0);
-
-    const totalRevUSD = totalRevXCD / USD_TO_XCD;
-    const profitUSD = totalRevUSD - totalCostUSD;
-
-    mItems.textContent = String(totalItems);
-
-    if(cur==="USD"){
-      mCost.textContent = fmtCurrency(totalCostUSD,"USD");
-      mRev.textContent = fmtCurrency(totalRevUSD,"USD");
-      mProfit.textContent = fmtCurrency(profitUSD,"USD");
-    } else {
-      mCost.textContent = fmtCurrency(totalCostUSD*USD_TO_XCD,"XCD");
-      mRev.textContent = fmtCurrency(totalRevXCD,"XCD");
-      mProfit.textContent = fmtCurrency(profitUSD*USD_TO_XCD,"XCD");
-    }
-  }
-
-  function clearForm(){
-    frm.reset();
-    $("#varJson").value = "[]";
-    selectedKey = null;
-    formMsg.textContent = "";
-  }
-
-  function loadIntoForm(r){
-    selectedKey = keyOf(r);
-    for(const el of frm.elements){
-      if(!el.name) continue;
-      el.value = r[el.name] ?? "";
-    }
-    formMsg.textContent = "Loaded.";
-  }
-
-  function thumbsUp(){
-    const el = $("#fxThumb");
-    el.classList.add("show");
-    setTimeout(()=>el.classList.remove("show"), 700);
-  }
-
-  function moneyRain(){
-    const box = $("#moneyBox");
-    box.innerHTML = "";
-    const count = 28;
-    for(let i=0;i<count;i++){
-      const d = document.createElement("div");
-      d.className="bill";
-      d.textContent = "💵";
-      d.style.left = (Math.random()*100)+"%";
-      d.style.animationDelay = (Math.random()*0.25)+"s";
-      d.style.transform = `translateY(-10vh) rotate(${Math.random()*90}deg)`;
-      box.appendChild(d);
-    }
-    const el = $("#fxMoney");
-    el.classList.add("show");
-    setTimeout(()=>el.classList.remove("show"), 1300);
-  }
-
-  // === Markup behavior ===
-  function currentMarkup(){
-    if(markupSelect.value==="custom") return customMarkup;
-    return Number(markupSelect.value);
-  }
-
-  function recomputeSellingFromCost(){
-    const c = parseNum(costUsd.value);
-    if(!c) return; // leave blank if no cost
-    const m = currentMarkup();
-    const sellUsd = c * (1 + m);
-    const sellX = sellUsd * USD_TO_XCD;
-    // Only auto-fill if field is blank OR contains previous auto calc
-    if(!sellXcd.value || sellXcd.dataset.auto==="1"){
-      sellXcd.value = sellX.toFixed(2);
-      sellXcd.dataset.auto="1";
-    }
-  }
-
-  // If user types selling manually, stop auto flag
-  sellXcd.addEventListener("input", ()=>{ sellXcd.dataset.auto="0"; });
-  costUsd.addEventListener("input", ()=>{ recomputeSellingFromCost(); });
-
-  markupSelect.addEventListener("change", ()=>{
-    if(markupSelect.value==="custom"){
-      const v = prompt("Enter custom markup as a percent (e.g. 125 for 125%)", String(customMarkup*100));
-      const n = Number(String(v||"").replace(/[^0-9.]/g,""));
-      if(Number.isFinite(n)){
-        customMarkup = Math.max(0, n/100);
-      }
-    }
-    recomputeSellingFromCost();
-    renderMetrics();
+    // drop empties
+    const cleaned = {};
+    Object.keys(v).forEach(k=>{ if(norm(v[k])) cleaned[k]=v[k]; });
+    if(Object.keys(cleaned).length) items.push(cleaned);
   });
+  variantsJson.value = items.length ? JSON.stringify(items) : "";
+}
 
-  // === Meta add/remove (double confirm on remove) ===
-  async function addToList(kind){
-    const label = (kind==="shipment") ? "shipment" : "category";
-    const value = prompt(`Add new ${label} name:`);
-    if(!value) return;
-
-    formMsg.textContent = "Saving…";
-    const action = (kind==="shipment") ? "meta_add_shipment" : "meta_add_category";
-    try{
-      await apiPost({ _action: action, value: value.trim() });
-      await loadMetaAndRefresh();
-      formMsg.textContent = "Added.";
-    }catch(e){
-      formMsg.textContent = "Failed: " + e.message;
-    }
-  }
-
-  async function removeFromList(kind){
-    const label = (kind==="shipment") ? "shipment" : "category";
-    const current = (kind==="shipment") ? shipSelect.value : catSelect.value;
-    if(!current){ alert(`Select a ${label} first.`); return; }
-
-    if(!confirm(`Remove ${label} "${current}"?`)) return;
-    if(!confirm(`Final confirm: remove "${current}"? This is permanent.`)) return;
-
-    formMsg.textContent = "Removing…";
-    const action = (kind==="shipment") ? "meta_remove_shipment" : "meta_remove_category";
-    try{
-      await apiPost({ _action: action, value: current.trim() });
-      await loadMetaAndRefresh();
-      // Clear selection
-      if(kind==="shipment") shipSelect.value = "";
-      if(kind==="category") catSelect.value = "";
-      formMsg.textContent = "Removed.";
-    }catch(e){
-      formMsg.textContent = "Failed: " + e.message;
-    }
-  }
-
-  btnAddShipment.addEventListener("click", ()=>addToList("shipment"));
-  btnRemoveShipment.addEventListener("click", ()=>removeFromList("shipment"));
-  btnAddCategory.addEventListener("click", ()=>addToList("category"));
-  btnRemoveCategory.addEventListener("click", ()=>removeFromList("category"));
-
-  // === Load meta/data ===
-  async function loadMetaAndRefresh(){
-    const m = await apiMeta();
-    if(!m || m.ok!==true || !m.meta) throw new Error(m?.error || "Meta load failed");
-    meta = m.meta;
-
-    // Build selects/filters from correct sources
-    rebuildFilters();
-    rebuildFormSelects();
-  }
-
-  async function loadAll(){
-    setLoad("Loading…");
-    try{
-      await loadMetaAndRefresh();
-
-      const d = await apiData();
-      if(!d || d.ok!==true || !Array.isArray(d.data)) throw new Error(d?.error || "Data load failed");
-      rows = d.data;
-
-      render();
-      setLoad("Ready.", "ok");
-    }catch(e){
-      // No JSONP text on screen. Keep it simple.
-      setLoad("Load failed. Check connection.", "error");
-      console.error(e);
-    }
-  }
-
-  // === Actions ===
-  brandMenu.addEventListener("click", ()=>openModal(brandBack));
-
-  btnAddTop.addEventListener("click", ()=>{
-    clearForm();
-    // Default shipment to first item if exists
-    if(meta.shipments && meta.shipments.length){
-      shipSelect.value = meta.shipments[0];
-    }
-    openModal(editBack);
+function addVariantRow(seed={}){
+  const div = document.createElement("div");
+  div.className = "vItem";
+  div.innerHTML = `
+    <div class="row">
+      <div>
+        <label style="margin-top:0;">Color</label>
+        <input data-v="color" value="${esc(seed.color||"")}" placeholder="e.g., Blue" />
+      </div>
+      <div>
+        <label style="margin-top:0;">Size</label>
+        <input data-v="size" value="${esc(seed.size||"")}" placeholder="e.g., L / EU 42" />
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label style="margin-top:0;">Gender</label>
+        <input data-v="gender" value="${esc(seed.gender||"")}" placeholder="Men/Women/Unisex" />
+      </div>
+      <div>
+        <label style="margin-top:0;">Qty</label>
+        <input data-v="qty" inputmode="numeric" value="${esc(seed.qty||"")}" placeholder="e.g., 6" />
+      </div>
+    </div>
+    <button type="button" class="removeV">Remove Variant</button>
+  `;
+  div.querySelector(".removeV").addEventListener("click", ()=>{
+    div.remove();
+    ensureVariantsJson();
   });
+  div.querySelectorAll("input").forEach(i=>i.addEventListener("input", ensureVariantsJson));
+  vList.appendChild(div);
+  ensureVariantsJson();
+}
 
-  q.addEventListener("input", render);
-  shipFilter.addEventListener("change", render);
-  catFilter.addEventListener("change", render);
-  statusFilter.addEventListener("change", render);
-  approvedFilter.addEventListener("change", render);
-  currencyToggle.addEventListener("change", render);
+/* ===== Auto markup =====
+   - You enter Cost USD; we auto-calc Selling XCD using:
+       SellingXCD = CostUSD * (1 + markup) * FX
+   - If user edits Selling manually -> we stop auto until next Cost edit.
+*/
+function getMarkup(){
+  const v = markupSel.value;
+  if(v === "custom"){
+    const raw = prompt("Custom markup percent (example: 35 for 35%)", "35");
+    if(raw == null) return null;
+    const p = asNum(raw);
+    if(!isFinite(p)) return null;
+    // store as decimal
+    const dec = p/100;
+    // set selector back to custom (keeps UX)
+    markupSel.value = "custom";
+    markupSel.dataset.custom = String(dec);
+    return dec;
+  }
+  return asNum(v);
+}
 
-  frm.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    formMsg.textContent = "Saving…";
+function currentMarkup(){
+  if(markupSel.value === "custom"){
+    const dec = asNum(markupSel.dataset.custom);
+    return isFinite(dec) && dec>=0 ? dec : 0.35;
+  }
+  return asNum(markupSel.value);
+}
 
-    const params = { _action:"update" };
-    for(const el of frm.elements){
-      if(!el.name) continue;
-      params[el.name] = el.value;
+function autofillSellingFromCost(){
+  if(sellingOverridden) return;
+  const cost = asNum(costInp.value);
+  if(!cost){ return; }
+  const m = currentMarkup();
+  const sellXCD = cost * (1 + m) * FX;
+  sellInp.value = (Math.round(sellXCD*100)/100).toFixed(2);
+}
+
+/* ===== Manage Categories / Shipments (double-confirm remove) ===== */
+async function addMeta(kind){
+  const isShip = kind === "shipment";
+  const label = isShip ? "shipment" : "category";
+  const v = prompt(`Add a new ${label} name:`);
+  if(!v) return;
+  formMsg.textContent = `Adding ${label}…`;
+
+  const action = isShip ? "meta_add_shipment" : "meta_add_category";
+  const out = await postToScript({ _action: action, value: v });
+  if(out.ok !== true) throw new Error(out.error || "Meta add failed");
+
+  await boot(); // reload meta + inventory
+  showToast(label.toUpperCase() + " ADDED");
+}
+
+async function removeMeta(kind){
+  const isShip = kind === "shipment";
+  const label = isShip ? "shipment" : "category";
+
+  const pick = prompt(`Type the EXACT ${label} name to remove:`);
+  if(!pick) return;
+
+  const confirm2 = prompt(`Confirm removal by typing REMOVE:`);
+  if(confirm2 !== "REMOVE") return;
+
+  formMsg.textContent = `Removing ${label}…`;
+
+  const action = isShip ? "meta_remove_shipment" : "meta_remove_category";
+  const out = await postToScript({ _action: action, value: pick });
+  if(out.ok !== true) throw new Error(out.error || "Meta remove failed");
+
+  await boot();
+  showToast(label.toUpperCase() + " REMOVED");
+}
+
+/* ===== Boot / Events ===== */
+async function boot(){
+  setLoad("Loading…");
+  try{
+    await loadMeta();
+    await loadInventory();
+    setLoad("Loaded.", "ok");
+    mode = "all";
+    render();
+  }catch(err){
+    setLoad("Load failed: " + err.message, "err");
+    tblBody.innerHTML = "";
+    countEl.textContent = "0";
+  }
+}
+
+btnTrip.addEventListener("click", ()=>window.location.href = "https://vinylpressusa.com/grenada-trip-helper");
+btnDash.addEventListener("click", ()=>window.location.href = "https://vinylpressusa.com/grenada-dashboard-mobile");
+
+btnReload.addEventListener("click", boot);
+
+btnAddTop.addEventListener("click", ()=>{
+  resetForm();
+  modalTitle.textContent = "Add Product";
+  openModal("Add Product");
+});
+
+btnCloseModal.addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", (e)=>{ if(e.target === modalOverlay) closeModal(); });
+
+brandCall.addEventListener("click", openCall);
+btnCloseCall.addEventListener("click", closeCall);
+callOverlay.addEventListener("click", (e)=>{ if(e.target === callOverlay) closeCall(); });
+
+btnCurrency.addEventListener("click", ()=>{
+  currency = (currency === "USD") ? "XCD" : "USD";
+  btnCurrency.textContent = currency;
+  render();
+});
+
+markupSel.addEventListener("change", ()=>{
+  if(markupSel.value === "custom"){
+    const dec = getMarkup();
+    if(dec != null){
+      markupSel.dataset.custom = String(dec);
+      showToast("MARKUP SET");
+      autofillSellingFromCost();
+    }
+  }else{
+    showToast("MARKUP SET");
+    autofillSellingFromCost();
+  }
+});
+
+q.addEventListener("input", render);
+shipFilter.addEventListener("change", render);
+catFilter.addEventListener("change", render);
+statusFilter.addEventListener("change", render);
+approvedFilter.addEventListener("change", render);
+dashShipSel.addEventListener("change", render);
+
+btnNeedsPrice.addEventListener("click", ()=>{
+  mode = (mode === "needsPrice") ? "all" : "needsPrice";
+  render();
+});
+btnNeedsApproval.addEventListener("click", ()=>{
+  mode = (mode === "needsApproval") ? "all" : "needsApproval";
+  render();
+});
+
+btnManageCats.addEventListener("click", ()=>addMeta("category").catch(e=>formMsg.textContent = e.message));
+btnManageShips.addEventListener("click", ()=>addMeta("shipment").catch(e=>formMsg.textContent = e.message));
+
+btnAddCatInline.addEventListener("click", ()=>addMeta("category").catch(e=>formMsg.textContent = e.message));
+btnRemoveCatInline.addEventListener("click", ()=>removeMeta("category").catch(e=>formMsg.textContent = e.message));
+
+btnAddShipInline.addEventListener("click", ()=>addMeta("shipment").catch(e=>formMsg.textContent = e.message));
+btnRemoveShipInline.addEventListener("click", ()=>removeMeta("shipment").catch(e=>formMsg.textContent = e.message));
+
+$("#btnAddVariant").addEventListener("click", ()=>addVariantRow({}));
+
+// quantity: allow up to 1..100 (no dropdown needed; you asked for up to 100)
+qtyInp.addEventListener("input", ()=>{
+  const n = asNum(qtyInp.value);
+  if(n > 100) qtyInp.value = "100";
+  if(n < 0) qtyInp.value = "0";
+});
+
+costInp.addEventListener("input", ()=>{
+  sellingOverridden = false;
+  autofillSellingFromCost();
+});
+sellInp.addEventListener("input", ()=>{
+  // user touched selling => override
+  sellingOverridden = true;
+  $("#autoHint").textContent = "Selling overridden (auto-fill paused).";
+});
+
+// Build shoe sizes list once
+buildShoeSizes();
+
+/* ===== Save / Delete ===== */
+frm.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  formMsg.textContent = "Saving…";
+
+  ensureVariantsJson();
+
+  const params = { _action: "update" };
+  for(const el of frm.elements){
+    if(!el.name) continue;
+    params[el.name] = el.value;
+  }
+
+  // Required
+  if(!norm(params["Product Name"]) || !norm(params["Shipment"]) || !norm(params["Category/Tab"])){
+    formMsg.textContent = "Product Name, Shipment, and Category are required.";
+    return;
+  }
+
+  // Easter eggs tracking (before save)
+  const prior = selectedKey ? rows.find(r=>keyOf(r)===selectedKey) : null;
+  const priorApproved = prior ? norm(prior["Price Approved"]) : "";
+  const priorShipStatus = prior ? norm(prior["Shipping Status"]) : "";
+
+  try{
+    const out = await postToScript(params);
+    if(out.ok !== true) throw new Error(out.error || "Save failed");
+    formMsg.textContent = (out.action === "created") ? "Created." : "Updated.";
+
+    // Reload data
+    await loadInventory();
+    render();
+
+    // Easter eggs:
+    const nowApproved = norm(params["Price Approved"]);
+    if(nowApproved === "Yes" && priorApproved !== "Yes"){
+      showToast("👍 PRICE APPROVED");
+    }
+    const nowShipStatus = norm(params["Shipping Status"]);
+    if(nowShipStatus.toLowerCase() === "shipped" && priorShipStatus.toLowerCase() !== "shipped"){
+      moneyRainBurst();
     }
 
-    if(!params["Product Name"] || !params["Shipment"]){
-      formMsg.textContent = "Product Name and Shipment are required.";
-      return;
-    }
+    // CLOSE modal automatically after Save (your request)
+    closeModal();
 
-    try{
-      const out = await apiPost(params);
+  }catch(err){
+    formMsg.textContent = "Save failed: " + err.message;
+  }
+});
 
-      // Easter eggs:
-      if(String(params["Price Approved"]||"") === "Yes") thumbsUp();
-      if(String(params["Shipping Status"]||"") === "Yes") moneyRain();
+btnDelete.addEventListener("click", async ()=>{
+  const name = norm(frm.elements["Product Name"]?.value);
+  const ship = norm(frm.elements["Shipment"]?.value);
+  if(!name || !ship){ formMsg.textContent = "Product Name + Shipment required to delete."; return; }
 
-      await loadAll();
+  if(!confirm(`Delete "${name}" from shipment "${ship}"?`)) return;
 
-      formMsg.textContent = (out.action==="created") ? "Created." : "Updated.";
+  formMsg.textContent = "Deleting…";
+  try{
+    const out = await postToScript({ _action:"delete", "Product Name": name, "Shipment": ship });
+    if(out.ok !== true) throw new Error(out.error || "Delete failed");
+    formMsg.textContent = (out.action === "deleted") ? "Deleted." : "Not found.";
 
-      // Auto-close modal after successful save (your request)
-      closeModal(editBack);
+    await loadInventory();
+    render();
+    closeModal();
+  }catch(err){
+    formMsg.textContent = "Delete failed: " + err.message;
+  }
+});
 
-    }catch(err){
-      formMsg.textContent = "Save failed: " + err.message;
-    }
-  });
-
-  btnDelete.addEventListener("click", async ()=>{
-    const name = (frm.elements["Product Name"]?.value||"").trim();
-    const ship = (frm.elements["Shipment"]?.value||"").trim();
-    if(!name || !ship){ formMsg.textContent="Product Name and Shipment required to delete."; return; }
-    if(!confirm(`Delete "${name}" (${ship})?`)) return;
-
-    formMsg.textContent = "Deleting…";
-    try{
-      const out = await apiPost({ _action:"delete", "Product Name":name, "Shipment":ship });
-      formMsg.textContent = (out.action==="deleted") ? "Deleted." : "Not found.";
-      await loadAll();
-      closeModal(editBack);
-    }catch(e){
-      formMsg.textContent = "Delete failed: " + e.message;
-    }
-  });
-
-  // Boot
-  buildShoes();
-  loadAll();
+/* ===== Kick off ===== */
+boot();
 </script>
 </body>
 </html>
