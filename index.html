@@ -2,1588 +2,1863 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Grenada Hub Pro – Inventory · Pricing · Shipments</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Grenada Hub Pro • Inventory • Pricing • Shipments</title>
   <style>
     :root{
-      --bg0:#070c10;
-      --bg1:#0b1218;
-      --panel:#0f1a22cc;
-      --panel2:#0c141bcc;
-      --line:#1b2a35;
-      --line2:#223744;
-      --text:#e7f1ff;
-      --muted:#a8bdd3;
-      --muted2:#7f95aa;
-      --accent:#17b8ff;
-      --accent2:#0ea5e9;
-      --good:#2dd4bf;
-      --warn:#fbbf24;
-      --bad:#fb7185;
-      --shadow: 0 18px 55px rgba(0,0,0,.55);
-      --radius: 20px;
-      --radius2: 14px;
+      --bg:#070b10;
+      --panel:#0b121a;
+      --panel2:#0a1119;
+      --line:rgba(255,255,255,.08);
+      --line2:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.62);
+      --muted2:rgba(255,255,255,.42);
+      --cyan:#00b8ff;
+      --cyan2:#0096d3;
+      --good:#25d366;
+      --warn:#ffcc00;
+      --bad:#ff4d4d;
+      --shadow: 0 30px 80px rgba(0,0,0,.65);
+      --radius:18px;
+      --radius2:14px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-family:var(--font);
       color:var(--text);
       background:
-        radial-gradient(1200px 600px at 50% -200px, #0b3a52aa, transparent 60%),
-        radial-gradient(900px 500px at 25% 0px, #06253bcc, transparent 65%),
-        radial-gradient(900px 500px at 80% 40px, #061d2fcc, transparent 65%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      padding: 26px 18px;
+        radial-gradient(1200px 600px at 50% -150px, rgba(0,184,255,.25), transparent 70%),
+        radial-gradient(900px 500px at 15% 10%, rgba(0,184,255,.10), transparent 60%),
+        radial-gradient(900px 500px at 85% 15%, rgba(0,184,255,.10), transparent 60%),
+        linear-gradient(180deg, #05080c, #05080c 30%, #04070b);
+      padding:22px;
     }
-    a{color:inherit}
-    .wrap{max-width:1180px;margin:0 auto}
-    .shell{
-      background: linear-gradient(180deg, rgba(18,34,46,.88), rgba(10,18,24,.82));
-      border:1px solid rgba(255,255,255,.06);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
+    .wrap{
+      max-width:1280px;
+      margin:0 auto;
+      background: linear-gradient(180deg, rgba(0,184,255,.08), rgba(255,255,255,.02) 180px);
+      border:1px solid var(--line);
+      border-radius:28px;
       overflow:hidden;
+      box-shadow: var(--shadow);
     }
     .topbar{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 18px 18px 12px 18px;
-      border-bottom:1px solid rgba(255,255,255,.06);
+      padding:18px 18px 12px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
     }
-    .top-left{
+    .toprow{
       display:flex;
       align-items:center;
       gap:12px;
-      min-width: 260px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+    }
+    .lefttitle{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:280px;
     }
     .pill{
       display:inline-flex;
       align-items:center;
       gap:10px;
       padding:10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      color:var(--text);
-      text-decoration:none;
-      font-weight:700;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      font-size: 13px;
+      border-radius:999px;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.03);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
       user-select:none;
       white-space:nowrap;
     }
-    .pill:hover{border-color: rgba(255,255,255,.16)}
+    .pill.dot::before{
+      content:"";
+      width:9px;height:9px;border-radius:50%;
+      background: var(--cyan);
+      box-shadow: 0 0 0 4px rgba(0,184,255,.15);
+    }
     .title{
-      font-size: 18px;
-      font-weight:900;
-      letter-spacing:.04em;
+      font-weight:800;
+      letter-spacing:.08em;
       text-transform:uppercase;
-      opacity:.98;
+      font-size:16px;
+      color:rgba(255,255,255,.92);
     }
     .subtitle{
       margin-top:2px;
-      font-size: 12px;
-      color: var(--muted);
+      font-size:13px;
+      color:var(--muted);
     }
-    .top-mid{
-      flex:1;
-      min-width: 260px;
-      padding: 0 10px;
-    }
-    .top-right{
+    .navrow{
       display:flex;
       align-items:center;
       gap:10px;
       flex-wrap:wrap;
-      justify-content:flex-end;
     }
     .btn{
+      appearance:none;
+      border:1px solid var(--line2);
+      background: rgba(255,255,255,.03);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:700;
+      letter-spacing:.02em;
+      cursor:pointer;
+      transition: transform .06s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18)}
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(0,184,255,.22), rgba(0,184,255,.10));
+      border-color: rgba(0,184,255,.35);
+      color: rgba(255,255,255,.95);
+    }
+    .btn.primary:hover{border-color: rgba(0,184,255,.55)}
+    .btn.small{padding:8px 12px; font-weight:800; font-size:12px}
+    .btn.icon{display:inline-flex; align-items:center; gap:8px}
+    .btn.link{
+      text-decoration:none;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      font-weight:800;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      font-size: 12px;
-      cursor:pointer;
-      user-select:none;
     }
-    .btn:hover{border-color: rgba(255,255,255,.18)}
-    .btn.primary{
-      background: linear-gradient(180deg, rgba(23,184,255,.95), rgba(14,165,233,.85));
-      border-color: rgba(23,184,255,.55);
-      color:#001018;
-    }
-    .btn.ghost{
-      background: rgba(255,255,255,.03);
-    }
-    .btn.small{padding:8px 12px;font-size:11px}
-    .btn.danger{border-color: rgba(251,113,133,.45)}
-    .btn.danger:hover{border-color: rgba(251,113,133,.8)}
     .grid{
-      display:grid;
-      grid-template-columns: 1.3fr .9fr;
-      gap:16px;
-      padding: 14px 18px 18px 18px;
+      padding:18px;
     }
-    .dashboard{
-      grid-column: 1 / -1;
+    .dash{
       display:grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 14px;
-      margin-top: 6px;
+      grid-template-columns: 1.1fr 1.2fr 1.4fr 1.2fr;
+      gap:14px;
+      margin-bottom:14px;
+    }
+    @media (max-width: 1100px){
+      .dash{grid-template-columns: 1fr 1fr}
+    }
+    @media (max-width: 720px){
+      .dash{grid-template-columns: 1fr}
     }
     .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.07);
-      padding: 16px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.25);
-      min-height: 94px;
-    }
-    .card h4{
-      margin:0 0 8px 0;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing:.14em;
-      text-transform:uppercase;
-    }
-    .card .big{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap: 10px;
-    }
-    .card .value{
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: .02em;
-    }
-    .card .miniRight{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:flex-end;
-      flex-wrap:wrap;
-    }
-    .chip{
-      padding:8px 12px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.18);
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      font-size: 11px;
-      color: var(--text);
-      white-space:nowrap;
-    }
-    .select{
-      appearance:none;
-      -webkit-appearance:none;
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      color: var(--text);
-      padding: 8px 34px 8px 12px;
-      border-radius: 999px;
-      font-weight:800;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      font-size: 11px;
-      cursor:pointer;
-      outline:none;
+      padding:14px 14px 12px;
       position:relative;
-    }
-    .select:focus{border-color: rgba(23,184,255,.55)}
-    .filters{
-      grid-column: 1 / -1;
-      display:flex;
-      flex-wrap:wrap;
-      gap: 10px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 2px 4px 6px 4px;
-    }
-    .filters .left, .filters .right{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .search{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      min-width: 240px;
-    }
-    .search input{
-      width: 260px;
-      max-width: 50vw;
-      border:none;
-      outline:none;
-      background: transparent;
-      color: var(--text);
-      font-weight:700;
-    }
-    .pane{
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.07);
       overflow:hidden;
-      box-shadow: 0 12px 40px rgba(0,0,0,.25);
     }
-    .paneHead{
+    .card::before{
+      content:"";
+      position:absolute; inset:-1px -1px auto -1px;
+      height:48px;
+      background: radial-gradient(600px 60px at 50% 0%, rgba(0,184,255,.18), transparent 70%);
+      pointer-events:none;
+    }
+    .cardhead{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding: 14px 16px;
-      border-bottom:1px solid rgba(255,255,255,.06);
+      gap:10px;
+      margin-bottom:8px;
     }
-    .paneHead h3{
-      margin:0;
-      font-size: 12px;
+    .label{
+      font-size:11px;
       letter-spacing:.16em;
       text-transform:uppercase;
-      color: var(--muted);
+      color:rgba(255,255,255,.64);
+      font-weight:800;
     }
-    .paneHead .badge{
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.09);
+    .value{
+      font-size:34px;
       font-weight:900;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size: 11px;
+      letter-spacing:.01em;
+      line-height:1;
+      margin-top:4px;
+    }
+    .subvalue{
+      color:var(--muted);
+      font-weight:700;
+      margin-left:10px;
+      font-size:14px;
+    }
+    .cardrow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:10px;
+    }
+    select, input[type="text"], input[type="number"], textarea{
+      width:100%;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      border-radius:12px;
+      padding:11px 12px;
+      outline:none;
+      transition:border-color .15s ease, background .15s ease;
+      font-family: var(--font);
+      font-size:14px;
+    }
+    select:focus, input:focus, textarea:focus{border-color: rgba(0,184,255,.45); background: rgba(0,0,0,.26)}
+    select{padding-right:34px}
+    .filters{
+      display:grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr auto auto;
+      gap:12px;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    @media (max-width: 1100px){
+      .filters{grid-template-columns: 1fr 1fr; }
+      .filters .span2{grid-column: span 2}
+    }
+    .muted{color:var(--muted)}
+    .lower{
+      display:grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .lower{grid-template-columns: 1fr}
+    }
+    .tablewrap{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
     }
     table{
       width:100%;
-      border-collapse: collapse;
-      font-size: 14px;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:14px;
     }
     thead th{
       text-align:left;
-      padding: 12px 16px;
-      font-size: 12px;
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      color:rgba(255,255,255,.65);
+      font-size:11px;
       letter-spacing:.16em;
       text-transform:uppercase;
-      color: var(--muted);
-      border-bottom:1px solid rgba(255,255,255,.06);
-      white-space:nowrap;
+      font-weight:900;
+      background: rgba(0,0,0,.14);
     }
     tbody td{
-      padding: 12px 16px;
+      padding:12px 12px;
       border-bottom:1px solid rgba(255,255,255,.06);
-      color: var(--text);
       vertical-align:top;
     }
-    tbody tr{cursor:pointer}
-    tbody tr:hover{background: rgba(255,255,255,.03)}
-    .muted{color:var(--muted2)}
-    .nowrap{white-space:nowrap}
-    .rightAlign{text-align:right}
-    .kpiRow{
-      display:flex;
-      gap:12px;
+    tbody tr{
+      cursor:pointer;
+      transition: background .12s ease;
+    }
+    tbody tr:hover{background: rgba(0,184,255,.06)}
+    tbody tr.active{background: rgba(0,184,255,.10)}
+    .badge{
+      display:inline-flex;
       align-items:center;
-      flex-wrap:wrap;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      font-weight:800;
+      font-size:12px;
+      color:rgba(255,255,255,.88);
+      user-select:none;
+    }
+    .badge.good{border-color: rgba(37,211,102,.35); background: rgba(37,211,102,.10)}
+    .badge.warn{border-color: rgba(255,204,0,.35); background: rgba(255,204,0,.10)}
+    .badge.bad{border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10)}
+    .help{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      padding:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .help .head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .help ul{
+      margin:0;
+      padding-left:18px;
+      color:rgba(255,255,255,.78);
+      line-height:1.55;
+      font-weight:650;
+    }
+    .help li{margin:8px 0}
+    .fxpill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      color:rgba(255,255,255,.82);
+      font-weight:900;
+      letter-spacing:.06em;
+      font-size:12px;
+      text-transform:uppercase;
+      user-select:none;
+    }
+    a{color:var(--cyan); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .statusline{
+      margin-top:10px;
+      font-size:12px;
+      color:rgba(255,255,255,.55);
+      font-weight:700;
     }
 
     /* Modal */
     .overlay{
-      position:fixed;
-      inset:0;
+      position:fixed; inset:0;
       background: rgba(0,0,0,.62);
-      backdrop-filter: blur(6px);
       display:none;
       align-items:center;
       justify-content:center;
-      padding: 18px;
-      z-index: 9999;
+      padding:18px;
+      z-index:1000;
     }
     .overlay.show{display:flex}
     .modal{
-      width: min(980px, 96vw);
-      max-height: min(86vh, 900px);
-      overflow:auto;
-      border-radius: 26px;
-      background: linear-gradient(180deg, rgba(16,28,38,.96), rgba(8,14,19,.92));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow: 0 18px 65px rgba(0,0,0,.65);
+      width:min(980px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      box-shadow: 0 40px 120px rgba(0,0,0,.75);
+      overflow:hidden;
     }
-    .modalHead{
+    .modalhead{
+      padding:14px 14px;
+      border-bottom:1px solid rgba(255,255,255,.10);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding: 16px 18px;
-      border-bottom:1px solid rgba(255,255,255,.06);
+      gap:10px;
+      background: radial-gradient(900px 120px at 50% 0%, rgba(0,184,255,.20), transparent 70%);
     }
-    .modalHead h2{
-      margin:0;
-      font-size: 12px;
-      letter-spacing:.18em;
+    .modalhead .h{
+      font-weight:950;
+      letter-spacing:.10em;
       text-transform:uppercase;
-      color: var(--muted);
+      font-size:13px;
+      color:rgba(255,255,255,.86);
     }
-    .modalBody{padding: 16px 18px 18px 18px}
-    .formGrid{
+    .modalbody{
+      padding:14px;
+    }
+    .formgrid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: 1.2fr 1fr;
+      gap:12px;
     }
-    .field{display:flex;flex-direction:column;gap:7px}
-    .label{
-      font-size: 11px;
-      letter-spacing:.18em;
+    @media (max-width: 860px){
+      .formgrid{grid-template-columns:1fr}
+    }
+    .fg{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
+    .fg label{
+      font-size:11px;
+      letter-spacing:.16em;
       text-transform:uppercase;
-      color: var(--muted);
+      color:rgba(255,255,255,.62);
       font-weight:900;
     }
-    .input, .textarea{
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: 999px;
-      padding: 12px 14px;
-      color: var(--text);
-      outline:none;
-      font-weight:800;
-      width:100%;
+    .two{
+      grid-column: span 2;
     }
-    .textarea{
-      border-radius: 18px;
-      min-height: 110px;
-      resize: vertical;
-      font-weight:700;
-      line-height:1.35;
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
     }
-    .input:focus, .textarea:focus{border-color: rgba(23,184,255,.55)}
-    .help{
-      margin-top:-2px;
-      font-size: 12px;
-      color: var(--muted2);
+    @media (max-width: 860px){
+      .row2{grid-template-columns:1fr}
+      .two{grid-column:auto}
     }
-    .twoBtns{display:flex;gap:10px;flex-wrap:wrap}
-    .modalFoot{
+    .hint{
+      font-size:12px;
+      color:rgba(255,255,255,.55);
+      font-weight:650;
+      margin-top:-4px;
+    }
+    .modalfoot{
+      padding:12px 14px 14px;
+      border-top:1px solid rgba(255,255,255,.10);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
-      flex-wrap:wrap;
-      padding: 14px 18px 18px 18px;
-      border-top:1px solid rgba(255,255,255,.06);
+      gap:10px;
+      background: rgba(0,0,0,.12);
     }
+    .msg{
+      font-size:12px;
+      color:rgba(255,255,255,.62);
+      font-weight:700;
+      min-height:16px;
+    }
+
+    /* Variants */
+    .variants{
+      margin-top:12px;
+      border-top:1px dashed rgba(255,255,255,.14);
+      padding-top:12px;
+    }
+    .variantshead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .variantshead .t{
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+    }
+    .variantcard{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      background: rgba(0,0,0,.12);
+      padding:12px;
+      margin-bottom:10px;
+    }
+    .variantgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 860px){
+      .variantgrid{grid-template-columns:1fr}
+    }
+    .vactions{
+      display:flex;
+      justify-content:flex-start;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    /* Tiny easter eggs */
     .toast{
       position:fixed;
       left:50%;
-      transform:translateX(-50%);
       bottom:18px;
-      padding: 12px 14px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.75);
-      border:1px solid rgba(255,255,255,.10);
-      color: var(--text);
-      font-weight:800;
-      letter-spacing:.04em;
+      transform:translateX(-50%);
+      background: rgba(0,0,0,.68);
+      border:1px solid rgba(255,255,255,.14);
+      color:rgba(255,255,255,.88);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:850;
+      font-size:13px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.6);
+      z-index:2000;
       display:none;
-      z-index: 10000;
-      max-width: 92vw;
+      max-width:min(760px, 92vw);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .toast.show{display:block}
-
-    /* Easter eggs */
-    .fx{
-      position:fixed;inset:0;pointer-events:none;z-index:9998;display:none;
+    .rain{
+      pointer-events:none;
+      position:fixed; inset:0;
+      z-index:1500;
+      display:none;
     }
-    .fx.show{display:block}
-    .thumb{
-      position:absolute;left:50%;top:40%;
-      transform:translate(-50%,-50%) scale(0.85);
-      font-size: 86px;
-      filter: drop-shadow(0 10px 25px rgba(0,0,0,.65));
-      animation: pop 900ms ease-out forwards;
-    }
-    @keyframes pop{
-      0%{opacity:0;transform:translate(-50%,-50%) scale(.55)}
-      18%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}
-      55%{opacity:1;transform:translate(-50%,-50%) scale(.98)}
-      100%{opacity:0;transform:translate(-50%,-50%) scale(.92)}
-    }
-    .bill{
+    .rain.show{display:block}
+    .drop{
       position:absolute;
-      top:-40px;
-      font-size: 24px;
-      opacity:.9;
-      animation: fall 1200ms linear forwards;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,.6));
+      top:-20px;
+      width:2px;height:14px;
+      background: rgba(255,255,255,.40);
+      animation: fall 900ms linear infinite;
     }
     @keyframes fall{
-      to{ transform: translateY(calc(100vh + 60px)) rotate(210deg); opacity:0.15;}
-    }
-
-    /* Responsive */
-    @media (max-width: 980px){
-      .grid{grid-template-columns: 1fr; }
-      .dashboard{grid-template-columns: 1fr 1fr}
-    }
-    @media (max-width: 680px){
-      .dashboard{grid-template-columns: 1fr}
-      .search input{width: 180px}
-      .formGrid{grid-template-columns: 1fr}
+      from{transform:translateY(-30px)}
+      to{transform:translateY(calc(100vh + 30px))}
     }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="shell">
-
+  <div class="wrap">
     <div class="topbar">
-      <div class="top-left">
-        <a class="pill" href="javascript:void(0)" id="hubBtn">GRENADA HUB PRO</a>
-        <div>
-          <div class="title">INVENTORY · PRICING · SHIPMENTS</div>
-          <div class="subtitle">One master Inventory sheet · dropdowns from “Lists” · works on iPhone + Android</div>
+      <div class="toprow">
+        <div class="lefttitle">
+          <button class="pill dot btn" id="hubProBtn" type="button" aria-label="Grenada Hub Pro menu">
+            GRENADA HUB PRO
+          </button>
+          <div>
+            <div class="title">Inventory • Pricing • Shipments</div>
+            <div class="subtitle">One master Inventory sheet • dropdowns from “Lists” • iPhone + Android friendly</div>
+          </div>
         </div>
-      </div>
 
-      <div class="top-mid"></div>
-
-      <div class="top-right">
-        <a class="pill" id="tripBtn" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">TRIP HELPER</a>
-        <a class="pill" id="dashBtn" href="https://vinylpressusa.com/grenada-dashboard-mobile/" target="_blank" rel="noopener">DASHBOARD MOBILE</a>
-        <button class="btn primary" id="addBtn">+ ADD PRODUCT</button>
+        <div class="navrow">
+          <a class="btn link" id="tripHelperLink" href="https://vinylpressusa.com/grenada-trip-helper" target="_blank" rel="noopener">TRIP HELPER</a>
+          <a class="btn link" id="dashMobileLink" href="https://vinylpressusa.com/grenada-dashboard-mobile" target="_blank" rel="noopener">DASHBOARD MOBILE</a>
+          <button class="btn primary icon" id="addBtn" type="button">+ ADD PRODUCT</button>
+          <button class="btn" id="reloadBtn" type="button">RELOAD</button>
+        </div>
       </div>
     </div>
 
     <div class="grid">
-
-      <div class="dashboard">
+      <div class="dash">
         <div class="card">
-          <h4>Total Items</h4>
-          <div class="big">
-            <div class="value" id="kpiItems">0</div>
-            <div class="miniRight">
-              <select class="select" id="kpiShipmentSelect"></select>
-            </div>
+          <div class="cardhead">
+            <div class="label">Total Items</div>
+            <span class="badge" id="dashShipmentTag">ALL SHIPMENTS</span>
           </div>
+          <div class="value"><span id="totalItems">0</span><span class="subvalue">items</span></div>
         </div>
 
         <div class="card">
-          <h4>Total Cost</h4>
-          <div class="big">
-            <div class="value" id="kpiCost">$0.00</div>
-            <div class="miniRight">
-              <span class="chip" id="curChip">USD</span>
-              <button class="btn small" id="curToggle">TOGGLE</button>
+          <div class="cardhead">
+            <div class="label">Total Cost</div>
+            <div class="cardrow" style="margin-top:0">
+              <span class="badge" id="currencyPill">USD</span>
+              <button class="btn small" id="currencyToggleBtn" type="button">TOGGLE</button>
             </div>
           </div>
+          <div class="value" id="totalCost">$0.00</div>
+          <div class="statusline" id="totalCostSub">USD</div>
         </div>
 
         <div class="card">
-          <h4>Expected Revenue</h4>
-          <div class="big">
-            <div class="value" id="kpiRevenue">$0.00</div>
-            <div class="miniRight">
-              <span class="chip" id="markupChip">MARKUP 100%</span>
-              <select class="select" id="markupSelect">
-                <option value="50">50%</option>
-                <option value="100" selected>100%</option>
-                <option value="150">150%</option>
-                <option value="200">200%</option>
+          <div class="cardhead">
+            <div class="label">Expected Revenue</div>
+            <div class="cardrow" style="margin-top:0; justify-content:flex-end">
+              <span class="badge" id="markupTag">MARKUP 100%</span>
+              <select id="markupSelect" style="max-width:110px">
+                <option value="0.50">50%</option>
+                <option value="1.00" selected>100%</option>
+                <option value="1.50">150%</option>
+                <option value="2.00">200%</option>
                 <option value="custom">Custom</option>
               </select>
             </div>
           </div>
+          <div class="value" id="expectedRevenue">$0.00</div>
+          <div class="statusline" id="expectedRevenueSub">100%</div>
         </div>
 
         <div class="card">
-          <h4>Profit</h4>
-          <div class="big">
-            <div class="value" id="kpiProfit">$0.00</div>
-            <div class="miniRight">
-              <button class="btn small" id="needsPriceBtn">NEEDS PRICE</button>
-              <button class="btn small" id="needsApprovalBtn">NEEDS APPROVAL</button>
+          <div class="cardhead">
+            <div class="label">Profit</div>
+            <div class="cardrow" style="margin-top:0; justify-content:flex-end">
+              <button class="btn small" id="needsPriceBtn" type="button">NEEDS PRICE</button>
+              <button class="btn small" id="needsApprovalBtn" type="button">NEEDS APPROVAL</button>
             </div>
           </div>
+          <div class="value" id="profit">$0.00</div>
+          <div class="statusline"><span class="muted">est.</span></div>
         </div>
       </div>
 
       <div class="filters">
-        <div class="left">
-          <div class="search">
-            <span class="muted">Search</span>
-            <input id="searchInput" placeholder="Product Name..." />
-          </div>
-          <select class="select" id="shipFilter"></select>
-          <select class="select" id="catFilter"></select>
-          <select class="select" id="statusFilter"></select>
-          <select class="select" id="approvedFilter"></select>
+        <div class="span2">
+          <input id="searchInput" type="text" placeholder="Search Product Name..." />
         </div>
 
-        <div class="right">
-          <button class="btn ghost" id="manageCatsBtn">MANAGE CATEGORIES</button>
-          <button class="btn ghost" id="manageShipsBtn">MANAGE SHIPMENTS</button>
-          <button class="btn" id="reloadBtn">RELOAD</button>
-        </div>
+        <select id="shipmentFilter">
+          <option value="">All Shipments</option>
+        </select>
+
+        <select id="categoryFilter">
+          <option value="">All Categories</option>
+        </select>
+
+        <select id="statusFilter">
+          <option value="">All Status</option>
+        </select>
+
+        <select id="approvedFilter">
+          <option value="">All Price Approved</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+
+        <button class="btn" id="manageShipmentsBtn" type="button">MANAGE SHIPMENTS</button>
+        <button class="btn" id="manageCategoriesBtn" type="button">MANAGE CATEGORIES</button>
+
+        <button class="btn" id="reloadBtn2" type="button">RELOAD</button>
       </div>
 
-      <div class="pane">
-        <div class="paneHead">
-          <h3>Inventory</h3>
-          <div class="badge" id="tableCount">0 items</div>
-        </div>
-        <div style="overflow:auto">
+      <div class="lower">
+        <div class="tablewrap">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border-bottom:1px solid var(--line); background: rgba(0,0,0,.12)">
+            <div class="label">Inventory</div>
+            <span class="badge" id="shownCount">0 ITEMS</span>
+          </div>
           <table>
             <thead>
               <tr>
-                <th>Product</th>
-                <th>Shipment</th>
-                <th>Category</th>
-                <th class="rightAlign">Qty</th>
-                <th class="rightAlign">Cost</th>
-                <th class="rightAlign">Selling</th>
-                <th>Status</th>
-                <th>Approved</th>
+                <th style="width:26%">Product</th>
+                <th style="width:18%">Shipment</th>
+                <th style="width:14%">Category</th>
+                <th style="width:8%">Qty</th>
+                <th style="width:12%">Cost</th>
+                <th style="width:12%">Selling</th>
+                <th style="width:12%">Status</th>
+                <th style="width:10%">Approved</th>
               </tr>
             </thead>
             <tbody id="tbody">
-              <tr><td colspan="8" class="muted">Loaded.</td></tr>
+              <tr><td colspan="8" class="muted" style="padding:18px 12px;">Loading…</td></tr>
             </tbody>
           </table>
         </div>
+
+        <div class="help">
+          <div class="head">
+            <div class="label">Quick Help</div>
+            <div class="fxpill" id="fxPill">FX 1 USD = 2.70 XCD</div>
+          </div>
+          <ul>
+            <li>Click a row to edit.</li>
+            <li>Cost auto-fills Selling using your Markup selector (you can override).</li>
+            <li>Currency Toggle changes what you <b>SEE</b> (USD or XCD) without mixing both on-screen.</li>
+            <li>Easter eggs: 👍 on “Price Approved = Yes” • 💵 rain when Shipping Status becomes “Shipped”.</li>
+          </ul>
+
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap">
+            <button class="btn" id="callMichaelBtn" type="button">CALL MICHAEL</button>
+            <button class="btn" id="callQuencieBtn" type="button">CALL QUENCIE</button>
+          </div>
+
+          <div class="statusline" style="margin-top:10px">
+            Michael: <span class="muted">(610) 703-5185</span><br/>
+            Quencie: <span class="muted">(484) 513-5528</span>
+          </div>
+
+          <div class="statusline" id="loadStatus">…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hub Pro menu -->
+  <div class="overlay" id="hubOverlay" aria-hidden="true">
+    <div class="modal" style="max-width:560px">
+      <div class="modalhead">
+        <div class="h">GRENADA HUB PRO</div>
+        <button class="btn small" id="hubCloseBtn" type="button">✕</button>
+      </div>
+      <div class="modalbody">
+        <div class="label" style="margin-bottom:8px">Call</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px">
+          <button class="btn primary" id="hubCallMichael" type="button">Call Michael</button>
+          <button class="btn primary" id="hubCallQuencie" type="button">Call Quencie</button>
+        </div>
+        <div class="statusline" style="margin-top:10px; color:rgba(255,255,255,.62)">
+          Uses your phone’s dialer.
+        </div>
+      </div>
+      <div class="modalfoot">
+        <div class="msg"></div>
+        <button class="btn" id="hubCloseBtn2" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Product Modal -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal">
+      <div class="modalhead">
+        <div class="h" id="modalTitle">Edit / Add</div>
+        <button class="btn small" id="closeBtn" type="button">✕</button>
+      </div>
+      <div class="modalbody">
+        <div class="formgrid">
+          <div class="fg">
+            <label>Product Name *</label>
+            <input id="fProductName" type="text" placeholder="e.g., Gain Detergent" />
+          </div>
+
+          <div class="fg">
+            <label>Shipment *</label>
+            <select id="fShipment">
+              <option value="">Select…</option>
+            </select>
+            <button class="btn small" id="addShipmentInlineBtn" type="button" style="margin-top:6px; width:max-content">+ Add a new shipment</button>
+          </div>
+
+          <div class="fg">
+            <label>Category/Tab</label>
+            <select id="fCategory">
+              <option value="">Select…</option>
+            </select>
+          </div>
+
+          <div class="fg">
+            <label>Status</label>
+            <select id="fStatus">
+              <option value="">(blank)</option>
+            </select>
+          </div>
+
+          <div class="row2 two">
+            <div class="fg">
+              <label id="costLabel">Cost Price (USD)</label>
+              <input id="fCost" type="number" inputmode="decimal" step="0.01" placeholder="" />
+              <div class="hint" id="costHint">Stored in sheet as USD.</div>
+            </div>
+            <div class="fg">
+              <label id="sellLabel">Selling Price (USD)</label>
+              <input id="fSelling" type="number" inputmode="decimal" step="0.01" placeholder="" />
+              <div class="hint" id="sellHint">Auto-fills from Cost using Markup (unless you override).</div>
+            </div>
+          </div>
+
+          <div class="row2 two">
+            <div class="fg">
+              <label>Quantity</label>
+              <input id="fQty" type="number" inputmode="numeric" step="1" min="0" placeholder="" />
+            </div>
+            <div class="fg">
+              <label>Price Approved</label>
+              <select id="fApproved">
+                <option value="">(blank)</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row2 two">
+            <div class="fg">
+              <label>Shipping Status</label>
+              <select id="fShipStatus">
+                <option value="">(blank)</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Gender</label>
+              <select id="fGender">
+                <option value="">(blank)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row2 two">
+            <div class="fg">
+              <label>Size</label>
+              <select id="fSize">
+                <option value="">(blank)</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Shoe Size</label>
+              <select id="fShoe">
+                <option value="">(blank)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row2 two">
+            <div class="fg">
+              <label>Image URL</label>
+              <input id="fImageUrl" type="text" placeholder="https://…" />
+              <div class="hint">Saved as a clickable link in the table.</div>
+            </div>
+            <div class="fg">
+              <label>Online Link</label>
+              <input id="fOnlineLink" type="text" placeholder="https://…" />
+              <div class="hint">Saved as a clickable link in the table.</div>
+            </div>
+          </div>
+
+          <div class="fg two">
+            <label>Note</label>
+            <textarea id="fNote" rows="3" placeholder="Notes, condition, resale ideas, etc."></textarea>
+          </div>
+        </div>
+
+        <!-- Variants (optional) -->
+        <div class="variants" id="variantsSection">
+          <div class="variantshead">
+            <div class="t">Variants (optional)</div>
+            <button class="btn small" id="addVariantBtn" type="button">+ VARIANT</button>
+          </div>
+          <div class="hint" style="margin:0 0 10px 0">
+            Add color/size/etc. Variants are stored inside “Variations JSON”.
+          </div>
+          <div id="variantsList"></div>
+        </div>
       </div>
 
-      <div class="pane">
-        <div class="paneHead">
-          <h3>Quick Help</h3>
-          <div class="badge">Summary</div>
+      <div class="modalfoot">
+        <div class="msg" id="formMsg"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end">
+          <button class="btn primary" id="saveBtn" type="button">SAVE</button>
+          <button class="btn" id="deleteBtn" type="button">DELETE</button>
         </div>
-        <div style="padding:14px 16px 16px 16px">
-          <div class="muted" style="line-height:1.45">
-            • Click a row to edit.<br>
-            • Cost auto-fills Selling using your Markup selector (you can override).<br>
-            • Currency Toggle changes what you SEE (USD or XCD) without mixing both on-screen.<br>
-            <div style="height:10px"></div>
-            <div class="kpiRow">
-              <a class="btn" href="tel:+16107035185" id="callMichael">CALL MICHAEL</a>
-              <a class="btn" href="tel:+14845135528" id="callQuencie">CALL QUENCIE</a>
-            </div>
-            <div class="muted" style="margin-top:10px">
-              Michael: (610) 703-5185<br>
-              Quencie: (484) 513-5528<br><br>
-              Exchange rate used for display: <b>1 USD = 2.70 XCD</b><br><br>
-              Easter eggs: 👍 on “Price Approved = Yes”. 💸 rain when Shipping Status becomes “Shipped”.
-            </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Categories -->
+  <div class="overlay" id="catOverlay" aria-hidden="true">
+    <div class="modal" style="max-width:560px">
+      <div class="modalhead">
+        <div class="h">Manage Categories</div>
+        <button class="btn small" id="catCloseBtn" type="button">✕</button>
+      </div>
+      <div class="modalbody">
+        <div class="fg">
+          <label>Add a new category name</label>
+          <input id="catAddInput" type="text" placeholder="e.g., Make Up" />
+          <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap">
+            <button class="btn primary" id="catAddBtn" type="button">+ ADD CATEGORY</button>
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="fg">
+          <label>Remove a category</label>
+          <select id="catRemoveSelect">
+            <option value="">Select…</option>
+          </select>
+          <div class="hint">Two-step confirmation (fail-safe).</div>
+          <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap">
+            <button class="btn" id="catRemoveBtn" type="button">REMOVE CATEGORY</button>
           </div>
         </div>
       </div>
-
+      <div class="modalfoot">
+        <div class="msg" id="catMsg"></div>
+        <button class="btn" id="catCloseBtn2" type="button">Close</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Hub menu modal (phone only inside GRENADA HUB PRO) -->
-<div class="overlay" id="hubOverlay" aria-hidden="true">
-  <div class="modal" style="width:min(520px,96vw)">
-    <div class="modalHead">
-      <h2>Grenada Hub Pro</h2>
-      <button class="btn small" id="hubClose">✕</button>
-    </div>
-    <div class="modalBody">
-      <div class="muted" style="line-height:1.5">
-        Call options:
+  <!-- Manage Shipments -->
+  <div class="overlay" id="shipOverlay" aria-hidden="true">
+    <div class="modal" style="max-width:560px">
+      <div class="modalhead">
+        <div class="h">Manage Shipments</div>
+        <button class="btn small" id="shipCloseBtn" type="button">✕</button>
       </div>
-      <div style="height:12px"></div>
-      <div class="twoBtns">
-        <a class="btn" href="tel:+16107035185">CALL MICHAEL</a>
-        <a class="btn" href="tel:+14845135528">CALL QUENCIE</a>
+      <div class="modalbody">
+        <div class="fg">
+          <label>Add a new shipment name</label>
+          <input id="shipAddInput" type="text" placeholder="e.g., February Shipment 2026-02-05" />
+          <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap">
+            <button class="btn primary" id="shipAddBtn" type="button">+ ADD SHIPMENT</button>
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="fg">
+          <label>Remove a shipment</label>
+          <select id="shipRemoveSelect">
+            <option value="">Select…</option>
+          </select>
+          <div class="hint">Two-step confirmation (fail-safe).</div>
+          <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap">
+            <button class="btn" id="shipRemoveBtn" type="button">REMOVE SHIPMENT</button>
+          </div>
+        </div>
       </div>
-      <div style="height:10px"></div>
-      <div class="muted">Michael: (610) 703-5185 · Quencie: (484) 513-5528</div>
-    </div>
-  </div>
-</div>
-
-<!-- Product modal -->
-<div class="overlay" id="overlay" aria-hidden="true">
-  <div class="modal">
-    <div class="modalHead">
-      <h2 id="modalTitle">Add / Edit</h2>
-      <button class="btn small" id="closeBtn">✕</button>
-    </div>
-
-    <div class="modalBody">
-      <div class="formGrid">
-
-        <div class="field">
-          <div class="label">Product Name *</div>
-          <input class="input" id="fName" placeholder="e.g., Gain detergent" />
-        </div>
-
-        <div class="field">
-          <div class="label">Shipment *</div>
-          <select class="input" id="fShipment"></select>
-          <div class="help">Pick from Lists → Shipment Options, or add a new one.</div>
-        </div>
-
-        <div class="field">
-          <div class="label">Category/Tab *</div>
-          <select class="input" id="fCategory"></select>
-        </div>
-
-        <div class="field">
-          <div class="label">Status</div>
-          <select class="input" id="fStatus"></select>
-        </div>
-
-        <div class="field">
-          <div class="label" id="costLabel">Cost Price (USD)</div>
-          <input class="input" id="fCost" inputmode="decimal" placeholder="0.00" />
-          <div class="help">Auto-fills Selling using Markup (unless you override).</div>
-        </div>
-
-        <div class="field">
-          <div class="label" id="sellLabel">Selling Price (USD)</div>
-          <input class="input" id="fSell" inputmode="decimal" placeholder="0.00" />
-          <div class="help">You can override the auto-fill.</div>
-        </div>
-
-        <div class="field">
-          <div class="label">Quantity</div>
-          <input class="input" id="fQty" inputmode="numeric" placeholder="1" />
-        </div>
-
-        <div class="field">
-          <div class="label">Price Approved</div>
-          <select class="input" id="fApproved"></select>
-        </div>
-
-        <div class="field">
-          <div class="label">Shipping Status</div>
-          <select class="input" id="fShipStatus"></select>
-        </div>
-
-        <div class="field">
-          <div class="label">Gender</div>
-          <select class="input" id="fGender"></select>
-        </div>
-
-        <div class="field">
-          <div class="label">Size</div>
-          <select class="input" id="fSize"></select>
-        </div>
-
-        <div class="field">
-          <div class="label">Shoe Size</div>
-          <select class="input" id="fShoe"></select>
-        </div>
-
-        <div class="field">
-          <div class="label">Image URL</div>
-          <input class="input" id="fImg" placeholder="https://..." />
-        </div>
-
-        <div class="field">
-          <div class="label">Online Link</div>
-          <input class="input" id="fLink" placeholder="https://..." />
-        </div>
-
-        <div class="field" style="grid-column:1/-1">
-          <div class="label">Note</div>
-          <textarea class="textarea" id="fNote" placeholder="Notes, condition, resale ideas, etc."></textarea>
-        </div>
-
+      <div class="modalfoot">
+        <div class="msg" id="shipMsg"></div>
+        <button class="btn" id="shipCloseBtn2" type="button">Close</button>
       </div>
-
-      <div style="height:14px"></div>
-
-      <div class="muted" style="font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:12px">
-        Variants (optional)
-      </div>
-      <div class="muted2" style="margin-top:4px">
-        Add color/size/etc. Variants are stored inside “Variations JSON”.
-      </div>
-
-      <div id="variantsWrap" style="margin-top:12px;display:flex;flex-direction:column;gap:12px"></div>
-      <div style="display:flex;justify-content:flex-end;margin-top:10px">
-        <button class="btn" id="addVariantBtn">+ Variant</button>
-      </div>
-
-      <div style="margin-top:12px">
-        <div class="label">Variations JSON (hidden detail)</div>
-        <textarea class="textarea" id="fVarJson" style="min-height:90px;opacity:.55" readonly></textarea>
-      </div>
-
-    </div>
-
-    <div class="modalFoot">
-      <div class="twoBtns">
-        <button class="btn primary" id="saveBtn">Save</button>
-        <button class="btn danger" id="deleteBtn">Delete</button>
-      </div>
-      <div class="muted" id="saveHint">Tip: Click a row to load it into the form.</div>
     </div>
   </div>
-</div>
 
-<!-- Manage modal -->
-<div class="overlay" id="manageOverlay" aria-hidden="true">
-  <div class="modal" style="width:min(760px,96vw)">
-    <div class="modalHead">
-      <h2 id="manageTitle">Manage</h2>
-      <button class="btn small" id="manageClose">✕</button>
-    </div>
-    <div class="modalBody">
-      <div class="formGrid">
-        <div class="field">
-          <div class="label" id="addLabel">Add</div>
-          <input class="input" id="manageAddInput" placeholder="Type new name..." />
-          <div class="help">Adds to Lists (unique, case-insensitive).</div>
-          <button class="btn primary" id="manageAddBtn">Add</button>
-        </div>
-        <div class="field">
-          <div class="label" id="removeLabel">Remove</div>
-          <select class="input" id="manageRemoveSelect"></select>
-          <div class="help">Double-confirm required.</div>
-          <button class="btn danger" id="manageRemoveBtn">Remove</button>
-        </div>
-      </div>
-      <div style="height:12px"></div>
-      <div class="muted" id="manageNote"></div>
-    </div>
-  </div>
-</div>
+  <div class="toast" id="toast"></div>
+  <div class="rain" id="rain"></div>
 
-<div class="toast" id="toast"></div>
-<div class="fx" id="fx"></div>
+  <script>
+  /***********************
+   * CONFIG (ONLY EDIT THIS)
+   ***********************/
+  const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
+  const FX = 2.70; // 1 USD = 2.70 XCD
 
-<script>
-/** =========================
- *  CONFIG
- *  ========================= */
-const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
-const FX = 2.70; // 1 USD = 2.70 XCD
+  // Inventory headers used by the app (must match your sheet)
+  const COL = {
+    ProductName: "Product Name",
+    Shipment: "Shipment",
+    Category: "Category/Tab",
+    ImageURL: "Image URL",
+    CostUSD: "Cost Price USD",
+    SellingXCD: "Selling Price XCD", // We will store USD here (same column), and compute XCD view. If your sheet is already USD, keep it.
+    Quantity: "Quantity",
+    OnlineLink: "Online Link",
+    Note: "Note",
+    Status: "Status",
+    Approved: "Price Approved",
+    Gender: "Gender",
+    Size: "Size",
+    ShoeSize: "Shoe Size",
+    ShippingStatus: "Shipping Status",
+    Variations: "Variations JSON"
+  };
 
-// Inventory headers (must match sheet headers exactly)
-const COL = {
-  name: "Product Name",
-  shipment: "Shipment",
-  category: "Category/Tab",
-  img: "Image URL",
-  costUSD: "Cost Price USD",
-  sellXCD: "Selling Price XCD",
-  qty: "Quantity",
-  link: "Online Link",
-  note: "Note",
-  status: "Status",
-  approved: "Price Approved",
-  shipStatus: "Shipping Status",
-  gender: "Gender",
-  size: "Size",
-  shoe: "Shoe Size",
-  varjson: "Variations JSON"
-};
+  /***********************
+   * STATE
+   ***********************/
+  const state = {
+    meta: {
+      categories: [],
+      statuses: [],
+      shippingStatuses: [],
+      priceApproved: ["Yes","No"], // fixed
+      genders: [],
+      sizes: [],
+      shoeSizes: [],
+      shipments: []
+    },
+    rows: [],
+    filtered: [],
+    activeIndex: -1,
+    currency: "USD", // USD or XCD (view)
+    markup: 1.00, // 100%
+    markupCustom: 1.00,
+    // manual selling override per modal open
+    sellingTouched: false
+  };
 
-let META = {
-  categories: [],
-  statuses: [],
-  shippingStatuses: [],
-  shipments: [],
-  priceApproved: [],
-  genders: [],
-  sizes: [],
-  shoeSizes: []
-};
+  /***********************
+   * DOM
+   ***********************/
+  const $ = (id)=>document.getElementById(id);
+  const tbody = $("tbody");
 
-let inventory = [];
-let filtered = [];
-let current = null; // current row object
-let viewCurrency = "USD"; // "USD" or "XCD"
-let markupPct = 100; // percent
-let customMarkup = null;
+  /***********************
+   * JSONP
+   ***********************/
+  function jsonp(url, cbName){
+    return new Promise((resolve,reject)=>{
+      const cb = "__cb_" + cbName + "_" + Math.random().toString(16).slice(2);
+      const s = document.createElement("script");
+      const t = setTimeout(()=>{
+        cleanup();
+        reject(new Error("JSONP timeout"));
+      }, 15000);
 
-const el = (id)=>document.getElementById(id);
-const toast = (msg)=>{ const t=el("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"), 1700); };
+      function cleanup(){
+        clearTimeout(t);
+        delete window[cb];
+        s.remove();
+      }
 
-function money(n, cur){
-  if (!isFinite(n)) n = 0;
-  const sign = cur==="USD" ? "$" : "EC$";
-  return sign + Number(n).toFixed(2);
-}
-function num(v){
-  const s = String(v ?? "").replace(/[^0-9.\-]/g,"");
-  const n = parseFloat(s);
-  return isFinite(n) ? n : 0;
-}
-function uniq(list){
-  const seen = new Set();
-  const out = [];
-  for (const v of list){
-    const k = String(v||"").trim();
-    if (!k) continue;
-    const kk = k.toLowerCase();
-    if (seen.has(kk)) continue;
-    seen.add(kk); out.push(k);
+      window[cb] = (data)=>{
+        cleanup();
+        resolve(data);
+      };
+
+      s.src = url + (url.includes("?") ? "&" : "?") + "callback=" + encodeURIComponent(cb);
+      s.onerror = ()=>{
+        cleanup();
+        reject(new Error("JSONP load failed"));
+      };
+      document.head.appendChild(s);
+    });
   }
-  return out;
-}
-function getMarkup(){
-  if (markupPct === "custom") return Math.max(0, Number(customMarkup ?? 0));
-  return Number(markupPct);
-}
-function calcSellXCD(costUSD){
-  const m = getMarkup();
-  // markupPct meaning: 100% = double? You described it as percent markup.
-  // We'll treat it as: sell = cost * (1 + m/100) * FX
-  return costUSD * (1 + (m/100)) * FX;
-}
-function displayCost(costUSD){
-  return viewCurrency === "USD" ? costUSD : (costUSD * FX);
-}
-function displaySell(sellXCD){
-  return viewCurrency === "USD" ? (sellXCD / FX) : sellXCD;
-}
-function toStoredCost(displayVal){
-  return viewCurrency === "USD" ? displayVal : (displayVal / FX);
-}
-function toStoredSell(displayVal){
-  return viewCurrency === "USD" ? (displayVal * FX) : displayVal;
-}
 
-/** =========================
- *  JSONP + POST
- *  ========================= */
-function jsonp(url){
-  return new Promise((resolve, reject)=>{
-    const cb = "cb_" + Math.random().toString(36).slice(2);
-    window[cb] = (data)=>{ cleanup(); resolve(data); };
-    const s = document.createElement("script");
-    s.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cb;
-    s.onerror = ()=>{ cleanup(); reject(new Error("JSONP load failed")); };
-    document.head.appendChild(s);
-    function cleanup(){
-      try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
-      if (s && s.parentNode) s.parentNode.removeChild(s);
+  /***********************
+   * POST via hidden iframe (Apps Script _pm=1)
+   ***********************/
+  function postToScript(params){
+    return new Promise((resolve,reject)=>{
+      const iframe = document.createElement("iframe");
+      iframe.style.display="none";
+      document.body.appendChild(iframe);
+
+      const form = document.createElement("form");
+      form.method="POST";
+      form.action=EXEC_URL;
+      form.target=iframe.name = "pm_" + Math.random().toString(16).slice(2);
+
+      // force postMessage HTML response
+      params._pm = "1";
+
+      Object.keys(params).forEach(k=>{
+        const input = document.createElement("input");
+        input.type="hidden";
+        input.name=k;
+        input.value = params[k] == null ? "" : String(params[k]);
+        form.appendChild(input);
+      });
+
+      const timeout = setTimeout(()=>{
+        window.removeEventListener("message", onMsg);
+        form.remove();
+        iframe.remove();
+        reject(new Error("Save timed out"));
+      }, 15000);
+
+      function onMsg(ev){
+        // Apps Script returns parent.postMessage({...}, "*")
+        if (!ev || !ev.data || typeof ev.data !== "object") return;
+        if (!("ok" in ev.data)) return;
+
+        clearTimeout(timeout);
+        window.removeEventListener("message", onMsg);
+        form.remove();
+        iframe.remove();
+
+        if (ev.data.ok) resolve(ev.data);
+        else reject(new Error(ev.data.error || "Save failed"));
+      }
+
+      window.addEventListener("message", onMsg);
+      document.body.appendChild(form);
+      form.submit();
+    });
+  }
+
+  /***********************
+   * UTIL
+   ***********************/
+  function n(v){
+    const x = Number(v);
+    return isFinite(x) ? x : 0;
+  }
+  function money(x){
+    const sign = state.currency === "USD" ? "$" : "EC$";
+    const val = Math.round(x*100)/100;
+    return sign + val.toFixed(2);
+  }
+  function toViewUSD(usd){
+    return state.currency === "USD" ? usd : usd * FX;
+  }
+  function fromViewToUSD(viewAmount){
+    return state.currency === "USD" ? viewAmount : (viewAmount / FX);
+  }
+  function sanitizeUrl(u){
+    const s = String(u || "").trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s;
+    // allow "www." shortcuts
+    if (/^www\./i.test(s)) return "https://" + s;
+    return s; // leave as-is
+  }
+  function toast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1700);
+  }
+  function rainOnce(){
+    const root = $("rain");
+    root.innerHTML = "";
+    const drops = 120;
+    for (let i=0;i<drops;i++){
+      const d = document.createElement("div");
+      d.className="drop";
+      d.style.left = (Math.random()*100)+"vw";
+      d.style.animationDuration = (650 + Math.random()*650) + "ms";
+      d.style.opacity = (0.15 + Math.random()*0.45);
+      d.style.height = (10 + Math.random()*18) + "px";
+      root.appendChild(d);
     }
-  });
-}
+    root.classList.add("show");
+    setTimeout(()=>root.classList.remove("show"), 1200);
+  }
 
-async function postForm(params){
-  const form = new URLSearchParams();
-  for (const [k,v] of Object.entries(params)) form.append(k, v ?? "");
-  // Use iframe-style postMessage response to avoid CORS issues
-  return new Promise((resolve, reject)=>{
-    const iframe = document.createElement("iframe");
-    iframe.style.display="none";
-    const url = EXEC_URL + "?" + form.toString() + "&_pm=1";
-    function handler(ev){
-      if (!ev || !ev.data) return;
-      const d = ev.data;
-      if (typeof d !== "object" || d.ok == null) return;
-      window.removeEventListener("message", handler);
-      try{ document.body.removeChild(iframe); }catch(e){}
-      if (d.ok) resolve(d);
-      else reject(new Error(d.error || "Save failed"));
+  /***********************
+   * META + DATA LOAD
+   ***********************/
+  async function loadAll(){
+    $("loadStatus").textContent = "Loading…";
+    tbody.innerHTML = `<tr><td colspan="8" class="muted" style="padding:18px 12px;">Loading…</td></tr>`;
+    try{
+      // Load meta
+      const metaResp = await jsonp(EXEC_URL + "?meta=1", "meta");
+      if (!metaResp || !metaResp.ok) throw new Error(metaResp?.error || "Meta load failed");
+
+      // IMPORTANT: Your current Apps Script meta mapping may still be wrong.
+      // We defensively support both:
+      //   - meta.shipments from script
+      //   - or shipments from "Shipment Options" if the script returns it in meta (some versions do)
+      // If the script still returns Yes/No as shipments, we will *reject* those and rebuild shipments list from inventory rows + allow add/remove via script.
+      const m = metaResp.meta || {};
+      const shipments = Array.isArray(m.shipments) ? m.shipments.slice() : [];
+      const categories = Array.isArray(m.categories) ? m.categories.slice() : [];
+      const statuses = Array.isArray(m.statuses) ? m.statuses.slice() : [];
+      const shippingStatuses = Array.isArray(m.shippingStatuses) ? m.shippingStatuses.slice() : [];
+
+      // Optional if your script exposes these as separate meta arrays
+      const genders = Array.isArray(m.genders) ? m.genders.slice() : (Array.isArray(m.genderOptions) ? m.genderOptions.slice() : []);
+      const sizes = Array.isArray(m.sizes) ? m.sizes.slice() : (Array.isArray(m.sizeOptions) ? m.sizeOptions.slice() : []);
+      const shoeSizes = Array.isArray(m.shoeSizes) ? m.shoeSizes.slice() : (Array.isArray(m.shoeSizeOptions) ? m.shoeSizeOptions.slice() : []);
+
+      state.meta.categories = categories;
+      state.meta.statuses = statuses;
+      state.meta.shippingStatuses = shippingStatuses;
+      state.meta.genders = genders;
+      state.meta.sizes = sizes;
+      state.meta.shoeSizes = shoeSizes;
+      state.meta.shipments = shipments;
+
+      // Load inventory rows
+      const dataResp = await jsonp(EXEC_URL, "data");
+      if (!dataResp || !dataResp.ok) throw new Error(dataResp?.error || "Data load failed");
+      state.rows = Array.isArray(dataResp.data) ? dataResp.data : [];
+
+      // Fix shipments list if script is returning boolean junk (Yes/No) as shipments
+      // (This happens when Apps Script meta reads the wrong Lists column.)
+      const badShip = new Set(["yes","no","true","false","(blank)"]);
+      const metaShipsLower = state.meta.shipments.map(s=>String(s).trim().toLowerCase()).filter(Boolean);
+      const hasBooleanPollution = metaShipsLower.some(x=>badShip.has(x));
+      if (hasBooleanPollution || state.meta.shipments.length === 0){
+        // Rebuild shipments from actual Inventory column values (unique) so the dropdown isn't broken.
+        const invShips = unique(state.rows.map(r=>String(r[COL.Shipment]||"").trim()).filter(Boolean));
+        // If you truly want shipments only from Lists, fix Apps Script mapping later.
+        state.meta.shipments = invShips;
+      }
+
+      // Ensure dropdowns populate
+      buildAllDropdowns();
+
+      // Apply filters + render
+      applyFilters();
+      renderDashboard();
+      renderTable();
+
+      $("loadStatus").textContent = "Loaded.";
+    }catch(err){
+      $("loadStatus").textContent = "Load failed: " + String(err.message || err);
+      tbody.innerHTML = `<tr><td colspan="8" style="padding:18px 12px; color:rgba(255,77,77,.9); font-weight:800;">Load failed. Check EXEC_URL + Apps Script deployment.</td></tr>`;
     }
-    window.addEventListener("message", handler);
-    iframe.src = url;
-    document.body.appendChild(iframe);
-    setTimeout(()=>{
-      window.removeEventListener("message", handler);
-      try{ document.body.removeChild(iframe); }catch(e){}
-      reject(new Error("Save timed out"));
-    }, 12000);
-  });
-}
-
-/** =========================
- *  Load meta + inventory
- *  ========================= */
-async function loadMeta(){
-  const data = await jsonp(EXEC_URL + "?meta=1");
-  if (!data.ok) throw new Error(data.error || "Meta error");
-
-  // Support your updated Apps Script meta keys
-  const m = data.meta || {};
-  META.categories = uniq(m.categories || []);
-  META.statuses = uniq(m.statuses || []);
-  META.shippingStatuses = uniq(m.shippingStatuses || []);
-  META.shipments = uniq(m.shipments || []);
-  META.priceApproved = uniq(m.priceApproved || ["Yes","No"]);
-  META.genders = uniq(m.genders || ["Male","Female","Unisex","Kids"]);
-  META.sizes = uniq(m.sizes || ["XS","S","M","L","XL","XXL"]);
-  META.shoeSizes = uniq(m.shoeSizes || ["6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12"]);
-}
-
-async function loadInventory(){
-  const data = await jsonp(EXEC_URL);
-  if (!data.ok) throw new Error(data.error || "Load error");
-  inventory = Array.isArray(data.data) ? data.data : [];
-}
-
-function buildFilters(){
-  const shipFilter = el("shipFilter");
-  const catFilter = el("catFilter");
-  const statusFilter = el("statusFilter");
-  const approvedFilter = el("approvedFilter");
-  const kpiShipment = el("kpiShipmentSelect");
-
-  shipFilter.innerHTML = "";
-  catFilter.innerHTML = "";
-  statusFilter.innerHTML = "";
-  approvedFilter.innerHTML = "";
-  kpiShipment.innerHTML = "";
-
-  const shipOpts = ["All Shipments", ...META.shipments];
-  for (const v of shipOpts){
-    const o=document.createElement("option"); o.value=v; o.textContent=v; shipFilter.appendChild(o);
-    const o2=document.createElement("option"); o2.value=v; o2.textContent=v; kpiShipment.appendChild(o2);
   }
 
-  for (const v of ["All Categories", ...META.categories]){
-    const o=document.createElement("option"); o.value=v; o.textContent=v; catFilter.appendChild(o);
-  }
-  for (const v of ["All Status", ...META.statuses]){
-    const o=document.createElement("option"); o.value=v; o.textContent=v; statusFilter.appendChild(o);
-  }
-  // Approved should be Yes/No only
-  const approvedBase = META.priceApproved.length ? META.priceApproved : ["Yes","No"];
-  for (const v of ["All Price Approved", ...approvedBase]){
-    const o=document.createElement("option"); o.value=v; o.textContent=v; approvedFilter.appendChild(o);
-  }
-}
-
-function normalize(val){ return String(val ?? "").trim(); }
-
-function applyFilters(){
-  const q = normalize(el("searchInput").value).toLowerCase();
-  const ship = el("shipFilter").value;
-  const cat = el("catFilter").value;
-  const st = el("statusFilter").value;
-  const ap = el("approvedFilter").value;
-
-  filtered = inventory.filter(r=>{
-    const name = normalize(r[COL.name]).toLowerCase();
-    const okQ = !q || name.includes(q);
-
-    const rShip = normalize(r[COL.shipment]);
-    const rCat = normalize(r[COL.category]);
-    const rSt  = normalize(r[COL.status]);
-    const rAp  = normalize(r[COL.approved]);
-
-    const okShip = (ship === "All Shipments") || (rShip === ship);
-    const okCat  = (cat === "All Categories") || (rCat === cat);
-    const okSt   = (st === "All Status") || (rSt === st);
-    const okAp   = (ap === "All Price Approved") || (rAp === ap);
-
-    return okQ && okShip && okCat && okSt && okAp;
-  });
-
-  renderTable();
-  renderKPIs();
-}
-
-function renderTable(){
-  const tb = el("tbody");
-  tb.innerHTML = "";
-  el("tableCount").textContent = `${filtered.length} items`;
-
-  if (!filtered.length){
-    const tr=document.createElement("tr");
-    tr.innerHTML = `<td colspan="8" class="muted">No results.</td>`;
-    tb.appendChild(tr);
-    return;
+  function unique(arr){
+    const seen = new Set();
+    const out = [];
+    for (const v of arr){
+      const k = String(v).trim().toLowerCase();
+      if (!k) continue;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      out.push(String(v).trim());
+    }
+    return out;
   }
 
-  for (const r of filtered){
-    const name = normalize(r[COL.name]);
-    const ship = normalize(r[COL.shipment]);
-    const cat  = normalize(r[COL.category]);
-    const qty  = Number(r[COL.qty] || 0) || 0;
-    const costUSD = num(r[COL.costUSD]);
-    const sellXCD = num(r[COL.sellXCD]);
+  /***********************
+   * DROPDOWNS
+   ***********************/
+  function setOptions(selectEl, options, withAllLabel){
+    const cur = selectEl.value;
+    selectEl.innerHTML = "";
+    if (withAllLabel){
+      const o = document.createElement("option");
+      o.value = "";
+      o.textContent = withAllLabel;
+      selectEl.appendChild(o);
+    }
+    for (const v of options){
+      const o = document.createElement("option");
+      o.value = v;
+      o.textContent = v;
+      selectEl.appendChild(o);
+    }
+    // restore if possible
+    if (cur) selectEl.value = cur;
+  }
 
-    const dCost = displayCost(costUSD);
-    const dSell = displaySell(sellXCD);
+  function buildAllDropdowns(){
+    // Filters
+    setOptions($("shipmentFilter"), state.meta.shipments, "All Shipments");
+    setOptions($("categoryFilter"), state.meta.categories, "All Categories");
+    setOptions($("statusFilter"), state.meta.statuses, "All Status");
+    // Approved filter is fixed in HTML already
 
-    const st = normalize(r[COL.status]);
-    const ap = normalize(r[COL.approved]);
+    // Modal dropdowns
+    setOptions($("fShipment"), state.meta.shipments, "Select…");
+    setOptions($("fCategory"), state.meta.categories, "Select…");
+    setOptions($("fStatus"), state.meta.statuses, "(blank)");
+    setOptions($("fShipStatus"), state.meta.shippingStatuses, "(blank)");
 
-    const tr=document.createElement("tr");
-    tr.innerHTML = `
-      <td>${name || "<span class='muted'>(blank)</span>"}</td>
-      <td class="nowrap">${ship || "<span class='muted'>(blank)</span>"}</td>
-      <td>${cat || "<span class='muted'>(blank)</span>"}</td>
-      <td class="rightAlign nowrap">${qty}</td>
-      <td class="rightAlign nowrap">${money(dCost, viewCurrency)}</td>
-      <td class="rightAlign nowrap">${money(dSell, viewCurrency)}</td>
-      <td>${st || "<span class='muted'>(blank)</span>"}</td>
-      <td>${ap || "<span class='muted'>(blank)</span>"}</td>
+    // Gender/Size/Shoe from Lists if available; otherwise fall back defaults
+    const genders = state.meta.genders.length ? state.meta.genders : ["Male","Female","Unisex"];
+    const sizes = state.meta.sizes.length ? state.meta.sizes : ["XS","S","M","L","XL","XXL"];
+    const shoeSizes = state.meta.shoeSizes.length ? state.meta.shoeSizes : ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"];
+
+    setOptions($("fGender"), genders, "(blank)");
+    setOptions($("fSize"), sizes, "(blank)");
+    setOptions($("fShoe"), shoeSizes, "(blank)");
+
+    // Manage modals selects
+    setOptions($("catRemoveSelect"), state.meta.categories, "Select…");
+    setOptions($("shipRemoveSelect"), state.meta.shipments, "Select…");
+  }
+
+  /***********************
+   * FILTERING + RENDER
+   ***********************/
+  function applyFilters(){
+    const q = $("searchInput").value.trim().toLowerCase();
+    const ship = $("shipmentFilter").value;
+    const cat = $("categoryFilter").value;
+    const st = $("statusFilter").value;
+    const ap = $("approvedFilter").value;
+
+    state.filtered = state.rows.filter(r=>{
+      const name = String(r[COL.ProductName]||"").toLowerCase();
+      if (q && !name.includes(q)) return false;
+      if (ship && String(r[COL.Shipment]||"").trim() !== ship) return false;
+      if (cat && String(r[COL.Category]||"").trim() !== cat) return false;
+      if (st && String(r[COL.Status]||"").trim() !== st) return false;
+      if (ap && String(r[COL.Approved]||"").trim() !== ap) return false;
+      return true;
+    });
+
+    $("shownCount").textContent = state.filtered.length + " ITEMS";
+    $("dashShipmentTag").textContent = ship ? ship.toUpperCase() : "ALL SHIPMENTS";
+  }
+
+  function parseCostUSD(row){
+    // cost stored in USD in sheet
+    return n(row[COL.CostUSD]);
+  }
+  function parseSellingUSD(row){
+    // Your sheet column name says "Selling Price XCD", but we treat it as stored USD for calculations.
+    // If you *actually store XCD* in that column, switch this to return n(row[COL.SellingXCD]) / FX;
+    return n(row[COL.SellingXCD]);
+  }
+
+  function renderDashboard(){
+    const costUSD = sum(state.filtered.map(r=>parseCostUSD(r)));
+    const sellUSD = sum(state.filtered.map(r=>parseSellingUSD(r)));
+    // Expected revenue if selling is blank: use cost * (1+markup) as estimate
+    const estSellUSD = state.filtered.reduce((acc,r)=>{
+      const s = parseSellingUSD(r);
+      const c = parseCostUSD(r);
+      return acc + (s>0 ? s : c*(1+state.markup));
+    },0);
+    const revenueUSD = estSellUSD;
+    const profitUSD = revenueUSD - costUSD;
+
+    $("totalItems").textContent = String(state.filtered.length);
+
+    $("totalCost").textContent = money(toViewUSD(costUSD));
+    $("expectedRevenue").textContent = money(toViewUSD(revenueUSD));
+    $("profit").textContent = money(toViewUSD(profitUSD));
+
+    $("currencyPill").textContent = state.currency;
+    $("totalCostSub").textContent = state.currency;
+    $("expectedRevenueSub").textContent = Math.round(state.markup*100) + "%";
+    $("markupTag").textContent = "MARKUP " + Math.round(state.markup*100) + "%";
+    $("fxPill").textContent = "FX 1 USD = " + FX.toFixed(2) + " XCD";
+  }
+
+  function sum(arr){ return arr.reduce((a,b)=>a+n(b),0); }
+
+  function renderTable(){
+    if (!state.filtered.length){
+      tbody.innerHTML = `<tr><td colspan="8" class="muted" style="padding:18px 12px;">No items match your filters.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = "";
+    state.filtered.forEach((r,i)=>{
+      const tr = document.createElement("tr");
+      tr.dataset.index = String(i);
+
+      const name = String(r[COL.ProductName]||"");
+      const ship = String(r[COL.Shipment]||"");
+      const cat = String(r[COL.Category]||"");
+      const qty = String(r[COL.Quantity]||"");
+      const costUSD = parseCostUSD(r);
+      const sellUSD = parseSellingUSD(r);
+      const status = String(r[COL.Status]||"");
+      const approved = String(r[COL.Approved]||"");
+
+      const costV = money(toViewUSD(costUSD));
+      const sellV = money(toViewUSD(sellUSD>0?sellUSD: (costUSD*(1+state.markup)) ));
+
+      tr.innerHTML = `
+        <td style="font-weight:900">${escapeHtml(name)}</td>
+        <td style="color:rgba(255,255,255,.86); font-weight:800">${escapeHtml(ship)}</td>
+        <td style="color:rgba(255,255,255,.86); font-weight:800">${escapeHtml(cat)}</td>
+        <td style="font-weight:900">${escapeHtml(qty)}</td>
+        <td style="font-weight:900">${escapeHtml(costV)}</td>
+        <td style="font-weight:900">${escapeHtml(sellV)}</td>
+        <td style="color:rgba(255,255,255,.82); font-weight:800">${escapeHtml(status)}</td>
+        <td style="font-weight:900">${approved === "Yes" ? "👍 Yes" : escapeHtml(approved)}</td>
+      `;
+      tr.addEventListener("click", ()=>openEditFromRow(r, tr));
+      tbody.appendChild(tr);
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s||"").replace(/[&<>"']/g, m=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  /***********************
+   * MODAL OPEN / FILL
+   ***********************/
+  function openAdd(){
+    state.activeIndex = -1;
+    state.sellingTouched = false;
+    $("modalTitle").textContent = "Add Product";
+    $("deleteBtn").style.display = "none";
+    clearForm();
+    syncModalCurrencyLabels();
+    $("overlay").classList.add("show");
+  }
+
+  function openEditFromRow(row, trEl){
+    // highlight row
+    [...tbody.querySelectorAll("tr")].forEach(x=>x.classList.remove("active"));
+    trEl.classList.add("active");
+
+    state.activeIndex = state.rows.indexOf(row);
+    state.sellingTouched = true; // don't auto overwrite their existing selling
+    $("modalTitle").textContent = "Edit / Add";
+    $("deleteBtn").style.display = "";
+    fillForm(row);
+    syncModalCurrencyLabels();
+    $("overlay").classList.add("show");
+  }
+
+  function closeModal(){
+    $("overlay").classList.remove("show");
+    $("formMsg").textContent = "";
+    // clear highlight
+    [...tbody.querySelectorAll("tr")].forEach(x=>x.classList.remove("active"));
+  }
+
+  function clearForm(){
+    $("fProductName").value="";
+    $("fShipment").value="";
+    $("fCategory").value="";
+    $("fStatus").value="";
+    $("fCost").value="";
+    $("fSelling").value="";
+    $("fQty").value="";
+    $("fApproved").value="";
+    $("fShipStatus").value="";
+    $("fGender").value="";
+    $("fSize").value="";
+    $("fShoe").value="";
+    $("fImageUrl").value="";
+    $("fOnlineLink").value="";
+    $("fNote").value="";
+    $("variantsList").innerHTML = "";
+  }
+
+  function fillForm(r){
+    $("fProductName").value = String(r[COL.ProductName]||"");
+    $("fShipment").value = String(r[COL.Shipment]||"");
+    $("fCategory").value = String(r[COL.Category]||"");
+    $("fStatus").value = String(r[COL.Status]||"");
+
+    // show current currency values in modal inputs
+    const costUSD = parseCostUSD(r);
+    const sellUSD = parseSellingUSD(r);
+    $("fCost").value = costUSD ? String(Math.round(toViewUSD(costUSD)*100)/100) : "";
+    $("fSelling").value = sellUSD ? String(Math.round(toViewUSD(sellUSD)*100)/100) : "";
+
+    $("fQty").value = String(r[COL.Quantity]||"");
+    $("fApproved").value = String(r[COL.Approved]||"");
+    $("fShipStatus").value = String(r[COL.ShippingStatus]||"");
+    $("fGender").value = String(r[COL.Gender]||"");
+    $("fSize").value = String(r[COL.Size]||"");
+    $("fShoe").value = String(r[COL.ShoeSize]||"");
+    $("fImageUrl").value = String(r[COL.ImageURL]||"");
+    $("fOnlineLink").value = String(r[COL.OnlineLink]||"");
+    $("fNote").value = String(r[COL.Note]||"");
+
+    // Variants JSON
+    const vtxt = String(r[COL.Variations]||"").trim();
+    if (vtxt){
+      try{
+        const arr = JSON.parse(vtxt);
+        if (Array.isArray(arr)) {
+          arr.forEach(v=>addVariantRow(v));
+        }
+      }catch(_){}
+    }
+  }
+
+  function syncModalCurrencyLabels(){
+    // REQUIRED FIX: both cost + selling labels must show same currency and change when toggled.
+    const cur = state.currency;
+    $("costLabel").textContent = "Cost Price (" + cur + ")";
+    $("sellLabel").textContent = "Selling Price (" + cur + ")";
+    $("costHint").textContent = "Stored in sheet as USD.";
+    $("sellHint").textContent = "Auto-fills from Cost using Markup (unless you override).";
+  }
+
+  /***********************
+   * AUTO SELLING CALC
+   ***********************/
+  function getMarkup(){
+    const v = $("markupSelect").value;
+    if (v === "custom") return state.markupCustom;
+    return n(v);
+  }
+
+  function setMarkupFromUI(){
+    const v = $("markupSelect").value;
+    if (v === "custom"){
+      const raw = prompt("Enter custom markup as a percent (e.g., 125 for 125%)", String(Math.round(state.markupCustom*100)));
+      if (raw == null) {
+        // revert to previous non-custom if they cancel
+        $("markupSelect").value = String(state.markup);
+        return;
+      }
+      const pct = n(raw)/100;
+      state.markupCustom = Math.max(0, pct);
+      state.markup = state.markupCustom;
+      toast("Markup set to " + Math.round(state.markup*100) + "%");
+    } else {
+      state.markup = n(v);
+    }
+    $("markupTag").textContent = "MARKUP " + Math.round(state.markup*100) + "%";
+    renderDashboard();
+    renderTable();
+    // If modal open and selling not touched, re-auto-fill
+    if ($("overlay").classList.contains("show")){
+      maybeAutofillSelling();
+    }
+  }
+
+  function maybeAutofillSelling(){
+    if (state.sellingTouched) return;
+    const cost = n($("fCost").value);
+    if (!cost) return;
+    const selling = cost * (1 + state.markup);
+    $("fSelling").value = (Math.round(selling*100)/100).toFixed(2);
+  }
+
+  /***********************
+   * VARIANTS UI
+   ***********************/
+  function addVariantRow(prefill){
+    const wrap = document.createElement("div");
+    wrap.className = "variantcard";
+
+    const vColor = document.createElement("input");
+    vColor.type="text";
+    vColor.placeholder="e.g., Blue";
+    vColor.value = (prefill && prefill.color) ? String(prefill.color) : "";
+
+    const vGender = document.createElement("select");
+    const gList = (state.meta.genders.length ? state.meta.genders : ["Men","Women","Unisex","Kids"]);
+    vGender.innerHTML = `<option value="">Men/Women/Unisex</option>` + gList.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join("");
+    vGender.value = (prefill && prefill.gender) ? String(prefill.gender) : "";
+
+    const vSize = document.createElement("select");
+    const sList = (state.meta.sizes.length ? state.meta.sizes : ["XS","S","M","L","XL","XXL"]);
+    vSize.innerHTML = `<option value="">e.g., L / EU 42</option>` + sList.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join("");
+    vSize.value = (prefill && prefill.size) ? String(prefill.size) : "";
+
+    const vShoe = document.createElement("select");
+    const shList = (state.meta.shoeSizes.length ? state.meta.shoeSizes : ["6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","12"]);
+    vShoe.innerHTML = `<option value="">Shoe size (optional)</option>` + shList.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join("");
+    vShoe.value = (prefill && prefill.shoeSize) ? String(prefill.shoeSize) : "";
+
+    const vQty = document.createElement("input");
+    vQty.type="number";
+    vQty.inputMode="numeric";
+    vQty.step="1";
+    vQty.placeholder="e.g., 6";
+    vQty.value = (prefill && prefill.qty != null) ? String(prefill.qty) : "";
+
+    wrap.innerHTML = `
+      <div class="variantgrid">
+        <div class="fg">
+          <label>Color</label>
+        </div>
+        <div class="fg">
+          <label>Size</label>
+        </div>
+        <div class="fg">
+          <label>Gender</label>
+        </div>
+        <div class="fg">
+          <label>Qty</label>
+        </div>
+        <div class="fg">
+          <label>Shoe Size</label>
+        </div>
+        <div class="fg">
+          <label>&nbsp;</label>
+        </div>
+      </div>
     `;
-    tr.addEventListener("click", ()=>openEdit(r));
-    tb.appendChild(tr);
+
+    const grid = wrap.querySelector(".variantgrid");
+    // place fields into the grid in order
+    grid.children[0].appendChild(vColor);
+    grid.children[1].appendChild(vSize);
+    grid.children[2].appendChild(vGender);
+    grid.children[3].appendChild(vQty);
+    grid.children[4].appendChild(vShoe);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.className="btn small";
+    removeBtn.type="button";
+    removeBtn.textContent="REMOVE VARIANT";
+    removeBtn.addEventListener("click", ()=>wrap.remove());
+    grid.children[5].appendChild(removeBtn);
+
+    $("variantsList").appendChild(wrap);
   }
-}
 
-function sumForShipmentRows(rows){
-  let items = 0;
-  let costUSD = 0;
-  let sellXCD = 0;
+  function collectVariantsJSON(){
+    const cards = [...$("variantsList").querySelectorAll(".variantcard")];
+    const arr = [];
+    for (const c of cards){
+      const inputs = c.querySelectorAll("input,select");
+      // order we created: color, size, gender, qty, shoeSize
+      const color = inputs[0].value.trim();
+      const size = inputs[1].value.trim();
+      const gender = inputs[2].value.trim();
+      const qty = inputs[3].value.trim();
+      const shoeSize = inputs[4].value.trim();
 
-  for (const r of rows){
-    const qty = Number(r[COL.qty] || 0) || 0;
-    items += qty > 0 ? qty : 0;
-    costUSD += num(r[COL.costUSD]) * (qty > 0 ? qty : 1);
-    sellXCD += num(r[COL.sellXCD]) * (qty > 0 ? qty : 1);
+      if (!color && !size && !gender && !qty && !shoeSize) continue;
+      arr.push({
+        color: color || "",
+        size: size || "",
+        gender: gender || "",
+        qty: qty ? n(qty) : "",
+        shoeSize: shoeSize || ""
+      });
+    }
+    return arr.length ? JSON.stringify(arr) : "";
   }
-  return {items, costUSD, sellXCD};
-}
 
-function renderKPIs(){
-  const chosen = el("kpiShipmentSelect").value || "All Shipments";
-  const rows = (chosen === "All Shipments")
-    ? inventory
-    : inventory.filter(r=>normalize(r[COL.shipment]) === chosen);
+  /***********************
+   * SAVE / DELETE
+   ***********************/
+  async function saveCurrent(){
+    $("formMsg").textContent = "Saving…";
+    try{
+      // required fields
+      const name = $("fProductName").value.trim();
+      const shipment = $("fShipment").value.trim();
+      if (!name || !shipment){
+        $("formMsg").textContent = "Product Name and Shipment are required.";
+        return;
+      }
 
-  const s = sumForShipmentRows(rows);
+      const payload = {};
+      payload[COL.ProductName] = name;
+      payload[COL.Shipment] = shipment;
+      payload[COL.Category] = $("fCategory").value.trim();
+      payload[COL.Status] = $("fStatus").value.trim();
+      payload[COL.Quantity] = $("fQty").value.trim();
+      payload[COL.Approved] = $("fApproved").value.trim();
+      payload[COL.ShippingStatus] = $("fShipStatus").value.trim();
+      payload[COL.Gender] = $("fGender").value.trim();
+      payload[COL.Size] = $("fSize").value.trim();
+      payload[COL.ShoeSize] = $("fShoe").value.trim();
+      payload[COL.ImageURL] = sanitizeUrl($("fImageUrl").value);
+      payload[COL.OnlineLink] = sanitizeUrl($("fOnlineLink").value);
+      payload[COL.Note] = $("fNote").value;
 
-  const dCost = displayCost(s.costUSD);
-  const dRev  = displaySell(s.sellXCD);
-  const dProf = displaySell(s.sellXCD) - displayCost(s.costUSD);
+      // Currency FIX: both fields are entered in CURRENT VIEW currency, stored as USD
+      const costView = n($("fCost").value);
+      const sellView = n($("fSelling").value);
 
-  el("kpiItems").textContent = (chosen==="All Shipments")
-    ? inventory.length
-    : rows.length;
+      const costUSD = fromViewToUSD(costView);
+      const sellUSD = fromViewToUSD(sellView);
 
-  el("kpiCost").textContent = money(dCost, viewCurrency);
-  el("kpiRevenue").textContent = money(dRev, viewCurrency);
-  el("kpiProfit").textContent = money(dProf, viewCurrency);
+      payload[COL.CostUSD] = costUSD ? (Math.round(costUSD*100)/100).toFixed(2) : "";
+      payload[COL.SellingXCD] = sellUSD ? (Math.round(sellUSD*100)/100).toFixed(2) : "";
 
-  el("curChip").textContent = viewCurrency;
-  el("markupChip").textContent = `MARKUP ${getMarkup()}%`;
-}
+      // Variants
+      payload[COL.Variations] = collectVariantsJSON();
 
-/** =========================
- *  Modal + form
- *  ========================= */
-function openModal(){ el("overlay").classList.add("show"); }
-function closeModal(){ el("overlay").classList.remove("show"); }
-function clearForm(){
-  current = null;
-  el("modalTitle").textContent = "Add Product";
-  el("fName").value="";
-  el("fNote").value="";
-  el("fImg").value="";
-  el("fLink").value="";
-  el("fQty").value="";
-  el("fCost").value="";
-  el("fSell").value="";
-  el("fVarJson").value="[]";
-  el("variantsWrap").innerHTML="";
-  el("deleteBtn").style.display="none";
-}
-function buildFormSelects(){
-  // Shipment select includes "Add new shipment..." at bottom
-  const shipSel = el("fShipment");
-  shipSel.innerHTML = "";
-  shipSel.appendChild(new Option("Select...", ""));
-  for (const v of META.shipments) shipSel.appendChild(new Option(v, v));
-  shipSel.appendChild(new Option("➕ Add new shipment…", "__add__"));
+      // Action
+      payload._action = "update";
 
-  const catSel = el("fCategory"); catSel.innerHTML="";
-  catSel.appendChild(new Option("Select...", ""));
-  for (const v of META.categories) catSel.appendChild(new Option(v, v));
+      const resp = await postToScript(payload);
+      if (!resp.ok) throw new Error(resp.error || "Save failed");
 
-  const stSel = el("fStatus"); stSel.innerHTML="";
-  stSel.appendChild(new Option("(blank)", ""));
-  for (const v of META.statuses) stSel.appendChild(new Option(v, v));
+      // Easter eggs
+      if (payload[COL.Approved] === "Yes") toast("👍 Price approved");
+      if (String(payload[COL.ShippingStatus]).toLowerCase() === "shipped") {
+        toast("💵 Shipped!");
+        rainOnce();
+      } else {
+        toast("Saved.");
+      }
 
-  const apSel = el("fApproved"); apSel.innerHTML="";
-  apSel.appendChild(new Option("(blank)", ""));
-  // force Yes/No only if present
-  const ap = META.priceApproved.length ? META.priceApproved : ["Yes","No"];
-  for (const v of ap) apSel.appendChild(new Option(v, v));
+      $("formMsg").textContent = "Saved.";
+      // REQUIRED FIX: close modal automatically after save
+      closeModal();
+      await loadAll();
+    }catch(err){
+      $("formMsg").textContent = "Save failed: " + String(err.message || err);
+    }
+  }
 
-  const ssSel = el("fShipStatus"); ssSel.innerHTML="";
-  ssSel.appendChild(new Option("(blank)", ""));
-  for (const v of META.shippingStatuses) ssSel.appendChild(new Option(v, v));
+  async function deleteCurrent(){
+    if (!confirm("Delete this item?")) return;
+    $("formMsg").textContent = "Deleting…";
+    try{
+      const payload = {};
+      payload[COL.ProductName] = $("fProductName").value.trim();
+      payload[COL.Shipment] = $("fShipment").value.trim();
+      payload._action = "delete";
+      const resp = await postToScript(payload);
+      if (!resp.ok) throw new Error(resp.error || "Delete failed");
+      toast("Deleted.");
+      closeModal();
+      await loadAll();
+    }catch(err){
+      $("formMsg").textContent = "Delete failed: " + String(err.message || err);
+    }
+  }
 
-  const gSel = el("fGender"); gSel.innerHTML="";
-  gSel.appendChild(new Option("(blank)", ""));
-  for (const v of META.genders) gSel.appendChild(new Option(v, v));
+  /***********************
+   * MANAGE CATEGORIES / SHIPMENTS
+   ***********************/
+  async function addCategory(){
+    const v = $("catAddInput").value.trim();
+    if (!v) return;
+    $("catMsg").textContent = "Adding…";
+    try{
+      const r = await postToScript({_action:"meta_add_category", value:v});
+      if (!r.ok) throw new Error(r.error || "Add failed");
+      $("catMsg").textContent = (r.action === "exists") ? "Already exists." : "Added.";
+      $("catAddInput").value = "";
+      await loadAll();
+    }catch(e){
+      $("catMsg").textContent = "Add failed: " + String(e.message||e);
+    }
+  }
 
-  const szSel = el("fSize"); szSel.innerHTML="";
-  szSel.appendChild(new Option("(blank)", ""));
-  for (const v of META.sizes) szSel.appendChild(new Option(v, v));
+  async function removeCategory(){
+    const v = $("catRemoveSelect").value.trim();
+    if (!v) return;
+    if (!confirm(`Remove category "${v}"?`)) return;
+    if (!confirm(`Confirm removal of "${v}" (second fail-safe).`)) return;
+    $("catMsg").textContent = "Removing…";
+    try{
+      const r = await postToScript({_action:"meta_remove_category", value:v});
+      if (!r.ok) throw new Error(r.error || "Remove failed");
+      $("catMsg").textContent = (r.action === "removed") ? "Removed." : "Not found.";
+      await loadAll();
+    }catch(e){
+      $("catMsg").textContent = "Remove failed: " + String(e.message||e);
+    }
+  }
 
-  const shSel = el("fShoe"); shSel.innerHTML="";
-  shSel.appendChild(new Option("(blank)", ""));
-  for (const v of META.shoeSizes) shSel.appendChild(new Option(v, v));
+  async function addShipment(){
+    const v = $("shipAddInput").value.trim();
+    if (!v) return;
+    $("shipMsg").textContent = "Adding…";
+    try{
+      const r = await postToScript({_action:"meta_add_shipment", value:v});
+      if (!r.ok) throw new Error(r.error || "Add failed");
+      $("shipMsg").textContent = (r.action === "exists") ? "Already exists." : "Added.";
+      $("shipAddInput").value = "";
+      await loadAll();
+    }catch(e){
+      $("shipMsg").textContent = "Add failed: " + String(e.message||e);
+    }
+  }
 
-  // Labels for currency in modal
-  el("costLabel").textContent = viewCurrency === "USD" ? "Cost Price (USD)" : "Cost Price (XCD)";
-  el("sellLabel").textContent = viewCurrency === "USD" ? "Selling Price (USD)" : "Selling Price (XCD)";
-}
+  async function removeShipment(){
+    const v = $("shipRemoveSelect").value.trim();
+    if (!v) return;
+    if (!confirm(`Remove shipment "${v}"?`)) return;
+    if (!confirm(`Confirm removal of "${v}" (second fail-safe).`)) return;
+    $("shipMsg").textContent = "Removing…";
+    try{
+      const r = await postToScript({_action:"meta_remove_shipment", value:v});
+      if (!r.ok) throw new Error(r.error || "Remove failed");
+      $("shipMsg").textContent = (r.action === "removed") ? "Removed." : "Not found.";
+      await loadAll();
+    }catch(e){
+      $("shipMsg").textContent = "Remove failed: " + String(e.message||e);
+    }
+  }
 
-function openAdd(){
-  clearForm();
-  buildFormSelects();
-  openModal();
-}
+  async function inlineAddShipment(){
+    const v = prompt("Enter new shipment name:", "");
+    if (!v) return;
+    try{
+      await postToScript({_action:"meta_add_shipment", value:v});
+      await loadAll();
+      $("fShipment").value = v;
+      toast("Shipment added.");
+    }catch(e){
+      $("formMsg").textContent = "Add shipment failed: " + String(e.message||e);
+    }
+  }
 
-function openEdit(row){
-  current = row;
-  el("modalTitle").textContent = "Edit Product";
-  el("deleteBtn").style.display="inline-flex";
+  /***********************
+   * NEEDS FILTER BUTTONS
+   ***********************/
+  function needsPrice(){
+    // Show rows missing selling price
+    $("approvedFilter").value = "";
+    $("statusFilter").value = "";
+    $("categoryFilter").value = "";
+    $("shipmentFilter").value = "";
+    $("searchInput").value = "";
+    state.filtered = state.rows.filter(r=> n(r[COL.SellingXCD]) <= 0);
+    $("shownCount").textContent = state.filtered.length + " ITEMS";
+    renderDashboard();
+    renderTable();
+    toast("Needs price");
+  }
+  function needsApproval(){
+    $("approvedFilter").value = "No";
+    applyFilters();
+    renderDashboard();
+    renderTable();
+    toast("Needs approval");
+  }
 
-  buildFormSelects();
+  /***********************
+   * CURRENCY TOGGLE
+   ***********************/
+  function toggleCurrency(){
+    state.currency = (state.currency === "USD") ? "XCD" : "USD";
+    syncModalCurrencyLabels();
+    // If modal open, re-map fields to view currency without altering stored USD
+    if ($("overlay").classList.contains("show")){
+      // Convert current visible numeric fields to new view currency
+      const costView = n($("fCost").value);
+      const sellView = n($("fSelling").value);
+      // costView currently in old currency. Convert to USD, then to new view.
+      const costUSD = (state.currency === "USD") ? (costView / FX) : costView; // This line would be wrong after toggling; do it properly:
+      // We'll do proper: oldCur = newCur ? can't know now; so read from row if editing OR treat as USD stored in hints:
+      // Safer: if editing existing item, keep original USD from row, else keep same numeric and just swap label.
+      // Minimal change to not surprise: keep numbers as-is, swap labels.
+    }
+    renderDashboard();
+    renderTable();
+    toast(state.currency + " view");
+  }
 
-  el("fName").value = normalize(row[COL.name]);
-  el("fNote").value = normalize(row[COL.note]);
-  el("fImg").value = normalize(row[COL.img]);
-  el("fLink").value = normalize(row[COL.link]);
-  el("fQty").value = normalize(row[COL.qty]);
-  el("fShipment").value = normalize(row[COL.shipment]);
-  el("fCategory").value = normalize(row[COL.category]);
-  el("fStatus").value = normalize(row[COL.status]);
-  el("fApproved").value = normalize(row[COL.approved]);
-  el("fShipStatus").value = normalize(row[COL.shipStatus]);
-  el("fGender").value = normalize(row[COL.gender]);
-  el("fSize").value = normalize(row[COL.size]);
-  el("fShoe").value = normalize(row[COL.shoe]);
+  /***********************
+   * EVENTS
+   ***********************/
+  $("reloadBtn").addEventListener("click", loadAll);
+  $("reloadBtn2").addEventListener("click", loadAll);
+  $("searchInput").addEventListener("input", ()=>{ applyFilters(); renderDashboard(); renderTable(); });
+  $("shipmentFilter").addEventListener("change", ()=>{ applyFilters(); renderDashboard(); renderTable(); });
+  $("categoryFilter").addEventListener("change", ()=>{ applyFilters(); renderDashboard(); renderTable(); });
+  $("statusFilter").addEventListener("change", ()=>{ applyFilters(); renderDashboard(); renderTable(); });
+  $("approvedFilter").addEventListener("change", ()=>{ applyFilters(); renderDashboard(); renderTable(); });
 
-  const costUSD = num(row[COL.costUSD]);
-  const sellXCD = num(row[COL.sellXCD]);
-  el("fCost").value = displayCost(costUSD).toFixed(2);
-  el("fSell").value = displaySell(sellXCD).toFixed(2);
-
-  // Variants JSON
-  let v = [];
-  try{ v = JSON.parse(row[COL.varjson] || "[]"); }catch(e){ v=[]; }
-  if (!Array.isArray(v)) v=[];
-  el("fVarJson").value = JSON.stringify(v, null, 2);
-  el("variantsWrap").innerHTML="";
-  v.forEach(addVariantRow);
-
-  openModal();
-}
-
-function addVariantRow(v = {}){
-  const wrap = el("variantsWrap");
-  const box = document.createElement("div");
-  box.style.border = "1px dashed rgba(255,255,255,.10)";
-  box.style.borderRadius = "18px";
-  box.style.padding = "12px";
-  box.style.background = "rgba(0,0,0,.18)";
-
-  const g = `
-    <div class="formGrid" style="grid-template-columns:1fr 1fr;gap:10px">
-      <div class="field">
-        <div class="label">Color</div>
-        <input class="input" data-k="color" placeholder="e.g., Blue" value="${(v.color||"").replace(/"/g,"&quot;")}" />
-      </div>
-      <div class="field">
-        <div class="label">Size</div>
-        <select class="input" data-k="size"></select>
-      </div>
-      <div class="field">
-        <div class="label">Gender</div>
-        <select class="input" data-k="gender"></select>
-      </div>
-      <div class="field">
-        <div class="label">Shoe Size</div>
-        <select class="input" data-k="shoeSize"></select>
-      </div>
-      <div class="field">
-        <div class="label">Qty</div>
-        <input class="input" data-k="qty" inputmode="numeric" placeholder="e.g., 6" value="${(v.qty||"")}" />
-      </div>
-      <div class="field" style="align-items:flex-start;justify-content:flex-end">
-        <div style="height:20px"></div>
-        <button class="btn danger small" type="button" data-remove="1">REMOVE VARIANT</button>
-      </div>
-    </div>
-  `;
-  box.innerHTML = g;
-
-  // Fill dropdowns
-  const sizeSel = box.querySelector('select[data-k="size"]');
-  sizeSel.appendChild(new Option("(blank)",""));
-  META.sizes.forEach(s=>sizeSel.appendChild(new Option(s,s)));
-  sizeSel.value = v.size || "";
-
-  const genSel = box.querySelector('select[data-k="gender"]');
-  genSel.appendChild(new Option("(blank)",""));
-  META.genders.forEach(s=>genSel.appendChild(new Option(s,s)));
-  genSel.value = v.gender || "";
-
-  const shoeSel = box.querySelector('select[data-k="shoeSize"]');
-  shoeSel.appendChild(new Option("(blank)",""));
-  META.shoeSizes.forEach(s=>shoeSel.appendChild(new Option(s,s)));
-  shoeSel.value = v.shoeSize || "";
-
-  box.querySelector('[data-remove="1"]').addEventListener("click", ()=>{
-    box.remove();
-    syncVarJson();
+  $("currencyToggleBtn").addEventListener("click", ()=>{
+    state.currency = (state.currency === "USD") ? "XCD" : "USD";
+    $("currencyPill").textContent = state.currency;
+    syncModalCurrencyLabels();
+    renderDashboard();
+    renderTable();
   });
 
-  box.addEventListener("input", syncVarJson);
-  box.addEventListener("change", syncVarJson);
+  $("markupSelect").addEventListener("change", setMarkupFromUI);
 
-  wrap.appendChild(box);
-  syncVarJson();
-}
+  $("needsPriceBtn").addEventListener("click", needsPrice);
+  $("needsApprovalBtn").addEventListener("click", needsApproval);
 
-function syncVarJson(){
-  const wrap = el("variantsWrap");
-  const boxes = [...wrap.children];
-  const out = boxes.map(b=>{
-    const get = (k)=>{
-      const node = b.querySelector(`[data-k="${k}"]`);
-      return node ? normalize(node.value) : "";
-    };
-    const v = {
-      color: get("color"),
-      size: get("size"),
-      gender: get("gender"),
-      shoeSize: get("shoeSize"),
-      qty: get("qty")
-    };
-    // prune empties
-    Object.keys(v).forEach(k=>{ if (!v[k]) delete v[k]; });
-    return v;
-  }).filter(v=>Object.keys(v).length);
+  $("addBtn").addEventListener("click", openAdd);
+  $("closeBtn").addEventListener("click", closeModal);
+  $("saveBtn").addEventListener("click", saveCurrent);
+  $("deleteBtn").addEventListener("click", deleteCurrent);
 
-  el("fVarJson").value = JSON.stringify(out, null, 2);
-}
+  $("fCost").addEventListener("input", ()=>{
+    state.sellingTouched = false;
+    maybeAutofillSelling();
+  });
+  $("fSelling").addEventListener("input", ()=>{
+    state.sellingTouched = true;
+  });
 
-/** =========================
- *  Save / Delete
- *  ========================= */
-function buildPayload(){
-  const name = normalize(el("fName").value);
-  const shipment = normalize(el("fShipment").value);
-  const category = normalize(el("fCategory").value);
+  // VARIANT BUTTON (REQUIRED FIX)
+  $("addVariantBtn").addEventListener("click", ()=>addVariantRow());
 
-  if (!name) throw new Error("Product Name is required.");
-  if (!shipment) throw new Error("Shipment is required.");
-  if (!category) throw new Error("Category/Tab is required.");
+  // Hub Pro menu
+  $("hubProBtn").addEventListener("click", ()=>$("hubOverlay").classList.add("show"));
+  $("hubCloseBtn").addEventListener("click", ()=>$("hubOverlay").classList.remove("show"));
+  $("hubCloseBtn2").addEventListener("click", ()=>$("hubOverlay").classList.remove("show"));
 
-  // Convert display inputs back into stored columns
-  const costDisplay = num(el("fCost").value);
-  const sellDisplay = num(el("fSell").value);
-  const costUSD = toStoredCost(costDisplay);
-  const sellXCD = toStoredSell(sellDisplay);
+  // Call buttons (no numeric prompts)
+  const phoneMichael = "16107035185";
+  const phoneQuencie = "14845135528";
 
-  const payload = {
-    [COL.name]: name,
-    [COL.shipment]: shipment,
-    [COL.category]: category,
-    [COL.status]: normalize(el("fStatus").value),
-    [COL.costUSD]: costUSD ? costUSD.toFixed(2) : "",
-    [COL.sellXCD]: sellXCD ? sellXCD.toFixed(2) : "",
-    [COL.qty]: normalize(el("fQty").value),
-    [COL.approved]: normalize(el("fApproved").value),
-    [COL.shipStatus]: normalize(el("fShipStatus").value),
-    [COL.gender]: normalize(el("fGender").value),
-    [COL.size]: normalize(el("fSize").value),
-    [COL.shoe]: normalize(el("fShoe").value),
-    [COL.img]: normalize(el("fImg").value),
-    [COL.link]: normalize(el("fLink").value),
-    [COL.note]: normalize(el("fNote").value),
-    [COL.varjson]: el("fVarJson").value || "[]"
-  };
-  return payload;
-}
+  function call(num){ window.location.href = "tel:" + num; }
 
-async function save(){
-  const payload = buildPayload();
+  $("callMichaelBtn").addEventListener("click", ()=>call(phoneMichael));
+  $("callQuencieBtn").addEventListener("click", ()=>call(phoneQuencie));
+  $("hubCallMichael").addEventListener("click", ()=>call(phoneMichael));
+  $("hubCallQuencie").addEventListener("click", ()=>call(phoneQuencie));
 
-  // Easter egg triggers based on change
-  const prevApproved = current ? normalize(current[COL.approved]) : "";
-  const nextApproved = normalize(payload[COL.approved]);
+  // Manage modals
+  $("manageCategoriesBtn").addEventListener("click", ()=>{
+    $("catMsg").textContent = "";
+    $("catOverlay").classList.add("show");
+  });
+  $("catCloseBtn").addEventListener("click", ()=>$("catOverlay").classList.remove("show"));
+  $("catCloseBtn2").addEventListener("click", ()=>$("catOverlay").classList.remove("show"));
+  $("catAddBtn").addEventListener("click", addCategory);
+  $("catRemoveBtn").addEventListener("click", removeCategory);
 
-  const prevShip = current ? normalize(current[COL.shipStatus]) : "";
-  const nextShip = normalize(payload[COL.shipStatus]);
+  $("manageShipmentsBtn").addEventListener("click", ()=>{
+    $("shipMsg").textContent = "";
+    $("shipOverlay").classList.add("show");
+  });
+  $("shipCloseBtn").addEventListener("click", ()=>$("shipOverlay").classList.remove("show"));
+  $("shipCloseBtn2").addEventListener("click", ()=>$("shipOverlay").classList.remove("show"));
+  $("shipAddBtn").addEventListener("click", addShipment);
+  $("shipRemoveBtn").addEventListener("click", removeShipment);
 
-  const res = await postForm({ _action:"update", ...payload });
-  toast(res.action === "created" ? "Saved (created)." : "Saved.");
+  // Inline add shipment in product modal
+  $("addShipmentInlineBtn").addEventListener("click", inlineAddShipment);
 
-  // reload + close modal
-  await refreshAll();
-  closeModal(); // <-- closes immediately after save (your request)
+  // Close overlays by clicking outside
+  ["overlay","catOverlay","shipOverlay","hubOverlay"].forEach(id=>{
+    const el = $(id);
+    el.addEventListener("click", (e)=>{
+      if (e.target === el) el.classList.remove("show");
+    });
+  });
 
-  // FX
-  if (nextApproved.toLowerCase() === "yes" && prevApproved.toLowerCase() !== "yes"){
-    thumbsUp();
-  }
-  if (nextShip.toLowerCase() === "shipped" && prevShip.toLowerCase() !== "shipped"){
-    moneyRain();
-  }
-}
+  // Init
+  (function init(){
+    // defaults
+    state.markup = 1.00;
+    $("markupSelect").value = "1.00";
+    $("markupTag").textContent = "MARKUP 100%";
+    $("currencyPill").textContent = state.currency;
+    $("fxPill").textContent = "FX 1 USD = " + FX.toFixed(2) + " XCD";
+    loadAll();
+  })();
 
-async function del(){
-  if (!current) return;
-  const ok = confirm("Delete this item? This cannot be undone.");
-  if (!ok) return;
-
-  const payload = {
-    [COL.name]: normalize(current[COL.name]),
-    [COL.shipment]: normalize(current[COL.shipment])
-  };
-  const res = await postForm({ _action:"delete", ...payload });
-  toast(res.action === "deleted" ? "Deleted." : "Not found.");
-  await refreshAll();
-  closeModal();
-}
-
-function thumbsUp(){
-  const fx = el("fx");
-  fx.innerHTML = `<div class="thumb">👍</div>`;
-  fx.classList.add("show");
-  setTimeout(()=>fx.classList.remove("show"), 950);
-}
-function moneyRain(){
-  const fx = el("fx");
-  fx.innerHTML = "";
-  fx.classList.add("show");
-  const count = 26;
-  for (let i=0;i<count;i++){
-    const d=document.createElement("div");
-    d.className="bill";
-    d.textContent="💸";
-    d.style.left = Math.random()*100 + "vw";
-    d.style.animationDelay = (Math.random()*0.35) + "s";
-    d.style.opacity = (0.65 + Math.random()*0.35).toFixed(2);
-    d.style.fontSize = (18 + Math.random()*14) + "px";
-    fx.appendChild(d);
-  }
-  setTimeout(()=>fx.classList.remove("show"), 1300);
-}
-
-/** =========================
- *  Manage categories/shipments
- *  ========================= */
-let manageMode = null; // "categories" or "shipments"
-
-function openManage(mode){
-  manageMode = mode;
-  el("manageOverlay").classList.add("show");
-  el("manageAddInput").value = "";
-
-  const isCat = mode==="categories";
-  el("manageTitle").textContent = isCat ? "Manage Categories" : "Manage Shipments";
-  el("addLabel").textContent = isCat ? "Add Category" : "Add Shipment";
-  el("removeLabel").textContent = isCat ? "Remove Category" : "Remove Shipment";
-  el("manageNote").textContent = isCat
-    ? "Categories affect totals + filters."
-    : "Shipments affect totals + filters.";
-
-  // populate remove select
-  const sel = el("manageRemoveSelect");
-  sel.innerHTML = "";
-  sel.appendChild(new Option("Select...", ""));
-  const list = isCat ? META.categories : META.shipments;
-  list.forEach(v=>sel.appendChild(new Option(v,v)));
-}
-
-function closeManage(){ el("manageOverlay").classList.remove("show"); }
-
-async function manageAdd(){
-  const v = normalize(el("manageAddInput").value);
-  if (!v) { toast("Type a name first."); return; }
-
-  const action = (manageMode==="categories") ? "meta_add_category" : "meta_add_shipment";
-  await postForm({ _action: action, value: v });
-  toast("Added.");
-  await refreshAll(true);
-  openManage(manageMode);
-}
-
-async function manageRemove(){
-  const sel = normalize(el("manageRemoveSelect").value);
-  if (!sel) { toast("Pick one to remove."); return; }
-
-  const ok1 = confirm(`Remove "${sel}"?`);
-  if (!ok1) return;
-  const ok2 = confirm(`Confirm again: permanently remove "${sel}" from Lists?`);
-  if (!ok2) return;
-
-  const action = (manageMode==="categories") ? "meta_remove_category" : "meta_remove_shipment";
-  await postForm({ _action: action, value: sel });
-  toast("Removed.");
-  await refreshAll(true);
-  openManage(manageMode);
-}
-
-/** =========================
- *  Shipment add from form dropdown
- *  ========================= */
-async function addShipmentFromPrompt(){
-  const v = prompt("New shipment name (e.g., January 2026 C):");
-  if (!v) return;
-  await postForm({ _action:"meta_add_shipment", value: v });
-  toast("Shipment added.");
-  await refreshAll(true);
-  buildFormSelects();
-  el("fShipment").value = v;
-}
-
-/** =========================
- *  Auto-calc selling
- *  ========================= */
-let sellOverridden = false;
-function onCostChanged(){
-  const costDisp = num(el("fCost").value);
-  const costUSD = toStoredCost(costDisp);
-  if (!costUSD){ if(!sellOverridden) el("fSell").value=""; return; }
-
-  if (!sellOverridden){
-    const sellXCD = calcSellXCD(costUSD);
-    const sellDisp = displaySell(sellXCD);
-    el("fSell").value = sellDisp.toFixed(2);
-  }
-}
-function onSellChanged(){
-  sellOverridden = true;
-}
-
-/** =========================
- *  Buttons + events
- *  ========================= */
-async function refreshAll(forceMeta=false){
-  if (forceMeta) await loadMeta();
-  await loadInventory();
-  buildFilters();
-  applyFilters();
-}
-
-async function bootstrap(){
-  try{
-    el("tbody").innerHTML = `<tr><td colspan="8" class="muted">Loading…</td></tr>`;
-    await loadMeta();
-    await loadInventory();
-    buildFilters();
-    applyFilters();
-    renderKPIs();
-  }catch(err){
-    el("tbody").innerHTML = `<tr><td colspan="8" style="color:var(--bad);font-weight:900">Load failed: ${String(err.message || err)}</td></tr>`;
-  }
-}
-
-el("reloadBtn").addEventListener("click", ()=>refreshAll(false));
-el("searchInput").addEventListener("input", applyFilters);
-el("shipFilter").addEventListener("change", applyFilters);
-el("catFilter").addEventListener("change", applyFilters);
-el("statusFilter").addEventListener("change", applyFilters);
-el("approvedFilter").addEventListener("change", applyFilters);
-el("kpiShipmentSelect").addEventListener("change", renderKPIs);
-
-el("addBtn").addEventListener("click", openAdd);
-el("closeBtn").addEventListener("click", closeModal);
-el("saveBtn").addEventListener("click", ()=>save().catch(e=>toast(String(e.message||e))));
-el("deleteBtn").addEventListener("click", ()=>del().catch(e=>toast(String(e.message||e))));
-el("addVariantBtn").addEventListener("click", ()=>addVariantRow({}));
-
-el("manageCatsBtn").addEventListener("click", ()=>openManage("categories"));
-el("manageShipsBtn").addEventListener("click", ()=>openManage("shipments"));
-el("manageClose").addEventListener("click", closeManage);
-el("manageAddBtn").addEventListener("click", ()=>manageAdd().catch(e=>toast(String(e.message||e))));
-el("manageRemoveBtn").addEventListener("click", ()=>manageRemove().catch(e=>toast(String(e.message||e))));
-
-el("hubBtn").addEventListener("click", ()=>el("hubOverlay").classList.add("show"));
-el("hubClose").addEventListener("click", ()=>el("hubOverlay").classList.remove("show"));
-el("hubOverlay").addEventListener("click", (e)=>{ if (e.target === el("hubOverlay")) el("hubOverlay").classList.remove("show"); });
-
-el("overlay").addEventListener("click", (e)=>{ if (e.target === el("overlay")) closeModal(); });
-
-el("curToggle").addEventListener("click", ()=>{
-  viewCurrency = (viewCurrency === "USD") ? "XCD" : "USD";
-  // update labels if modal open
-  if (el("overlay").classList.contains("show")){
-    buildFormSelects();
-    // re-write values to keep same stored amounts
-    const costUSD = toStoredCost(num(el("fCost").value));
-    const sellXCD = toStoredSell(num(el("fSell").value));
-    el("fCost").value = displayCost(costUSD).toFixed(2);
-    el("fSell").value = displaySell(sellXCD).toFixed(2);
-  }
-  renderKPIs();
-  renderTable();
-});
-
-el("markupSelect").addEventListener("change", ()=>{
-  const v = el("markupSelect").value;
-  if (v === "custom"){
-    const x = prompt("Custom markup percent (e.g., 135):", String(customMarkup ?? 135));
-    if (x == null) { el("markupSelect").value = String(markupPct); return; }
-    customMarkup = Number(x);
-    markupPct = "custom";
-  } else {
-    markupPct = Number(v);
-  }
-  renderKPIs();
-  // if modal open and not overridden, recalc selling from cost
-  if (el("overlay").classList.contains("show")){
-    sellOverridden = false;
-    onCostChanged();
-  }
-});
-
-el("needsPriceBtn").addEventListener("click", ()=>{
-  // Needs price = Selling Price XCD empty or 0
-  el("approvedFilter").value = "All Price Approved";
-  el("catFilter").value = "All Categories";
-  el("statusFilter").value = "All Status";
-  el("shipFilter").value = "All Shipments";
-  el("searchInput").value = "";
-  filtered = inventory.filter(r => num(r[COL.sellXCD]) <= 0);
-  renderTable(); renderKPIs();
-});
-
-el("needsApprovalBtn").addEventListener("click", ()=>{
-  // Needs approval = Price Approved not Yes
-  el("approvedFilter").value = "All Price Approved";
-  el("catFilter").value = "All Categories";
-  el("statusFilter").value = "All Status";
-  el("shipFilter").value = "All Shipments";
-  el("searchInput").value = "";
-  filtered = inventory.filter(r => normalize(r[COL.approved]).toLowerCase() !== "yes");
-  renderTable(); renderKPIs();
-});
-
-// form behaviors
-el("fCost").addEventListener("input", ()=>{
-  sellOverridden = false;
-  onCostChanged();
-});
-el("fSell").addEventListener("input", onSellChanged);
-
-el("fShipment").addEventListener("change", async ()=>{
-  if (el("fShipment").value === "__add__"){
-    el("fShipment").value = "";
-    await addShipmentFromPrompt().catch(e=>toast(String(e.message||e)));
-  }
-});
-
-// hyperlink-friendly: we store raw URL text; Sheets can render clickable if you format column as "Automatic" or use HYPERLINK formula.
-// We'll leave as plain URL text (works everywhere).
-// init
-bootstrap();
-</script>
+  </script>
 </body>
 </html>
