@@ -1,1573 +1,505 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Grenada Hub Pro</title>
-  <meta name="theme-color" content="#071018" />
-  <style>
-    :root{
-      color-scheme: dark;
-      --bg:#071018;
-      --panel: rgba(255,255,255,.06);
-      --panel2: rgba(255,255,255,.045);
-      --stroke: rgba(255,255,255,.10);
-      --stroke2: rgba(255,255,255,.14);
-      --text:#f3f6ff;
-      --muted: rgba(243,246,255,.65);
-      --muted2: rgba(243,246,255,.45);
-      --accent:#11b7ff;
-      --accent2:#0aa0df;
-      --good:#46d36a;
-      --warn:#ffcc66;
-      --bad:#ff5b6a;
-      --shadow: 0 30px 70px rgba(0,0,0,.45);
-      --r18: 18px;
-      --r22: 22px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background:
-        radial-gradient(1200px 700px at 30% -10%, rgba(17,183,255,.22), transparent 60%),
-        radial-gradient(900px 700px at 110% 20%, rgba(64,125,255,.18), transparent 55%),
-        radial-gradient(900px 700px at 10% 110%, rgba(9,160,223,.10), transparent 50%),
-        var(--bg);
-      color:var(--text);
-      min-height:100vh;
-      padding: 28px 18px 60px;
-    }
-
-    .shell{
-      max-width: 1260px;
-      margin: 0 auto;
-      border-radius: 28px;
-      padding: 18px 18px 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
-    }
-
-    /* Top header row */
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding: 6px 6px 12px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width: 240px;
-    }
-    .brand .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(17,183,255,.14);
-      border:1px solid rgba(17,183,255,.28);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
-      cursor:pointer;
-      user-select:none;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 3px rgba(17,183,255,.18);
-    }
-    .brandTitle{
-      font-weight: 800;
-      letter-spacing:.6px;
-      font-size: 13px;
-      text-transform: uppercase;
-    }
-    .titleBlock{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-    .titleLine{
-      font-weight: 800;
-      letter-spacing: .8px;
-      text-transform: uppercase;
-      font-size: 18px;
-      line-height:1.1;
-      opacity:.95;
-    }
-    .subLine{
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .topActions{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .btn{
-      appearance:none;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 999px;
-      cursor:pointer;
-      font-weight: 700;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      font-size: 12px;
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      transition: transform .08s ease, background .12s ease, border-color .12s ease;
-      user-select:none;
-    }
-    .btn:hover{ background: rgba(255,255,255,.09); border-color: var(--stroke2); }
-    .btn:active{ transform: translateY(1px); }
-    .btn.primary{
-      background: linear-gradient(180deg, rgba(17,183,255,.35), rgba(17,183,255,.18));
-      border-color: rgba(17,183,255,.35);
-    }
-    .btn.primary:hover{
-      background: linear-gradient(180deg, rgba(17,183,255,.42), rgba(17,183,255,.22));
-    }
-
-    /* Summary grid */
-    .summaryGrid{
-      display:grid;
-      grid-template-columns: 1.05fr 1.05fr 1.4fr 1.0fr;
-      gap: 14px;
-      padding: 12px 6px 12px;
-    }
-    .card{
-      border-radius: 22px;
-      padding: 18px 18px 16px;
-      background: rgba(255,255,255,.045);
-      border: 1px solid var(--stroke);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
-      min-height: 140px;
-      position:relative;
-      overflow:hidden;
-    }
-    .card:before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(700px 260px at 30% 0%, rgba(17,183,255,.14), transparent 55%);
-      opacity:.75;
-      pointer-events:none;
-    }
-    .card > *{ position:relative; z-index:1; }
-
-    .cardLabel{
-      font-weight: 800;
-      letter-spacing: 1.6px;
-      text-transform: uppercase;
-      font-size: 12px;
-      color: rgba(243,246,255,.75);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom: 10px;
-      white-space:nowrap;
-    }
-    .bigNumber{
-      font-size: 64px;
-      font-weight: 900;
-      letter-spacing: -1.2px;
-      line-height: .95;
-      margin: 6px 0 8px;
-      white-space:nowrap;
-    }
-    .bigSub{
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 2px;
-    }
-    .pillMini{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      font-weight: 900;
-      letter-spacing: .8px;
-      text-transform: uppercase;
-      font-size: 12px;
-      white-space:nowrap;
-      cursor:pointer;
-      user-select:none;
-    }
-    .pillMini.accent{
-      border-color: rgba(17,183,255,.35);
-      background: rgba(17,183,255,.12);
-      color: rgba(243,246,255,.95);
-    }
-    .stack{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .selectMini{
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 7px 10px;
-      font-weight: 900;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      font-size: 12px;
-      outline:none;
-      max-width: 140px;
-    }
-
-    /* Filters row */
-    .filtersRow{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      padding: 6px;
-      flex-wrap:wrap;
-    }
-    .field{
-      flex: 1 1 220px;
-      min-width: 200px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .input, .select{
-      width:100%;
-      border-radius: 999px;
-      padding: 11px 14px;
-      border: 1px solid var(--stroke);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      outline:none;
-      font-weight: 650;
-      letter-spacing:.2px;
-    }
-    .input::placeholder{ color: rgba(243,246,255,.35); }
-
-    .filtersActions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex: 0 0 auto;
-    }
-
-    /* Main grid */
-    .mainGrid{
-      display:grid;
-      grid-template-columns: 1.45fr .95fr;
-      gap:14px;
-      padding: 8px 6px 6px;
-    }
-    .tableCard{
-      padding: 16px 16px 12px;
-    }
-    .rightCard{
-      padding: 16px 16px 14px;
-    }
-    .sectionTitleRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 12px;
-    }
-    .sectionTitle{
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-size: 13px;
-      color: rgba(243,246,255,.78);
-    }
-
-    /* Table: allow horizontal scroll */
-    .tableWrap{
-      width:100%;
-      overflow:auto;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.12);
-    }
-    table{
-      width:100%;
-      min-width: 980px;
-      border-collapse: collapse;
-      font-variant-numeric: tabular-nums;
-    }
-    thead th{
-      text-align:left;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(243,246,255,.55);
-      padding: 12px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      position:sticky;
-      top:0;
-      background: rgba(10,16,24,.85);
-      backdrop-filter: blur(10px);
-      z-index:2;
-      white-space:nowrap;
-    }
-    tbody td{
-      padding: 13px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      color: rgba(243,246,255,.92);
-      vertical-align:middle;
-    }
-    tbody tr{
-      cursor:pointer;
-      transition: background .12s ease;
-    }
-    tbody tr:hover{
-      background: rgba(17,183,255,.06);
-    }
-    .muted{ color: rgba(243,246,255,.55); }
-    .money{ font-weight: 900; white-space:nowrap; }
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      color: rgba(243,246,255,.85);
-      font-weight: 900;
-      letter-spacing:.6px;
-      text-transform: uppercase;
-      font-size: 11px;
-      white-space:nowrap;
-    }
-
-    .helpList{
-      margin: 0;
-      padding-left: 18px;
-      color: rgba(243,246,255,.75);
-      line-height: 1.55;
-    }
-    .helpList li{ margin: 8px 0; }
-    .helpFooter{
-      margin-top: 12px;
-      color: rgba(243,246,255,.50);
-      font-size: 12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    /* Phone popover */
-    .popover{
-      position:absolute;
-      top:58px;
-      left:16px;
-      width: 310px;
-      border-radius: 18px;
-      background: rgba(12,18,28,.92);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 30px 80px rgba(0,0,0,.65);
-      backdrop-filter: blur(16px);
-      padding: 12px;
-      display:none;
-      z-index: 50;
-    }
-    .popover.open{ display:block; }
-    .popRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.07);
-      margin: 8px 0;
-    }
-    .popName{ font-weight: 900; letter-spacing:.3px; }
-    .popNum{ color: rgba(243,246,255,.65); font-weight: 800; }
-    .popRow a{
-      color: rgba(243,246,255,.92);
-      text-decoration:none;
-      font-weight: 900;
-      letter-spacing:.4px;
-      text-transform: uppercase;
-      font-size: 12px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(17,183,255,.14);
-      border:1px solid rgba(17,183,255,.28);
-    }
-
-    /* Modal */
-    .backdrop{
-      position:fixed;
-      inset:0;
-      background: rgba(0,0,0,.62);
-      backdrop-filter: blur(10px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 22px;
-      z-index: 100;
-    }
-    .backdrop.open{ display:flex; }
-    .modal{
-      width: min(980px, 100%);
-      border-radius: 26px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(12,18,28,.92);
-      box-shadow: 0 40px 110px rgba(0,0,0,.75);
-      overflow:hidden;
-      position:relative;
-    }
-    .modalHeader{
-      padding: 16px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      border-bottom: 1px solid rgba(255,255,255,.10);
-    }
-    .modalTitle{
-      font-weight: 1000;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-size: 13px;
-      color: rgba(243,246,255,.85);
-    }
-    .iconBtn{
-      width: 38px;height:38px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      color: rgba(243,246,255,.88);
-      cursor:pointer;
-      font-size: 18px;
-      font-weight: 900;
-      display:grid;
-      place-items:center;
-    }
-    .modalBody{
-      padding: 18px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px 14px;
-    }
-    .fcol{ display:flex; flex-direction:column; gap:8px; }
-    .lbl{
-      font-weight: 900;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-size: 11px;
-      color: rgba(243,246,255,.70);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-    .hint{
-      color: rgba(243,246,255,.45);
-      font-size: 12px;
-    }
-    .row2{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    .wide{ grid-column: 1 / -1; }
-    .textarea{
-      width:100%;
-      min-height: 90px;
-      border-radius: 18px;
-      padding: 12px 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      outline:none;
-      resize: vertical;
-    }
-    .variantBox{
-      border: 1px dashed rgba(255,255,255,.14);
-      border-radius: 18px;
-      padding: 14px;
-      background: rgba(255,255,255,.03);
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-    }
-    .variantRow{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 10px;
-    }
-    .modalFooter{
-      padding: 14px 18px 18px;
-      border-top: 1px solid rgba(255,255,255,.10);
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .danger{
-      background: rgba(255,91,106,.12);
-      border-color: rgba(255,91,106,.28);
-    }
-
-    @media (max-width: 980px){
-      .summaryGrid{ grid-template-columns: 1fr 1fr; }
-      .mainGrid{ grid-template-columns: 1fr; }
-      .modalBody{ grid-template-columns: 1fr; }
-      .variantRow{ grid-template-columns: 1fr 1fr; }
-      .brand{ min-width: auto; }
-    }
-  </style>
-</head>
-<body>
-  <div class="shell">
-    <div class="topbar">
-      <div class="brand">
-        <div class="pill" id="brandPill" title="Calls">
-          <span class="dot"></span>
-          <span class="brandTitle">Grenada Hub Pro</span>
-        </div>
-        <div class="titleBlock">
-          <div class="titleLine">Inventory · Pricing · Shipments</div>
-          <div class="subLine">One master Inventory sheet · dropdowns from “Lists” · iPhone + Android friendly</div>
-        </div>
-
-        <div class="popover" id="phonePopover" aria-hidden="true">
-          <div class="popRow">
-            <div>
-              <div class="popName">Michael</div>
-              <div class="popNum" id="michaelNumText">(610) 703-5185</div>
-            </div>
-            <a id="callMichael" href="tel:+16107035185">Call</a>
-          </div>
-          <div class="popRow">
-            <div>
-              <div class="popName">Quencie</div>
-              <div class="popNum" id="quencieNumText">(484) 513-5528</div>
-            </div>
-            <a id="callQuencie" href="tel:+14845135528">Call</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="topActions">
-        <button class="btn" id="btnTripHelper">Trip Helper</button>
-        <button class="btn" id="btnDashboardMobile">Dashboard Mobile</button>
-        <button class="btn primary" id="btnAdd">+ Add Product</button>
-        <button class="btn" id="btnReloadTop">Reload</button>
-      </div>
-    </div>
-
-    <div class="summaryGrid">
-      <div class="card">
-        <div class="cardLabel">
-          <span>Total Items</span>
-          <span class="pillMini" id="pillShipmentLabel">All Shipments</span>
-        </div>
-        <div class="bigNumber" id="kpiItems">0</div>
-        <div class="bigSub">Filtered view</div>
-      </div>
-
-      <div class="card">
-        <div class="cardLabel">
-          <span>Total Cost</span>
-          <div class="stack">
-            <span class="pillMini accent" id="currencyPill">USD</span>
-          </div>
-        </div>
-        <div class="bigNumber" id="kpiCost">$0.00</div>
-        <div class="bigSub" id="kpiCostSub">USD</div>
-      </div>
-
-      <div class="card">
-        <div class="cardLabel">
-          <span>Expected Revenue</span>
-          <div class="stack">
-            <span class="pillMini" id="markupLabel">Markup 100%</span>
-            <select class="selectMini" id="markupSelect" title="Markup">
-              <option value="0.5">50%</option>
-              <option value="1.0" selected>100%</option>
-              <option value="1.5">150%</option>
-              <option value="2.0">200%</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-        </div>
-        <div class="bigNumber" id="kpiRevenue">$0.00</div>
-        <div class="bigSub" id="kpiRevenueSub">est.</div>
-      </div>
-
-      <div class="card">
-        <div class="cardLabel">
-          <span>Profit</span>
-          <div class="stack">
-            <span class="pillMini" id="btnNeedsPrice">Needs Price</span>
-            <span class="pillMini" id="btnNeedsApproval">Needs Approval</span>
-          </div>
-        </div>
-        <div class="bigNumber" id="kpiProfit">$0.00</div>
-        <div class="bigSub">est.</div>
-      </div>
-    </div>
-
-    <div class="filtersRow">
-      <div class="field">
-        <input class="input" id="qSearch" placeholder="Search Product Name..." />
-      </div>
-
-      <div class="field">
-        <select class="select" id="fShipment"></select>
-      </div>
-      <div class="field">
-        <select class="select" id="fCategory"></select>
-      </div>
-      <div class="field">
-        <select class="select" id="fStatus"></select>
-      </div>
-      <div class="field">
-        <select class="select" id="fApproved"></select>
-      </div>
-
-      <div class="filtersActions">
-        <button class="btn" id="btnManageShipments">Manage Shipments</button>
-        <button class="btn" id="btnManageCategories">Manage Categories</button>
-        <button class="btn" id="btnReload">Reload</button>
-      </div>
-    </div>
-
-    <div class="mainGrid">
-      <div class="card tableCard">
-        <div class="sectionTitleRow">
-          <div class="sectionTitle">Inventory</div>
-          <div class="tag" id="itemsBadge">0 items</div>
-        </div>
-
-        <div class="tableWrap" id="tableWrap">
-          <table id="tbl">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Shipment</th>
-                <th>Category</th>
-                <th>Qty</th>
-                <th>Unit Cost</th>
-                <th>Total Cost</th>
-                <th>Selling</th>
-                <th>Status</th>
-                <th>Approved</th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="card rightCard">
-        <div class="sectionTitleRow">
-          <div class="sectionTitle">Quick Help</div>
-          <div class="tag" id="fxPill">FX 1 USD = 2.70 XCD</div>
-        </div>
-        <ul class="helpList">
-          <li>Click a row to edit.</li>
-          <li>Totals use <b>Unit Cost × Quantity</b> (not just unit cost).</li>
-          <li>Currency button (USD/XCD) changes what you SEE without mixing both on-screen.</li>
-          <li>Easter egg: 👍 on “Price Approved = Yes” · 💸 rain when Shipping Status becomes “Shipped”.</li>
-        </ul>
-
-        <div class="helpFooter">
-          <div class="row2">
-            <a class="btn" href="tel:+16107035185">Call Michael</a>
-            <a class="btn" href="tel:+14845135528">Call Quencie</a>
-          </div>
-          <div class="muted" id="loadedMsg">Loaded.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add/Edit Modal -->
-  <div class="backdrop" id="modalBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Add/Edit Product">
-      <div class="modalHeader">
-        <div class="modalTitle" id="modalTitle">Add Product</div>
-        <button class="iconBtn" id="modalClose" aria-label="Close">×</button>
-      </div>
-
-      <div class="modalBody">
-        <div class="fcol wide">
-          <div class="lbl">Product Name <span class="hint" id="rowIdHint"></span></div>
-          <input class="input" id="mProduct" placeholder="e.g., Gain Detergent" />
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Shipment *</div>
-          <select class="select" id="mShipment"></select>
-          <div class="row2">
-            <button class="btn" id="mAddShipment">+ Add a new shipment</button>
-          </div>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Category/Tab *</div>
-          <select class="select" id="mCategory"></select>
-          <div class="row2">
-            <button class="btn" id="mAddCategory">+ Add category</button>
-            <button class="btn" id="mRemoveCategory">Remove category</button>
-          </div>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">
-            Cost Price (<span id="mCurLabel1">USD</span>)
-            <span class="pillMini accent" id="mCurToggle" title="Toggle USD/XCD">USD</span>
-          </div>
-          <input class="input" id="mCost" inputmode="decimal" placeholder="0.00" />
-          <div class="hint">Stored in sheet as USD.</div>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">
-            Selling Price (<span id="mCurLabel2">USD</span>)
-            <span class="hint">Auto-fills from Cost using Markup (unless you override).</span>
-          </div>
-          <input class="input" id="mSell" inputmode="decimal" placeholder="0.00" />
-          <div class="hint">You can override the auto-fill.</div>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Quantity</div>
-          <input class="input" id="mQty" inputmode="numeric" placeholder="1" />
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Price Approved</div>
-          <select class="select" id="mApproved"></select>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Status</div>
-          <select class="select" id="mStatus"></select>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Shipping Status</div>
-          <select class="select" id="mShipStatus"></select>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Gender</div>
-          <select class="select" id="mGender"></select>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Size</div>
-          <select class="select" id="mSize"></select>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Shoe Size</div>
-          <select class="select" id="mShoe"></select>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Image URL</div>
-          <input class="input" id="mImage" placeholder="https://..." />
-          <div class="hint">Saved as a clickable link in the table.</div>
-        </div>
-
-        <div class="fcol">
-          <div class="lbl">Online Link</div>
-          <input class="input" id="mLink" placeholder="https://..." />
-          <div class="hint">Saved as a clickable link in the table.</div>
-        </div>
-
-        <div class="fcol wide">
-          <div class="lbl">Note</div>
-          <textarea class="textarea" id="mNote" placeholder="Notes, condition, resale ideas, etc."></textarea>
-        </div>
-
-        <div class="fcol wide">
-          <div class="variantBox">
-            <div class="lbl">Variants (optional) <span class="hint">Stored in “Variations JSON”</span></div>
-            <div id="variants"></div>
-            <div class="row2">
-              <button class="btn" id="btnAddVariant">+ Variant</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modalFooter">
-        <div class="row2">
-          <button class="btn danger" id="btnDelete">Delete</button>
-        </div>
-        <div class="row2">
-          <button class="btn primary" id="btnSave">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Manage Lists Modal -->
-  <div class="backdrop" id="manageBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Manage Lists">
-      <div class="modalHeader">
-        <div class="modalTitle" id="manageTitle">Manage</div>
-        <button class="iconBtn" id="manageClose" aria-label="Close">×</button>
-      </div>
-      <div class="modalBody" style="grid-template-columns:1fr 1fr;">
-        <div class="fcol">
-          <div class="lbl" id="manageAddLbl">Add</div>
-          <input class="input" id="manageAddInput" placeholder="Type a new name..." />
-          <button class="btn primary" id="manageAddBtn">Add</button>
-          <div class="hint" id="manageAddHint"></div>
-        </div>
-        <div class="fcol">
-          <div class="lbl" id="manageRemoveLbl">Remove</div>
-          <select class="select" id="manageRemoveSelect"></select>
-          <button class="btn danger" id="manageRemoveBtn">Remove</button>
-          <div class="hint" id="manageRemoveHint"></div>
-        </div>
-        <div class="fcol wide">
-          <div class="hint muted">Changes appear after Reload (or automatically if your Apps Script response includes updated meta).</div>
-        </div>
-      </div>
-      <div class="modalFooter">
-        <button class="btn" id="manageDone">Done</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    /******************************************************************
-     * CONFIG — SET THIS ONCE
-     ******************************************************************/
-    const EXEC_URL = "https://script.google.com/macros/s/AKfycbxPuCzoLqRE-xcUuUDx2VTgZnrhPyucuHTjxNJCwU_jeQOXXrJBG6Wq5vvkEHH-JikP/exec";
-    const FX = 2.70;
-
-    /******************************************************************
-     * STATE
-     ******************************************************************/
-    let meta = null;
-    let rows = [];
-    let filtered = [];
-    let displayCurrency = "USD";
-    let customMarkup = 1.0;
-    let editingRowId = null;
-    let modalCurrency = "USD";
-    let modalTouchedSell = false;
-
-    let manageMode = null;
-
-    /******************************************************************
-     * JSONP helper
-     ******************************************************************/
-    function jsonp(url, params = {}) {
-      return new Promise((resolve, reject) => {
-        const cbName = "cb_" + Math.random().toString(36).slice(2);
-        const script = document.createElement("script");
-        const q = new URLSearchParams({ ...params, callback: cbName });
-
-        window[cbName] = (payload) => {
-          try { resolve(payload); } finally {
-            delete window[cbName];
-            script.remove();
-          }
-        };
-
-        script.onerror = () => {
-          delete window[cbName];
-          script.remove();
-          reject(new Error("JSONP load failed"));
-        };
-
-        script.src = url + (url.includes("?") ? "&" : "?") + q.toString();
-        document.body.appendChild(script);
-      });
-    }
-
-    /******************************************************************
-     * API wrappers (must match Apps Script actions)
-     ******************************************************************/
-    const apiMeta          = () => jsonp(EXEC_URL, { action: "meta" });
-    const apiData          = () => jsonp(EXEC_URL, { action: "data" });
-    const apiUpsert        = (row) => jsonp(EXEC_URL, { action: "upsert", row: JSON.stringify(row) });
-    const apiDelete        = (rowId) => jsonp(EXEC_URL, { action: "delete", rowId: rowId });
-    const apiAddListItem   = (listName, value) => jsonp(EXEC_URL, { action: "addListItem", list: listName, value: value });
-    const apiRemoveListItem= (listName, value) => jsonp(EXEC_URL, { action: "removeListItem", list: listName, value: value });
-
-    /******************************************************************
-     * DOM
-     ******************************************************************/
-    const $ = (id) => document.getElementById(id);
-
-    const brandPill = $("brandPill");
-    const phonePopover = $("phonePopover");
-
-    const kpiItems = $("kpiItems");
-    const kpiCost = $("kpiCost");
-    const kpiCostSub = $("kpiCostSub");
-    const kpiRevenue = $("kpiRevenue");
-    const kpiRevenueSub = $("kpiRevenueSub");
-    const kpiProfit = $("kpiProfit");
-
-    const currencyPill = $("currencyPill");
-    const markupSelect = $("markupSelect");
-    const markupLabel = $("markupLabel");
-
-    const qSearch = $("qSearch");
-    const fShipment = $("fShipment");
-    const fCategory = $("fCategory");
-    const fStatus = $("fStatus");
-    const fApproved = $("fApproved");
-
-    const btnAdd = $("btnAdd");
-    const btnReload = $("btnReload");
-    const btnReloadTop = $("btnReloadTop");
-    const btnTripHelper = $("btnTripHelper");
-    const btnDashboardMobile = $("btnDashboardMobile");
-
-    const btnManageShipments = $("btnManageShipments");
-    const btnManageCategories = $("btnManageCategories");
-
-    const tbody = $("tbody");
-    const itemsBadge = $("itemsBadge");
-    const loadedMsg = $("loadedMsg");
-
-    // modal
-    const modalBackdrop = $("modalBackdrop");
-    const modalClose = $("modalClose");
-    const modalTitle = $("modalTitle");
-    const rowIdHint = $("rowIdHint");
-    const btnSave = $("btnSave");
-    const btnDelete = $("btnDelete");
-    const mCurToggle = $("mCurToggle");
-    const mCurLabel1 = $("mCurLabel1");
-    const mCurLabel2 = $("mCurLabel2");
-
-    const mProduct = $("mProduct");
-    const mShipment = $("mShipment");
-    const mCategory = $("mCategory");
-    const mCost = $("mCost");
-    const mSell = $("mSell");
-    const mQty = $("mQty");
-    const mApproved = $("mApproved");
-    const mStatus = $("mStatus");
-    const mShipStatus = $("mShipStatus");
-    const mGender = $("mGender");
-    const mSize = $("mSize");
-    const mShoe = $("mShoe");
-    const mImage = $("mImage");
-    const mLink = $("mLink");
-    const mNote = $("mNote");
-    const mAddShipment = $("mAddShipment");
-    const mAddCategory = $("mAddCategory");
-    const mRemoveCategory = $("mRemoveCategory");
-    const variants = $("variants");
-    const btnAddVariant = $("btnAddVariant");
-
-    // manage modal
-    const manageBackdrop = $("manageBackdrop");
-    const manageClose = $("manageClose");
-    const manageDone = $("manageDone");
-    const manageTitle = $("manageTitle");
-    const manageAddLbl = $("manageAddLbl");
-    const manageRemoveLbl = $("manageRemoveLbl");
-    const manageAddInput = $("manageAddInput");
-    const manageAddBtn = $("manageAddBtn");
-    const manageRemoveSelect = $("manageRemoveSelect");
-    const manageRemoveBtn = $("manageRemoveBtn");
-    const manageAddHint = $("manageAddHint");
-    const manageRemoveHint = $("manageRemoveHint");
-
-    /******************************************************************
-     * Helpers
-     ******************************************************************/
-    function n(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
-    function money(v, cur){
-      const x = n(v);
-      const sign = (cur === "XCD") ? "EC$" : "$";
-      return sign + x.toFixed(2);
-    }
-    function toXCD(usd){ return n(usd) * FX; }
-    function toUSD(xcd){ return n(xcd) / FX; }
-    function displayedUSDToDisplay(usd){
-      return (displayCurrency === "XCD") ? toXCD(usd) : n(usd);
-    }
-
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-      }[m]));
-    }
-    function escapeAttr(s){ return String(s).replace(/"/g,"&quot;"); }
-
-    function buildSelect(selectEl, values, allLabel){
-      selectEl.innerHTML = "";
-      const opt0 = document.createElement("option");
-      opt0.value = "";
-      opt0.textContent = allLabel;
-      selectEl.appendChild(opt0);
-      for (const v of values){
-        const opt = document.createElement("option");
-        opt.value = v;
-        opt.textContent = v;
-        selectEl.appendChild(opt);
+/**************************************************************
+ * Grenada Hub Pro — Apps Script API (JSONP GET + JSON POST)
+ * - Inventory, Expenses, Sales, Distributions
+ * - Meta lists
+ * - Summary (P&L) with Year/Shipment/Category filters
+ * - Receipt upload to Drive folder: /Grenada/Expenses/YYYY/
+ *
+ * DEPLOY:
+ * 1) Extensions → Apps Script (paste)
+ * 2) Set SHEET TAB NAMES below if you renamed anything
+ * 3) Deploy → New deployment → Web app
+ *    Execute as: Me
+ *    Who has access: Anyone (or anyone with link)
+ **************************************************************/
+
+const CFG = {
+  FX: 2.70,
+
+  // Sheet tab names
+  SHEET_LISTS: "Lists",
+  SHEET_INVENTORY: "Inventory",
+  SHEET_SALES: "Sales",
+  SHEET_EXPENSES: "Expenses",
+  SHEET_DISTS: "Distributions",
+
+  // Lists columns in Lists tab (A-F)
+  LISTS: {
+    shipments: { col: 1, name: "Shipments" },
+    categories:{ col: 2, name: "Categories" },
+    statuses:  { col: 3, name: "Statuses" },
+    approved:  { col: 4, name: "PriceApproved" },
+    expenseCategories:{ col: 5, name: "ExpenseCategories" },
+    partners:  { col: 6, name: "Partners" }
+  }
+};
+
+/** ====== ENTRY POINTS ====== */
+function doGet(e) {
+  const params = e && e.parameter ? e.parameter : {};
+  const action = (params.action || "meta").toLowerCase();
+  const cb = params.callback;
+
+  try {
+    let payload;
+    switch (action) {
+      case "meta": payload = apiMeta_(); break;
+      case "data": payload = apiInventoryData_(); break;
+
+      case "expensesdata": payload = apiExpensesData_(); break;
+      case "salesdata": payload = apiSalesData_(); break;
+      case "distsdata": payload = apiDistsData_(); break;
+
+      case "upsert": payload = apiInventoryUpsert_(params); break;
+      case "delete": payload = apiInventoryDelete_(params); break;
+
+      case "expenseupsert": payload = apiExpenseUpsert_(params); break;
+      case "expensedelete": payload = apiExpenseDelete_(params); break;
+
+      case "salesupsert": payload = apiSalesUpsert_(params); break;
+      case "salesdelete": payload = apiSalesDelete_(params); break;
+
+      case "distupsert": payload = apiDistUpsert_(params); break;
+      case "distdelete": payload = apiDistDelete_(params); break;
+
+      case "addlistitem": payload = apiAddListItem_(params); break;
+      case "removelistitem": payload = apiRemoveListItem_(params); break;
+
+      case "summary": payload = apiSummary_(params); break;
+
+      default:
+        payload = { ok: false, error: "Unknown action: " + action };
+    }
+
+    return jsonpOrJson_(payload, cb);
+  } catch (err) {
+    return jsonpOrJson_({ ok: false, error: String(err && err.message ? err.message : err) }, cb);
+  }
+}
+
+function doPost(e) {
+  // Used for receipt upload and optional JSON-based upserts
+  try {
+    const contentType = (e.postData && e.postData.type) ? e.postData.type : "";
+    let body = {};
+    if (contentType.includes("application/json")) {
+      body = JSON.parse(e.postData.contents || "{}");
+    } else {
+      // form encoded fallback
+      body = e.parameter || {};
+    }
+
+    const action = String(body.action || "").toLowerCase();
+    let payload;
+
+    switch (action) {
+      case "uploadreceipt":
+        payload = apiUploadReceipt_(body);
+        break;
+
+      // Optional: allow POST upserts if you want later
+      case "upsert":
+        payload = apiInventoryUpsert_({ row: JSON.stringify(body.row || {}) });
+        break;
+
+      case "expenseupsert":
+        payload = apiExpenseUpsert_({ row: JSON.stringify(body.row || {}) });
+        break;
+
+      case "salesupsert":
+        payload = apiSalesUpsert_({ row: JSON.stringify(body.row || {}) });
+        break;
+
+      case "distupsert":
+        payload = apiDistUpsert_({ row: JSON.stringify(body.row || {}) });
+        break;
+
+      default:
+        payload = { ok: false, error: "Unknown POST action: " + action };
+    }
+
+    return corsJson_(payload);
+  } catch (err) {
+    return corsJson_({ ok: false, error: String(err && err.message ? err.message : err) });
+  }
+}
+
+/** ====== RESPONSE HELPERS ====== */
+function jsonpOrJson_(obj, cb) {
+  if (cb) {
+    const out = cb + "(" + JSON.stringify(obj) + ");";
+    return ContentService.createTextOutput(out).setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function corsJson_(obj) {
+  const output = ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+
+  // Basic CORS headers (best-effort; Apps Script support varies by runtime)
+  // Still works fine for same-origin; for cross-origin fetch, this helps.
+  try {
+    return output
+      .setHeader("Access-Control-Allow-Origin", "*")
+      .setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+      .setHeader("Access-Control-Allow-Headers", "Content-Type");
+  } catch (_) {
+    return output;
+  }
+}
+
+/** ====== SHEET UTILITIES ====== */
+function ss_() { return SpreadsheetApp.getActiveSpreadsheet(); }
+function sh_(name) {
+  const s = ss_().getSheetByName(name);
+  if (!s) throw new Error("Missing sheet tab: " + name);
+  return s;
+}
+function values_(sheet) {
+  const r = sheet.getDataRange();
+  const vals = r.getValues();
+  if (!vals.length) return { headers: [], rows: [] };
+  const headers = vals[0].map(String);
+  const rows = vals.slice(1);
+  return { headers, rows };
+}
+function toObjects_(headers, rows) {
+  return rows.map((r, i) => {
+    const o = {};
+    headers.forEach((h, idx) => o[h] = r[idx]);
+    o.__rowNum = i + 2; // sheet row number
+    return o;
+  });
+}
+function findHeaderIndex_(headers, name) {
+  const idx = headers.indexOf(name);
+  if (idx < 0) throw new Error("Missing column header: " + name);
+  return idx;
+}
+function upsertById_(sheetName, idHeader, rowObj) {
+  const sheet = sh_(sheetName);
+  const { headers, rows } = values_(sheet);
+
+  const idIdx = findHeaderIndex_(headers, idHeader);
+
+  // Ensure we write in sheet column order
+  const rowArr = headers.map(h => (rowObj[h] !== undefined ? rowObj[h] : ""));
+
+  const idVal = String(rowObj[idHeader] || "").trim();
+
+  if (idVal) {
+    // Find existing row
+    for (let i = 0; i < rows.length; i++) {
+      if (String(rows[i][idIdx]).trim() === idVal) {
+        sheet.getRange(i + 2, 1, 1, headers.length).setValues([rowArr]);
+        return { ok: true, mode: "updated", rowNum: i + 2, id: idVal };
       }
     }
+  }
 
-    function currentMarkup(){
-      const v = markupSelect.value;
-      if (v === "custom") return n(customMarkup);
-      return n(v);
+  // If no id or not found, append new and auto-generate ID if blank
+  let newId = idVal;
+  if (!newId) newId = generateId_(sheetName);
+
+  rowArr[idIdx] = newId;
+  sheet.appendRow(rowArr);
+
+  return { ok: true, mode: "inserted", rowNum: sheet.getLastRow(), id: newId };
+}
+function deleteById_(sheetName, idHeader, idVal) {
+  const sheet = sh_(sheetName);
+  const { headers, rows } = values_(sheet);
+  const idIdx = findHeaderIndex_(headers, idHeader);
+
+  for (let i = 0; i < rows.length; i++) {
+    if (String(rows[i][idIdx]).trim() === String(idVal).trim()) {
+      sheet.deleteRow(i + 2);
+      return { ok: true, deleted: true };
     }
+  }
+  return { ok: false, error: "ID not found: " + idVal };
+}
+function generateId_(prefix) {
+  const p = prefix.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase() || "ID";
+  return p + "-" + Utilities.getUuid().slice(0, 8).toUpperCase();
+}
 
-    function sellUSDFromRow(r){
-      const sellXCD = n(r["Selling Price XCD"]);
-      if (sellXCD > 0) return toUSD(sellXCD);
-      const costUSD = n(r["Cost Price USD"]);
-      return costUSD * (1 + currentMarkup());
+/** ====== META / LISTS ====== */
+function apiMeta_() {
+  const listsSheet = sh_(CFG.SHEET_LISTS);
+
+  function getColValues(col) {
+    const last = listsSheet.getLastRow();
+    if (last < 2) return [];
+    const vals = listsSheet.getRange(2, col, last - 1, 1).getValues().flat();
+    return vals.map(v => String(v).trim()).filter(v => v.length);
+  }
+
+  const meta = {
+    fx: CFG.FX,
+    shipments: getColValues(CFG.LISTS.shipments.col),
+    categories: getColValues(CFG.LISTS.categories.col),
+    statuses: getColValues(CFG.LISTS.statuses.col),
+    priceApprovedOptions: getColValues(CFG.LISTS.approved.col),
+    expenseCategories: getColValues(CFG.LISTS.expenseCategories.col),
+    partners: getColValues(CFG.LISTS.partners.col),
+
+    // Keep your existing dropdowns stable for clothing features
+    genderOptions: ["Male","Female","Unisex","Kids"],
+    sizeOptions: ["XS","S","M","L","XL","XXL","XXXL"],
+    shoeSizeOptions: ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"],
+    shippingStatuses: ["Purchased","Processing","On Island","Shipped","Delivered"]
+  };
+
+  return { ok: true, meta };
+}
+
+function apiAddListItem_(p) {
+  const listName = String(p.list || "").toLowerCase();
+  const value = String(p.value || "").trim();
+  if (!value) return { ok: false, error: "Missing value" };
+
+  const sheet = sh_(CFG.SHEET_LISTS);
+  const map = CFG.LISTS[listName];
+  if (!map) return { ok: false, error: "Unknown list: " + listName };
+
+  const col = map.col;
+  const last = sheet.getLastRow();
+  const existing = (last >= 2) ? sheet.getRange(2, col, last - 1, 1).getValues().flat().map(v => String(v).trim()) : [];
+  if (existing.includes(value)) return { ok: true, already: true };
+
+  // Append at first blank
+  let rowToWrite = last + 1;
+  for (let r = 2; r <= last; r++) {
+    if (!String(sheet.getRange(r, col).getValue()).trim()) { rowToWrite = r; break; }
+  }
+  sheet.getRange(rowToWrite, col).setValue(value);
+  return { ok: true, added: true };
+}
+
+function apiRemoveListItem_(p) {
+  const listName = String(p.list || "").toLowerCase();
+  const value = String(p.value || "").trim();
+  if (!value) return { ok: false, error: "Missing value" };
+
+  const sheet = sh_(CFG.SHEET_LISTS);
+  const map = CFG.LISTS[listName];
+  if (!map) return { ok: false, error: "Unknown list: " + listName };
+
+  const col = map.col;
+  const last = sheet.getLastRow();
+  for (let r = 2; r <= last; r++) {
+    if (String(sheet.getRange(r, col).getValue()).trim() === value) {
+      sheet.getRange(r, col).clearContent();
+      return { ok: true, removed: true };
     }
-
-    function getFiltered(){
-      const q = (qSearch.value || "").trim().toLowerCase();
-      const sh = fShipment.value;
-      const cat = fCategory.value;
-      const st = fStatus.value;
-      const ap = fApproved.value;
-
-      return rows.filter(r => {
-        const name = (r["Product Name"] || "").toLowerCase();
-        if (q && !name.includes(q)) return false;
-        if (sh && (r["Shipment"] || "") !== sh) return false;
-        if (cat && (r["Category/Tab"] || "") !== cat) return false;
-        if (st && (r["Status"] || "") !== st) return false;
-        if (ap && (r["Price Approved"] || "") !== ap) return false;
-        return true;
-      });
-    }
-
-    function calcAggregates(list){
-      let costUSD = 0;
-      let revenueUSD = 0;
-
-      for (const r of list){
-        const qty = Math.max(1, Math.floor(n(r["Quantity"])));
-        const unitCost = n(r["Cost Price USD"]);
-        const unitSellUSD = sellUSDFromRow(r);
-
-        costUSD += (unitCost * qty);
-        revenueUSD += (unitSellUSD * qty);
-      }
-      return {
-        totalItems: list.length,
-        costUSD,
-        revenueUSD,
-        profitUSD: revenueUSD - costUSD
-      };
-    }
-
-    function render(){
-      filtered = getFiltered();
-      const ag = calcAggregates(filtered);
-
-      itemsBadge.textContent = `${ag.totalItems} items`;
-      kpiItems.textContent = ag.totalItems;
-
-      const costDisp = displayedUSDToDisplay(ag.costUSD);
-      const revDisp  = displayedUSDToDisplay(ag.revenueUSD);
-      const profDisp = displayedUSDToDisplay(ag.profitUSD);
-
-      kpiCost.textContent = money(costDisp, displayCurrency);
-      kpiCostSub.textContent = displayCurrency;
-
-      kpiRevenue.textContent = money(revDisp, displayCurrency);
-      kpiRevenueSub.textContent = "est.";
-
-      kpiProfit.textContent = money(profDisp, displayCurrency);
-
-      tbody.innerHTML = "";
-      for (const r of filtered){
-        const tr = document.createElement("tr");
-        tr.addEventListener("click", () => openEdit(r));
-
-        const qty = Math.max(1, Math.floor(n(r["Quantity"])));
-        const unitCostUSD = n(r["Cost Price USD"]);
-        const totalCostUSD = unitCostUSD * qty;
-        const sellUSD = sellUSDFromRow(r);
-
-        const unitCostDisp = displayedUSDToDisplay(unitCostUSD);
-        const totalCostDisp = displayedUSDToDisplay(totalCostUSD);
-        const sellDisp = displayedUSDToDisplay(sellUSD);
-
-        tr.innerHTML = `
-          <td><b>${escapeHtml(r["Product Name"] || "")}</b></td>
-          <td>${escapeHtml(r["Shipment"] || "")}</td>
-          <td>${escapeHtml(r["Category/Tab"] || "")}</td>
-          <td class="money">${qty}</td>
-          <td class="money">${money(unitCostDisp, displayCurrency)}</td>
-          <td class="money">${money(totalCostDisp, displayCurrency)}</td>
-          <td class="money">${money(sellDisp, displayCurrency)}</td>
-          <td>${escapeHtml(r["Status"] || "")}</td>
-          <td>${escapeHtml(r["Price Approved"] || "")}</td>
-        `;
-        tbody.appendChild(tr);
-      }
-    }
-
-    /******************************************************************
-     * Modal currency logic (keeps both fields same currency)
-     ******************************************************************/
-    function setModalCurrency(cur){
-      modalCurrency = cur;
-      mCurToggle.textContent = cur;
-      mCurLabel1.textContent = cur;
-      mCurLabel2.textContent = cur;
-    }
-    function toggleModalCurrency(){
-      const cost = n(mCost.value);
-      const sell = n(mSell.value);
-
-      if (modalCurrency === "USD"){
-        mCost.value = (cost * FX).toFixed(2);
-        mSell.value = (sell * FX).toFixed(2);
-        setModalCurrency("XCD");
-      } else {
-        mCost.value = (cost / FX).toFixed(2);
-        mSell.value = (sell / FX).toFixed(2);
-        setModalCurrency("USD");
-      }
-    }
-    function normalizeModalToUSD(){
-      const cost = n(mCost.value);
-      const sell = n(mSell.value);
-      if (modalCurrency === "XCD"){
-        return { costUSD: cost / FX, sellUSD: sell / FX };
-      }
-      return { costUSD: cost, sellUSD: sell };
-    }
-
-    /******************************************************************
-     * Modal open/close
-     ******************************************************************/
-    function openModal(){
-      modalBackdrop.classList.add("open");
-      modalBackdrop.setAttribute("aria-hidden","false");
-    }
-    function closeModal(){
-      modalBackdrop.classList.remove("open");
-      modalBackdrop.setAttribute("aria-hidden","true");
-    }
-
-    function openAdd(){
-      editingRowId = null;
-      modalTitle.textContent = "Add Product";
-      rowIdHint.textContent = "";
-      btnDelete.style.display = "none";
-      modalTouchedSell = false;
-      setModalCurrency("USD");
-
-      mProduct.value = "";
-      mShipment.value = "";
-      mCategory.value = "";
-      mCost.value = "";
-      mSell.value = "";
-      mQty.value = "1";
-      mApproved.value = "";
-      mStatus.value = "";
-      mShipStatus.value = "";
-      mGender.value = "";
-      mSize.value = "";
-      mShoe.value = "";
-      mImage.value = "";
-      mLink.value = "";
-      mNote.value = "";
-      variants.innerHTML = "";
-
-      openModal();
-    }
-
-    function openEdit(r){
-      editingRowId = r.__rowId || r.rowId || r._rowId || null;
-      modalTitle.textContent = "Edit Product";
-      rowIdHint.textContent = editingRowId ? `Row ${editingRowId}` : "";
-      btnDelete.style.display = "inline-flex";
-      modalTouchedSell = true;
-      setModalCurrency("USD");
-
-      mProduct.value = r["Product Name"] || "";
-      mShipment.value = r["Shipment"] || "";
-      mCategory.value = r["Category/Tab"] || "";
-
-      const costUSD = n(r["Cost Price USD"]);
-      const sellUSD = sellUSDFromRow(r);
-
-      mCost.value = costUSD ? costUSD.toFixed(2) : "";
-      mSell.value = sellUSD ? sellUSD.toFixed(2) : "";
-
-      mQty.value = r["Quantity"] || "1";
-      mApproved.value = r["Price Approved"] || "";
-      mStatus.value = r["Status"] || "";
-      mShipStatus.value = r["Shipping Status"] || "";
-      mGender.value = r["Gender"] || "";
-      mSize.value = r["Size"] || "";
-      mShoe.value = r["Shoe Size"] || "";
-      mImage.value = r["Image URL"] || "";
-      mLink.value = r["Online Link"] || "";
-      mNote.value = r["Note"] || "";
-
-      variants.innerHTML = "";
-      const vjson = (r["Variations JSON"] || "").trim();
-      if (vjson){
-        try{
-          const arr = JSON.parse(vjson);
-          if (Array.isArray(arr)){
-            for (const v of arr) addVariantRow(v);
-          }
-        }catch(_){}
-      }
-
-      openModal();
-    }
-
-    function addVariantRow(seed = {}){
-      const wrap = document.createElement("div");
-      wrap.className = "variantRow";
-      wrap.innerHTML = `
-        <input class="input" placeholder="Color" value="${escapeAttr(seed.color||"")}" />
-        <select class="select">
-          ${(meta?.sizeOptions || ["XS","S","M","L","XL","XXL"]).map(x => `<option ${x===seed.size?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
-        </select>
-        <select class="select">
-          ${(meta?.shoeSizeOptions || ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"]).map(x => `<option ${String(x)===String(seed.shoeSize)?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
-        </select>
-        <select class="select">
-          ${["Men","Women","Unisex","Kids"].map(x => `<option ${x===seed.gender?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
-        </select>
-      `;
-      variants.appendChild(wrap);
-    }
-
-    /******************************************************************
-     * Manage lists modal
-     ******************************************************************/
-    function openManage(mode){
-      manageMode = mode;
-      manageAddInput.value = "";
-      manageAddHint.textContent = "";
-      manageRemoveHint.textContent = "";
-
-      if (mode === "shipments"){
-        manageTitle.textContent = "Manage Shipments";
-        manageAddLbl.textContent = "Add Shipment";
-        manageRemoveLbl.textContent = "Remove Shipment";
-        buildSelect(manageRemoveSelect, meta.shipments || [], "Select...");
-      } else {
-        manageTitle.textContent = "Manage Categories";
-        manageAddLbl.textContent = "Add Category";
-        manageRemoveLbl.textContent = "Remove Category";
-        buildSelect(manageRemoveSelect, meta.categories || [], "Select...");
-      }
-
-      manageBackdrop.classList.add("open");
-      manageBackdrop.setAttribute("aria-hidden","false");
-    }
-    function closeManage(){
-      manageBackdrop.classList.remove("open");
-      manageBackdrop.setAttribute("aria-hidden","true");
-    }
-
-    /******************************************************************
-     * Wire events
-     ******************************************************************/
-    brandPill.addEventListener("click", (e) => {
-      e.stopPropagation();
-      phonePopover.classList.toggle("open");
-      phonePopover.setAttribute("aria-hidden", phonePopover.classList.contains("open") ? "false" : "true");
-    });
-    document.addEventListener("click", () => {
-      phonePopover.classList.remove("open");
-      phonePopover.setAttribute("aria-hidden","true");
-    });
-
-    currencyPill.addEventListener("click", () => {
-      displayCurrency = (displayCurrency === "USD") ? "XCD" : "USD";
-      currencyPill.textContent = displayCurrency;
-      render();
-    });
-
-    markupSelect.addEventListener("change", () => {
-      if (markupSelect.value === "custom"){
-        const v = prompt("Enter custom markup (e.g., 1.25 for 125%):", String(customMarkup));
-        if (v !== null) customMarkup = n(v);
-      }
-      markupLabel.textContent = `Markup ${Math.round(currentMarkup()*100)}%`;
-      render();
-    });
-
-    qSearch.addEventListener("input", render);
-    fShipment.addEventListener("change", render);
-    fCategory.addEventListener("change", render);
-    fStatus.addEventListener("change", render);
-    fApproved.addEventListener("change", render);
-
-    btnAdd.addEventListener("click", openAdd);
-    btnReload.addEventListener("click", loadAll);
-    btnReloadTop.addEventListener("click", loadAll);
-
-    btnTripHelper.addEventListener("click", () => window.open("/trip-helper", "_blank"));
-    btnDashboardMobile.addEventListener("click", () => window.open("/dashboard-mobile", "_blank"));
-
-    btnManageShipments.addEventListener("click", () => openManage("shipments"));
-    btnManageCategories.addEventListener("click", () => openManage("categories"));
-
-    modalClose.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
-
-    manageClose.addEventListener("click", closeManage);
-    manageDone.addEventListener("click", closeManage);
-    manageBackdrop.addEventListener("click", (e) => { if (e.target === manageBackdrop) closeManage(); });
-
-    mCurToggle.addEventListener("click", toggleModalCurrency);
-
-    mCost.addEventListener("input", () => {
-      if (!modalTouchedSell){
-        const cost = n(mCost.value);
-        const sell = cost * (1 + currentMarkup());
-        mSell.value = sell ? sell.toFixed(2) : "";
-      }
-    });
-    mSell.addEventListener("input", () => { modalTouchedSell = true; });
-
-    btnAddVariant.addEventListener("click", () => addVariantRow({}));
-
-    mAddCategory.addEventListener("click", async () => {
-      const name = prompt("New category name:");
-      if (!name) return;
-      try{
-        await apiAddListItem("categories", name.trim());
-        await loadMetaOnly(true);
-        mCategory.value = name.trim();
-      }catch(_){ alert("Add category failed."); }
-    });
-
-    mRemoveCategory.addEventListener("click", async () => {
-      const name = mCategory.value;
-      if (!name) return;
-      if (!confirm(`Remove category: ${name}?`)) return;
-      try{
-        await apiRemoveListItem("categories", name);
-        await loadMetaOnly(true);
-        mCategory.value = "";
-      }catch(_){ alert("Remove category failed."); }
-    });
-
-    mAddShipment.addEventListener("click", async () => {
-      const name = prompt("New shipment name:");
-      if (!name) return;
-      try{
-        await apiAddListItem("shipments", name.trim());
-        await loadMetaOnly(true);
-        mShipment.value = name.trim();
-      }catch(_){ alert("Add shipment failed."); }
-    });
-
-    manageAddBtn.addEventListener("click", async () => {
-      const v = (manageAddInput.value || "").trim();
-      if (!v) return;
-      const listName = (manageMode === "shipments") ? "shipments" : "categories";
-      try{
-        await apiAddListItem(listName, v);
-        manageAddHint.textContent = "Added.";
-        await loadMetaOnly(true);
-        openManage(manageMode);
-      }catch(_){
-        manageAddHint.textContent = "Add failed.";
-      }
-    });
-
-    manageRemoveBtn.addEventListener("click", async () => {
-      const v = manageRemoveSelect.value;
-      if (!v) return;
-      const listName = (manageMode === "shipments") ? "shipments" : "categories";
-      if (!confirm(`Remove ${manageMode.slice(0,-1)}: ${v}?`)) return;
-
-      try{
-        await apiRemoveListItem(listName, v);
-        manageRemoveHint.textContent = "Removed.";
-        await loadMetaOnly(true);
-        openManage(manageMode);
-      }catch(_){
-        manageRemoveHint.textContent = "Remove failed.";
-      }
-    });
-
-    btnSave.addEventListener("click", async () => {
-      const name = (mProduct.value || "").trim();
-      if (!name){ alert("Product Name required."); return; }
-      if (!mShipment.value){ alert("Shipment required."); return; }
-      if (!mCategory.value){ alert("Category required."); return; }
-
-      const { costUSD, sellUSD } = normalizeModalToUSD();
-
-      const vArr = [];
-      const vRows = variants.querySelectorAll(".variantRow");
-      for (const vr of vRows){
-        const inputs = vr.querySelectorAll("input,select");
-        vArr.push({
-          color: inputs[0].value || "",
-          size: inputs[1].value || "",
-          shoeSize: inputs[2].value || "",
-          gender: inputs[3].value || ""
-        });
-      }
-      const vjson = vArr.length ? JSON.stringify(vArr) : "";
-
-      const sellXCD = toXCD(sellUSD);
-
-      const row = {
-        rowId: editingRowId || "",
-        "Product Name": name,
-        "Shipment": mShipment.value,
-        "Category/Tab": mCategory.value,
-        "Image URL": (mImage.value || "").trim(),
-        "Cost Price USD": costUSD ? Number(costUSD.toFixed(2)) : "",
-        "Selling Price XCD": sellXCD ? Number(sellXCD.toFixed(2)) : "",
-        "Quantity": (mQty.value || "1").trim(),
-        "Online Link": (mLink.value || "").trim(),
-        "Note": (mNote.value || "").trim(),
-        "Status": mStatus.value || "",
-        "Price Approved": mApproved.value || "",
-        "Ship Date": "",
-        "Gender": mGender.value || "",
-        "Size": mSize.value || "",
-        "Shoe Size": mShoe.value || "",
-        "Shipping Status": mShipStatus.value || "",
-        "Shipped Date (optional but recommended)": "",
-        "Variations JSON": vjson
-      };
-
-      try{
-        await apiUpsert(row);
-        closeModal();
-        await loadAll();
-      }catch(_){
-        alert("Save failed.");
-      }
-    });
-
-    btnDelete.addEventListener("click", async () => {
-      if (!editingRowId){ alert("No row id."); return; }
-      if (!confirm("Delete this item?")) return;
-      try{
-        await apiDelete(editingRowId);
-        closeModal();
-        await loadAll();
-      }catch(_){
-        alert("Delete failed.");
-      }
-    });
-
-    /******************************************************************
-     * Load
-     ******************************************************************/
-    async function loadMetaOnly(rebuildSelects){
-      const m = await apiMeta();
-      if (!m || m.ok !== true) throw new Error("meta failed");
-      meta = m.meta || m.data || m;
-
-      meta.categories = (meta.categories || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
-      meta.shipments = (meta.shipments || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
-      meta.statuses = (meta.statuses || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
-      meta.priceApprovedOptions = (meta.priceApprovedOptions || ["Yes","No"]).filter(x => typeof x === "string" && x.trim().length);
-      meta.genderOptions = (meta.genderOptions || ["Male","Female","Unisex"]).filter(x => typeof x === "string" && x.trim().length);
-      meta.sizeOptions = (meta.sizeOptions || ["XS","S","M","L","XL","XXL"]).filter(x => typeof x === "string" && x.trim().length);
-      meta.shoeSizeOptions = (meta.shoeSizeOptions || ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"]).map(String);
-
-      meta.shippingStatuses = (meta.shippingStatuses || ["Purchased","Processing","On Island","Shipped","Delivered"]).filter(x => typeof x === "string" && x.trim().length);
-
-      if (rebuildSelects){
-        buildSelect(fShipment, meta.shipments, "All Shipments");
-        buildSelect(fCategory, meta.categories, "All Categories");
-        buildSelect(fStatus, meta.statuses, "All Status");
-        buildSelect(fApproved, meta.priceApprovedOptions, "All Price Approved");
-
-        buildSelect(mShipment, meta.shipments, "Select...");
-        buildSelect(mCategory, meta.categories, "Select...");
-        buildSelect(mStatus, meta.statuses, "(blank)");
-        buildSelect(mApproved, meta.priceApprovedOptions, "(blank)");
-        buildSelect(mGender, meta.genderOptions, "(blank)");
-        buildSelect(mSize, meta.sizeOptions, "(blank)");
-        buildSelect(mShoe, meta.shoeSizeOptions, "(blank)");
-        buildSelect(mShipStatus, meta.shippingStatuses, "(blank)");
-      }
-    }
-
-    async function loadAll(){
-      try{
-        loadedMsg.textContent = "Loading...";
-        await loadMetaOnly(true);
-
-        const d = await apiData();
-        if (!d || d.ok !== true) throw new Error("data failed");
-        rows = (d.data || []).map((r, idx) => ({
-          ...r,
-          __rowId: r.rowId || r.__rowId || r._rowId || r.RowId || (idx+2)
-        }));
-
-        loadedMsg.textContent = "Loaded.";
-        render();
-      }catch(err){
-        console.error(err);
-        loadedMsg.textContent = "Load error.";
-        alert("Load error. Check your Apps Script deploy + permissions.");
-      }
-    }
-
-    /******************************************************************
-     * Init
-     ******************************************************************/
-    (function init(){
-      buildSelect(fShipment, [], "All Shipments");
-      buildSelect(fCategory, [], "All Categories");
-      buildSelect(fStatus, [], "All Status");
-      buildSelect(fApproved, [], "All Price Approved");
-
-      buildSelect(mShipment, [], "Select...");
-      buildSelect(mCategory, [], "Select...");
-      buildSelect(mStatus, [], "(blank)");
-      buildSelect(mApproved, [], "(blank)");
-      buildSelect(mGender, ["Male","Female","Unisex"], "(blank)");
-      buildSelect(mSize, ["XS","S","M","L","XL","XXL"], "(blank)");
-      buildSelect(mShoe, ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"], "(blank)");
-      buildSelect(mShipStatus, ["Purchased","Processing","On Island","Shipped","Delivered"], "(blank)");
-
-      loadAll();
-    })();
-  </script>
-</body>
-</html>
+  }
+  return { ok: false, error: "Not found" };
+}
+
+/** ====== INVENTORY ====== */
+function apiInventoryData_() {
+  const sheet = sh_(CFG.SHEET_INVENTORY);
+  const { headers, rows } = values_(sheet);
+  const data = toObjects_(headers, rows);
+  return { ok: true, data, headers };
+}
+
+function apiInventoryUpsert_(p) {
+  const row = JSON.parse(p.row || "{}");
+  // ID header must match your sheet
+  const res = upsertById_(CFG.SHEET_INVENTORY, "Item ID", row);
+  return res;
+}
+
+function apiInventoryDelete_(p) {
+  const id = p.rowId || p.id || "";
+  if (!id) return { ok: false, error: "Missing rowId" };
+  return deleteById_(CFG.SHEET_INVENTORY, "Item ID", id);
+}
+
+/** ====== EXPENSES ====== */
+function apiExpensesData_() {
+  const sheet = sh_(CFG.SHEET_EXPENSES);
+  const { headers, rows } = values_(sheet);
+  const data = toObjects_(headers, rows);
+  return { ok: true, data, headers };
+}
+function apiExpenseUpsert_(p) {
+  const row = JSON.parse(p.row || "{}");
+  const res = upsertById_(CFG.SHEET_EXPENSES, "Expense ID", row);
+  return res;
+}
+function apiExpenseDelete_(p) {
+  const id = p.rowId || p.id || "";
+  if (!id) return { ok: false, error: "Missing id" };
+  return deleteById_(CFG.SHEET_EXPENSES, "Expense ID", id);
+}
+
+/** ====== SALES ====== */
+function apiSalesData_() {
+  const sheet = sh_(CFG.SHEET_SALES);
+  const { headers, rows } = values_(sheet);
+  const data = toObjects_(headers, rows);
+  return { ok: true, data, headers };
+}
+function apiSalesUpsert_(p) {
+  const row = JSON.parse(p.row || "{}");
+  const res = upsertById_(CFG.SHEET_SALES, "Sale ID", row);
+  return res;
+}
+function apiSalesDelete_(p) {
+  const id = p.rowId || p.id || "";
+  if (!id) return { ok: false, error: "Missing id" };
+  return deleteById_(CFG.SHEET_SALES, "Sale ID", id);
+}
+
+/** ====== DISTRIBUTIONS ====== */
+function apiDistsData_() {
+  const sheet = sh_(CFG.SHEET_DISTS);
+  const { headers, rows } = values_(sheet);
+  const data = toObjects_(headers, rows);
+  return { ok: true, data, headers };
+}
+function apiDistUpsert_(p) {
+  const row = JSON.parse(p.row || "{}");
+  const res = upsertById_(CFG.SHEET_DISTS, "Distribution ID", row);
+  return res;
+}
+function apiDistDelete_(p) {
+  const id = p.rowId || p.id || "";
+  if (!id) return { ok: false, error: "Missing id" };
+  return deleteById_(CFG.SHEET_DISTS, "Distribution ID", id);
+}
+
+/** ====== SUMMARY (P&L) ====== */
+function apiSummary_(p) {
+  const year = String(p.year || "").trim();       // e.g. "2025"
+  const shipment = String(p.shipment || "").trim();
+  const category = String(p.category || "").trim();
+
+  // Load sheets
+  const inv = apiInventoryData_().data;
+  const sales = apiSalesData_().data;
+  const exp = apiExpensesData_().data;
+
+  // Filters
+  function matchYear(v) { return !year || String(v).trim() === year; }
+  function matchShipment(v) { return !shipment || String(v).trim() === shipment; }
+  function matchCategory(v) { return !category || String(v).trim() === category; }
+
+  // Revenue (USD): Sales Qty * Unit Sell USD (prefer sheet calc if present)
+  let revenueUSD = 0;
+  let cogsUSD = 0;
+
+  // Map inventory cost by Item ID (USD unit)
+  const costById = {};
+  inv.forEach(r => {
+    const id = String(r["Item ID"] || "").trim();
+    if (!id) return;
+    costById[id] = Number(r["Cost Price USD (Unit)"] || r["Cost Price USD"] || 0) || 0;
+  });
+
+  sales.forEach(s => {
+    if (!matchYear(s["Year"])) return;
+    if (!matchShipment(s["Shipment"])) return;
+
+    const qty = Number(s["Quantity Sold"] || 0) || 0;
+    const unitSellUSD = Number(s["Unit Sell USD"] || 0) || 0;
+    revenueUSD += qty * unitSellUSD;
+
+    const itemId = String(s["Item ID"] || "").trim();
+    const unitCost = costById[itemId] || 0;
+    cogsUSD += qty * unitCost;
+  });
+
+  // Expenses USD
+  let allocatedInvUSD = 0;
+  let opExUSD = 0;
+
+  exp.forEach(x => {
+    if (!matchYear(x["Year"])) return;
+    if (!matchShipment(x["Shipment"])) return;
+
+    const amt = Number(x["Amount USD"] || 0) || 0;
+    const alloc = String(x["Allocate to Inventory? (Y/N)"] || "").trim().toUpperCase();
+    if (alloc === "Y") allocatedInvUSD += amt;
+    else opExUSD += amt;
+  });
+
+  // Inventory on hand value (USD) (accrual-aware): remaining qty * unit cost
+  let invOnHandUSD = 0;
+  inv.forEach(r => {
+    if (!matchYear(r["Year"])) return;
+    if (!matchShipment(r["Shipment"])) return;
+    if (!matchCategory(r["Category/Tab"])) return;
+
+    const remain = Number(r["Quantity Remaining"] || 0) || 0;
+    const unitCost = Number(r["Cost Price USD (Unit)"] || r["Cost Price USD"] || 0) || 0;
+    invOnHandUSD += remain * unitCost;
+  });
+
+  // Profit
+  const grossUSD = revenueUSD - cogsUSD;
+  const netUSD = grossUSD - allocatedInvUSD - opExUSD;
+  const margin = revenueUSD ? (netUSD / revenueUSD) : 0;
+
+  return {
+    ok: true,
+    fx: CFG.FX,
+    filters: { year, shipment, category },
+    revenueUSD, cogsUSD, allocatedInvUSD, opExUSD,
+    grossUSD, netUSD, margin,
+    inventoryOnHandUSD: invOnHandUSD,
+
+    // convenience XCD
+    revenueXCD: revenueUSD * CFG.FX,
+    cogsXCD: cogsUSD * CFG.FX,
+    allocatedInvXCD: allocatedInvUSD * CFG.FX,
+    opExXCD: opExUSD * CFG.FX,
+    grossXCD: grossUSD * CFG.FX,
+    netXCD: netUSD * CFG.FX,
+    inventoryOnHandXCD: invOnHandUSD * CFG.FX
+  };
+}
+
+/** ====== RECEIPT UPLOAD ======
+ * Client POST JSON:
+ * {
+ *   action:"uploadReceipt",
+ *   fileName:"receipt.jpg",
+ *   mimeType:"image/jpeg",
+ *   base64:"....",  // no data: prefix
+ *   expenseDate:"2025-12-31" // optional
+ * }
+ */
+function apiUploadReceipt_(body) {
+  const base64 = String(body.base64 || "").trim();
+  const fileName = String(body.fileName || "receipt.jpg").trim();
+  const mimeType = String(body.mimeType || "image/jpeg").trim();
+  const expenseDate = String(body.expenseDate || "").trim();
+
+  if (!base64) return { ok: false, error: "Missing base64" };
+
+  const yyyy = expenseDate ? (new Date(expenseDate)).getFullYear() : (new Date()).getFullYear();
+
+  // Ensure folder path: /Grenada/Expenses/YYYY/
+  const root = ensureFolder_(DriveApp.getRootFolder(), "Grenada");
+  const expFolder = ensureFolder_(root, "Expenses");
+  const yearFolder = ensureFolder_(expFolder, String(yyyy));
+
+  const bytes = Utilities.base64Decode(base64);
+  const blob = Utilities.newBlob(bytes, mimeType, fileName);
+
+  const file = yearFolder.createFile(blob);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+  return { ok: true, fileId: file.getId(), url: file.getUrl(), name: file.getName() };
+}
+
+function ensureFolder_(parent, name) {
+  const it = parent.getFoldersByName(name);
+  if (it.hasNext()) return it.next();
+  return parent.createFolder(name);
+}
