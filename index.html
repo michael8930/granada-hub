@@ -301,14 +301,14 @@
     /* Table: allow horizontal scroll */
     .tableWrap{
       width:100%;
-      overflow:auto;               /* <-- horizontal/vertical scroll */
+      overflow:auto;
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,.08);
       background: rgba(0,0,0,.12);
     }
     table{
       width:100%;
-      min-width: 980px;            /* <-- forces horizontal scroll on narrow screens */
+      min-width: 980px;
       border-collapse: collapse;
       font-variant-numeric: tabular-nums;
     }
@@ -357,9 +357,6 @@
       font-size: 11px;
       white-space:nowrap;
     }
-    .tag.good{ border-color: rgba(70,211,106,.25); background: rgba(70,211,106,.10); }
-    .tag.bad{ border-color: rgba(255,91,106,.25); background: rgba(255,91,106,.10); }
-    .tag.warn{ border-color: rgba(255,204,102,.25); background: rgba(255,204,102,.10); }
 
     .helpList{
       margin: 0;
@@ -438,7 +435,7 @@
       width: min(980px, 100%);
       border-radius: 26px;
       border: 1px solid rgba(255,255,255,.14);
-      background: rgba(12,18,28,.92); /* LESS TRANSPARENT (fixes your “fields disappear” issue) */
+      background: rgba(12,18,28,.92);
       box-shadow: 0 40px 110px rgba(0,0,0,.75);
       overflow:hidden;
       position:relative;
@@ -500,7 +497,7 @@
     .wide{ grid-column: 1 / -1; }
     .textarea{
       width:100%;
-      min-height: 90px;            /* keep the larger note field */
+      min-height: 90px;
       border-radius: 18px;
       padding: 12px 14px;
       border: 1px solid rgba(255,255,255,.12);
@@ -537,7 +534,6 @@
       border-color: rgba(255,91,106,.28);
     }
 
-    /* Small screens */
     @media (max-width: 980px){
       .summaryGrid{ grid-template-columns: 1fr 1fr; }
       .mainGrid{ grid-template-columns: 1fr; }
@@ -836,7 +832,7 @@
     </div>
   </div>
 
-  <!-- Manage Lists Modal (Add + Remove bubbles) -->
+  <!-- Manage Lists Modal -->
   <div class="backdrop" id="manageBackdrop" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Manage Lists">
       <div class="modalHeader">
@@ -879,21 +875,16 @@
     let meta = null;
     let rows = [];
     let filtered = [];
-    let displayCurrency = "USD";         // dashboard/table view
-    let markup = 1.0;                   // 1.0 = 100%
+    let displayCurrency = "USD";
     let customMarkup = 1.0;
-
-    // modal state
     let editingRowId = null;
-    let modalCurrency = "USD";          // modal view only
+    let modalCurrency = "USD";
     let modalTouchedSell = false;
-    let modalTouchedCost = false;
 
-    // manage modal
-    let manageMode = null;              // "shipments" | "categories"
+    let manageMode = null;
 
     /******************************************************************
-     * JSONP helper (avoids CORS; matches your cb(...) screenshots)
+     * JSONP helper
      ******************************************************************/
     function jsonp(url, params = {}) {
       return new Promise((resolve, reject) => {
@@ -920,26 +911,14 @@
     }
 
     /******************************************************************
-     * API wrappers (expects your Apps Script supports these actions)
+     * API wrappers (must match Apps Script actions)
      ******************************************************************/
-    async function apiMeta(){
-      return jsonp(EXEC_URL, { action: "meta" });
-    }
-    async function apiData(){
-      return jsonp(EXEC_URL, { action: "data" });
-    }
-    async function apiUpsert(row){
-      return jsonp(EXEC_URL, { action: "upsert", row: JSON.stringify(row) });
-    }
-    async function apiDelete(rowId){
-      return jsonp(EXEC_URL, { action: "delete", rowId: rowId });
-    }
-    async function apiAddListItem(listName, value){
-      return jsonp(EXEC_URL, { action: "addListItem", list: listName, value: value });
-    }
-    async function apiRemoveListItem(listName, value){
-      return jsonp(EXEC_URL, { action: "removeListItem", list: listName, value: value });
-    }
+    const apiMeta          = () => jsonp(EXEC_URL, { action: "meta" });
+    const apiData          = () => jsonp(EXEC_URL, { action: "data" });
+    const apiUpsert        = (row) => jsonp(EXEC_URL, { action: "upsert", row: JSON.stringify(row) });
+    const apiDelete        = (rowId) => jsonp(EXEC_URL, { action: "delete", rowId: rowId });
+    const apiAddListItem   = (listName, value) => jsonp(EXEC_URL, { action: "addListItem", list: listName, value: value });
+    const apiRemoveListItem= (listName, value) => jsonp(EXEC_URL, { action: "removeListItem", list: listName, value: value });
 
     /******************************************************************
      * DOM
@@ -1026,7 +1005,7 @@
     const manageRemoveHint = $("manageRemoveHint");
 
     /******************************************************************
-     * Format helpers
+     * Helpers
      ******************************************************************/
     function n(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
     function money(v, cur){
@@ -1036,14 +1015,17 @@
     }
     function toXCD(usd){ return n(usd) * FX; }
     function toUSD(xcd){ return n(xcd) / FX; }
-
     function displayedUSDToDisplay(usd){
       return (displayCurrency === "XCD") ? toXCD(usd) : n(usd);
     }
 
-    /******************************************************************
-     * Render & Filtering
-     ******************************************************************/
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+      }[m]));
+    }
+    function escapeAttr(s){ return String(s).replace(/"/g,"&quot;"); }
+
     function buildSelect(selectEl, values, allLabel){
       selectEl.innerHTML = "";
       const opt0 = document.createElement("option");
@@ -1056,6 +1038,19 @@
         opt.textContent = v;
         selectEl.appendChild(opt);
       }
+    }
+
+    function currentMarkup(){
+      const v = markupSelect.value;
+      if (v === "custom") return n(customMarkup);
+      return n(v);
+    }
+
+    function sellUSDFromRow(r){
+      const sellXCD = n(r["Selling Price XCD"]);
+      if (sellXCD > 0) return toUSD(sellXCD);
+      const costUSD = n(r["Cost Price USD"]);
+      return costUSD * (1 + currentMarkup());
     }
 
     function getFiltered(){
@@ -1077,10 +1072,6 @@
     }
 
     function calcAggregates(list){
-      // Unit cost is stored USD in sheet. Quantity numeric.
-      // Total cost must be SUM(unitCostUSD * qty)
-      const totalItems = list.length;
-
       let costUSD = 0;
       let revenueUSD = 0;
 
@@ -1090,29 +1081,14 @@
         const unitSellUSD = sellUSDFromRow(r);
 
         costUSD += (unitCost * qty);
-
-        // expected revenue = unitSellUSD * qty (you can later adjust to sold-only if you want)
         revenueUSD += (unitSellUSD * qty);
       }
-
-      const profitUSD = revenueUSD - costUSD;
-      return { totalItems, costUSD, revenueUSD, profitUSD };
-    }
-
-    function sellUSDFromRow(r){
-      // Sheet stores Selling Price XCD. Convert to USD.
-      // If missing, compute from cost & markup.
-      const sellXCD = n(r["Selling Price XCD"]);
-      if (sellXCD > 0) return toUSD(sellXCD);
-
-      const costUSD = n(r["Cost Price USD"]);
-      return costUSD * (1 + currentMarkup());
-    }
-
-    function currentMarkup(){
-      const v = markupSelect.value;
-      if (v === "custom") return n(customMarkup);
-      return n(v);
+      return {
+        totalItems: list.length,
+        costUSD,
+        revenueUSD,
+        profitUSD: revenueUSD - costUSD
+      };
     }
 
     function render(){
@@ -1134,7 +1110,6 @@
 
       kpiProfit.textContent = money(profDisp, displayCurrency);
 
-      // table
       tbody.innerHTML = "";
       for (const r of filtered){
         const tr = document.createElement("tr");
@@ -1164,14 +1139,8 @@
       }
     }
 
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, m => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-      }[m]));
-    }
-
     /******************************************************************
-     * Modal helpers
+     * Modal currency logic (keeps both fields same currency)
      ******************************************************************/
     function setModalCurrency(cur){
       modalCurrency = cur;
@@ -1179,34 +1148,39 @@
       mCurLabel1.textContent = cur;
       mCurLabel2.textContent = cur;
     }
-
     function toggleModalCurrency(){
-      // Convert BOTH fields together and keep them same currency in the UI.
       const cost = n(mCost.value);
       const sell = n(mSell.value);
 
       if (modalCurrency === "USD"){
-        // USD -> XCD
         mCost.value = (cost * FX).toFixed(2);
         mSell.value = (sell * FX).toFixed(2);
         setModalCurrency("XCD");
       } else {
-        // XCD -> USD
         mCost.value = (cost / FX).toFixed(2);
         mSell.value = (sell / FX).toFixed(2);
         setModalCurrency("USD");
       }
     }
-
     function normalizeModalToUSD(){
-      // Before save: convert displayed modal fields back to USD
       const cost = n(mCost.value);
       const sell = n(mSell.value);
-
       if (modalCurrency === "XCD"){
         return { costUSD: cost / FX, sellUSD: sell / FX };
       }
       return { costUSD: cost, sellUSD: sell };
+    }
+
+    /******************************************************************
+     * Modal open/close
+     ******************************************************************/
+    function openModal(){
+      modalBackdrop.classList.add("open");
+      modalBackdrop.setAttribute("aria-hidden","false");
+    }
+    function closeModal(){
+      modalBackdrop.classList.remove("open");
+      modalBackdrop.setAttribute("aria-hidden","true");
     }
 
     function openAdd(){
@@ -1215,7 +1189,6 @@
       rowIdHint.textContent = "";
       btnDelete.style.display = "none";
       modalTouchedSell = false;
-      modalTouchedCost = false;
       setModalCurrency("USD");
 
       mProduct.value = "";
@@ -1239,19 +1212,17 @@
     }
 
     function openEdit(r){
-      editingRowId = r.__rowId || r.rowId || r._rowId || null; // supports several shapes
+      editingRowId = r.__rowId || r.rowId || r._rowId || null;
       modalTitle.textContent = "Edit Product";
       rowIdHint.textContent = editingRowId ? `Row ${editingRowId}` : "";
       btnDelete.style.display = "inline-flex";
       modalTouchedSell = true;
-      modalTouchedCost = true;
       setModalCurrency("USD");
 
       mProduct.value = r["Product Name"] || "";
       mShipment.value = r["Shipment"] || "";
       mCategory.value = r["Category/Tab"] || "";
 
-      // load stored USD / XCD but show in modal USD by default
       const costUSD = n(r["Cost Price USD"]);
       const sellUSD = sellUSDFromRow(r);
 
@@ -1269,7 +1240,6 @@
       mLink.value = r["Online Link"] || "";
       mNote.value = r["Note"] || "";
 
-      // Variations JSON
       variants.innerHTML = "";
       const vjson = (r["Variations JSON"] || "").trim();
       if (vjson){
@@ -1284,34 +1254,22 @@
       openModal();
     }
 
-    function openModal(){
-      modalBackdrop.classList.add("open");
-      modalBackdrop.setAttribute("aria-hidden","false");
-    }
-    function closeModal(){
-      modalBackdrop.classList.remove("open");
-      modalBackdrop.setAttribute("aria-hidden","true");
-    }
-
     function addVariantRow(seed = {}){
       const wrap = document.createElement("div");
       wrap.className = "variantRow";
       wrap.innerHTML = `
         <input class="input" placeholder="Color" value="${escapeAttr(seed.color||"")}" />
         <select class="select">
-          ${meta.sizeOptions.map(x => `<option ${x===seed.size?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
+          ${(meta?.sizeOptions || ["XS","S","M","L","XL","XXL"]).map(x => `<option ${x===seed.size?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
         </select>
         <select class="select">
-          ${meta.shoeSizeOptions.map(x => `<option ${String(x)===String(seed.shoeSize)?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
+          ${(meta?.shoeSizeOptions || ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"]).map(x => `<option ${String(x)===String(seed.shoeSize)?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
         </select>
         <select class="select">
           ${["Men","Women","Unisex","Kids"].map(x => `<option ${x===seed.gender?"selected":""} value="${escapeAttr(x)}">${escapeHtml(x)}</option>`).join("")}
         </select>
       `;
       variants.appendChild(wrap);
-    }
-    function escapeAttr(s){
-      return String(s).replace(/"/g,"&quot;");
     }
 
     /******************************************************************
@@ -1344,7 +1302,7 @@
     }
 
     /******************************************************************
-     * Wiring / Events
+     * Wire events
      ******************************************************************/
     brandPill.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -1365,9 +1323,7 @@
     markupSelect.addEventListener("change", () => {
       if (markupSelect.value === "custom"){
         const v = prompt("Enter custom markup (e.g., 1.25 for 125%):", String(customMarkup));
-        if (v !== null){
-          customMarkup = n(v);
-        }
+        if (v !== null) customMarkup = n(v);
       }
       markupLabel.textContent = `Markup ${Math.round(currentMarkup()*100)}%`;
       render();
@@ -1398,9 +1354,7 @@
 
     mCurToggle.addEventListener("click", toggleModalCurrency);
 
-    // Auto-fill Selling from Cost using markup unless user has typed in sell
     mCost.addEventListener("input", () => {
-      modalTouchedCost = true;
       if (!modalTouchedSell){
         const cost = n(mCost.value);
         const sell = cost * (1 + currentMarkup());
@@ -1418,7 +1372,7 @@
         await apiAddListItem("categories", name.trim());
         await loadMetaOnly(true);
         mCategory.value = name.trim();
-      }catch(err){ alert("Add category failed."); }
+      }catch(_){ alert("Add category failed."); }
     });
 
     mRemoveCategory.addEventListener("click", async () => {
@@ -1429,7 +1383,7 @@
         await apiRemoveListItem("categories", name);
         await loadMetaOnly(true);
         mCategory.value = "";
-      }catch(err){ alert("Remove category failed."); }
+      }catch(_){ alert("Remove category failed."); }
     });
 
     mAddShipment.addEventListener("click", async () => {
@@ -1439,20 +1393,19 @@
         await apiAddListItem("shipments", name.trim());
         await loadMetaOnly(true);
         mShipment.value = name.trim();
-      }catch(err){ alert("Add shipment failed."); }
+      }catch(_){ alert("Add shipment failed."); }
     });
 
     manageAddBtn.addEventListener("click", async () => {
       const v = (manageAddInput.value || "").trim();
       if (!v) return;
-
       const listName = (manageMode === "shipments") ? "shipments" : "categories";
       try{
         await apiAddListItem(listName, v);
         manageAddHint.textContent = "Added.";
         await loadMetaOnly(true);
         openManage(manageMode);
-      }catch(err){
+      }catch(_){
         manageAddHint.textContent = "Add failed.";
       }
     });
@@ -1460,7 +1413,6 @@
     manageRemoveBtn.addEventListener("click", async () => {
       const v = manageRemoveSelect.value;
       if (!v) return;
-
       const listName = (manageMode === "shipments") ? "shipments" : "categories";
       if (!confirm(`Remove ${manageMode.slice(0,-1)}: ${v}?`)) return;
 
@@ -1469,7 +1421,7 @@
         manageRemoveHint.textContent = "Removed.";
         await loadMetaOnly(true);
         openManage(manageMode);
-      }catch(err){
+      }catch(_){
         manageRemoveHint.textContent = "Remove failed.";
       }
     });
@@ -1480,10 +1432,8 @@
       if (!mShipment.value){ alert("Shipment required."); return; }
       if (!mCategory.value){ alert("Category required."); return; }
 
-      // normalize modal money to USD for saving
       const { costUSD, sellUSD } = normalizeModalToUSD();
 
-      // Variants JSON
       const vArr = [];
       const vRows = variants.querySelectorAll(".variantRow");
       for (const vr of vRows){
@@ -1497,7 +1447,6 @@
       }
       const vjson = vArr.length ? JSON.stringify(vArr) : "";
 
-      // Store selling as XCD in sheet (per your column)
       const sellXCD = toXCD(sellUSD);
 
       const row = {
@@ -1526,7 +1475,7 @@
         await apiUpsert(row);
         closeModal();
         await loadAll();
-      }catch(err){
+      }catch(_){
         alert("Save failed.");
       }
     });
@@ -1538,7 +1487,7 @@
         await apiDelete(editingRowId);
         closeModal();
         await loadAll();
-      }catch(err){
+      }catch(_){
         alert("Delete failed.");
       }
     });
@@ -1551,16 +1500,14 @@
       if (!m || m.ok !== true) throw new Error("meta failed");
       meta = m.meta || m.data || m;
 
-      // Make sure arrays are arrays (strip accidental timestamps/noise)
       meta.categories = (meta.categories || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
       meta.shipments = (meta.shipments || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
       meta.statuses = (meta.statuses || []).filter(x => typeof x === "string" && x.trim().length && !String(x).includes("GMT"));
       meta.priceApprovedOptions = (meta.priceApprovedOptions || ["Yes","No"]).filter(x => typeof x === "string" && x.trim().length);
       meta.genderOptions = (meta.genderOptions || ["Male","Female","Unisex"]).filter(x => typeof x === "string" && x.trim().length);
       meta.sizeOptions = (meta.sizeOptions || ["XS","S","M","L","XL","XXL"]).filter(x => typeof x === "string" && x.trim().length);
-      meta.shoeSizeOptions = (meta.shoeSizeOptions || ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"]);
+      meta.shoeSizeOptions = (meta.shoeSizeOptions || ["2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15"]).map(String);
 
-      // shipping statuses (your list)
       meta.shippingStatuses = (meta.shippingStatuses || ["Purchased","Processing","On Island","Shipped","Delivered"]).filter(x => typeof x === "string" && x.trim().length);
 
       if (rebuildSelects){
@@ -1569,16 +1516,13 @@
         buildSelect(fStatus, meta.statuses, "All Status");
         buildSelect(fApproved, meta.priceApprovedOptions, "All Price Approved");
 
-        // modal dropdowns
         buildSelect(mShipment, meta.shipments, "Select...");
         buildSelect(mCategory, meta.categories, "Select...");
         buildSelect(mStatus, meta.statuses, "(blank)");
         buildSelect(mApproved, meta.priceApprovedOptions, "(blank)");
-
-        // Gender / Size / Shoe / ShipStatus
         buildSelect(mGender, meta.genderOptions, "(blank)");
         buildSelect(mSize, meta.sizeOptions, "(blank)");
-        buildSelect(mShoe, meta.shoeSizeOptions.map(String), "(blank)");
+        buildSelect(mShoe, meta.shoeSizeOptions, "(blank)");
         buildSelect(mShipStatus, meta.shippingStatuses, "(blank)");
       }
     }
@@ -1586,16 +1530,13 @@
     async function loadAll(){
       try{
         loadedMsg.textContent = "Loading...";
-        const m = await apiMeta();
-        meta = m.meta || m.data || m;
-
         await loadMetaOnly(true);
 
         const d = await apiData();
         if (!d || d.ok !== true) throw new Error("data failed");
         rows = (d.data || []).map((r, idx) => ({
           ...r,
-          __rowId: r.rowId || r.__rowId || r._rowId || r.RowId || (idx+2) // fallback
+          __rowId: r.rowId || r.__rowId || r._rowId || r.RowId || (idx+2)
         }));
 
         loadedMsg.textContent = "Loaded.";
@@ -1611,13 +1552,11 @@
      * Init
      ******************************************************************/
     (function init(){
-      // defaults
       buildSelect(fShipment, [], "All Shipments");
       buildSelect(fCategory, [], "All Categories");
       buildSelect(fStatus, [], "All Status");
       buildSelect(fApproved, [], "All Price Approved");
 
-      // modal selects pre
       buildSelect(mShipment, [], "Select...");
       buildSelect(mCategory, [], "Select...");
       buildSelect(mStatus, [], "(blank)");
